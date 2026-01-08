@@ -1,22 +1,15 @@
-// Cache Name
+// Service Worker für m.s.app
 const CACHE_NAME = 'm.s.app-v1.0';
-
-// Assets to cache
 const urlsToCache = [
-  '/m.s.app/',
-  '/m.s.app/index.html',
-  '/m.s.app/manifest.json',
-  '/m.s.app/icons/icon-72x72.png',
-  '/m.s.app/icons/icon-96x96.png',
-  '/m.s.app/icons/icon-128x128.png',
-  '/m.s.app/icons/icon-144x144.png',
-  '/m.s.app/icons/icon-192x192.png',
-  '/m.s.app/icons/icon-256x256.png',
-  '/m.s.app/icons/icon-384x384.png',
-  '/m.s.app/icons/icon-512x512.png',
-  '/m.s.app/icons/icon-32x32.png',
-  '/m.s.app/icons/icon-16x16.png',
-  '/m.s.app/icons/icon-180x180.png'
+  './',
+  './index.html',
+  './manifest.json',
+  './icons/icon-72x72.png',
+  './icons/icon-96x96.png',
+  './icons/icon-128x128.png',
+  './icons/icon-144x144.png',
+  './icons/icon-192x192.png',
+  './icons/icon-512x512.png'
 ];
 
 // Install Event
@@ -24,39 +17,67 @@ self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => {
-        console.log('Cache geöffnet');
+        console.log('📦 Cache geöffnet');
         return cache.addAll(urlsToCache);
       })
   );
-});
-
-// Fetch Event
-self.addEventListener('fetch', event => {
-  event.respondWith(
-    caches.match(event.request)
-      .then(response => {
-        // Cache hit - return response
-        if (response) {
-          return response;
-        }
-        return fetch(event.request);
-      }
-    )
-  );
+  self.skipWaiting();
 });
 
 // Activate Event
 self.addEventListener('activate', event => {
-  const cacheWhitelist = [CACHE_NAME];
   event.waitUntil(
     caches.keys().then(cacheNames => {
       return Promise.all(
         cacheNames.map(cacheName => {
-          if (cacheWhitelist.indexOf(cacheName) === -1) {
+          if (cacheName !== CACHE_NAME) {
+            console.log('🗑️ Alten Cache löschen:', cacheName);
             return caches.delete(cacheName);
           }
         })
       );
     })
+  );
+  self.clients.claim();
+});
+
+// Fetch Event (Cache First Strategy)
+self.addEventListener('fetch', event => {
+  event.respondWith(
+    caches.match(event.request)
+      .then(response => {
+        // Cache-Treffer: Zurückgeben
+        if (response) {
+          return response;
+        }
+        
+        // Nicht im Cache: Netzwerkanfrage
+        return fetch(event.request)
+          .then(response => {
+            // Nur erfolgreiche Antworten cachen
+            if (!response || response.status !== 200 || response.type !== 'basic') {
+              return response;
+            }
+            
+            // Antwort klonen und cachen
+            const responseToCache = response.clone();
+            caches.open(CACHE_NAME)
+              .then(cache => {
+                cache.put(event.request, responseToCache);
+              });
+            
+            return response;
+          })
+          .catch(() => {
+            // Fallback für Fehler (optional)
+            return new Response('Offline-Inhalt', {
+              status: 503,
+              statusText: 'Service Unavailable',
+              headers: new Headers({
+                'Content-Type': 'text/plain'
+              })
+            });
+          });
+      })
   );
 });
