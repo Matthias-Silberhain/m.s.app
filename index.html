@@ -44,19 +44,65 @@
     <!-- PWA Script -->
     <script src="pwa.js" defer></script>
     
-    <!-- CSS Fallback für JavaScript disabled -->
-    <noscript>
-        <style>
-            #preloader { display: none !important; }
-            .inhalt, .social-section, .footer { 
-                opacity: 1 !important; 
-                transform: none !important; 
-            }
-            .burger { display: none !important; }
-        </style>
-    </noscript>
-    
     <style>
+        /* Temporäre Styles für Preloader */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+        
+        .preloader-inner {
+            text-align: center;
+        }
+        
+        .preloader-logo {
+            width: 200px;
+            height: 200px;
+            margin-bottom: 40px;
+            animation: pulse 2s infinite;
+        }
+        
+        .preloader-text {
+            font-family: 'Cinzel', serif;
+            color: #ffffff;
+            font-size: 2rem;
+            margin-bottom: 30px;
+        }
+        
+        .preloader-line {
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #667eea, transparent);
+            margin: 0 auto;
+            animation: fillLine 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.05); }
+        }
+        
+        @keyframes fillLine {
+            0% { width: 0; }
+            50% { width: 200px; }
+            100% { width: 0; }
+        }
+        
+        /* Verstecke Preloader wenn Seite geladen ist */
+        body.loaded #preloader {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
         /* PWA-spezifische Styles */
         @media (display-mode: standalone) {
             body {
@@ -94,14 +140,14 @@
 <!-- Preloader -->
 <div id="preloader" role="status" aria-label="Ladevorgang">
     <div class="preloader-inner">
-        <img src="assets/images/logo.png" alt="Logo" class="preloader-logo" width="200" height="200">
+        <img src="assets/images/logo.png" alt="Logo" class="preloader-logo">
         <div class="text-container">
             <h1 class="preloader-text" aria-live="polite">
-                <span id="type-text"></span>
+                <span id="type-text">Matthias Silberhain</span>
             </h1>
         </div>
         <!-- Silberner Strich -->
-        <div class="preloader-line" id="preloaderLine" aria-hidden="true"></div>
+        <div class="preloader-line"></div>
     </div>
 </div>
 
@@ -150,7 +196,7 @@
 <div class="lichtkante" aria-hidden="true"></div>
 
 <!-- ================= HAUPTINHALT ================= -->
-<main class="inhalt" id="main-content" role="main">
+<main class="inhalt" id="main-content" role="main" style="display: none;">
     <section class="startseite">
         <!-- HAUPTTITEL -->
         <div class="credo-container">
@@ -231,7 +277,7 @@
 </main>
 
 <!-- ================= SOCIAL MEDIA ================= -->
-<section class="social-section" aria-labelledby="social-title">
+<section class="social-section" aria-labelledby="social-title" style="display: none;">
     <h3 class="social-title" id="social-title">Folgen Sie den Gedanken</h3>
     <div class="social-grid" role="list">
         <!-- Snapchat -->
@@ -310,7 +356,7 @@
 </section>
 
 <!-- ================= FOOTER ================= -->
-<footer class="footer" role="contentinfo">
+<footer class="footer" role="contentinfo" style="display: none;">
     <div class="footer-links">
         <a href="impressum.html">Impressum</a>
         <a href="datenschutz.html">Datenschutz</a>
@@ -320,7 +366,7 @@
 </footer>
 
 <!-- PWA Status Indicator -->
-<div class="pwa-status" id="pwaStatusIndicator">
+<div class="pwa-status" id="pwaStatusIndicator" style="display: none;">
     <span id="connectionStatus">📶 Online</span>
 </div>
 
@@ -332,12 +378,65 @@
     
     // Setze aktuelles Jahr im Footer
     document.getElementById('currentYear').textContent = new Date().getFullYear();
+    
+    // Preloader Logic - Einfache Version
+    window.addEventListener('load', function() {
+        console.log('✅ Seite vollständig geladen');
+        
+        // Warte 2 Sekunden, dann Preloader ausblenden
+        setTimeout(function() {
+            const preloader = document.getElementById('preloader');
+            if (preloader) {
+                preloader.style.opacity = '0';
+                
+                // Nach der Animation Inhalt anzeigen
+                setTimeout(function() {
+                    preloader.style.display = 'none';
+                    document.body.classList.add('loaded');
+                    
+                    // Hauptinhalt anzeigen
+                    const mainContent = document.getElementById('main-content');
+                    if (mainContent) mainContent.style.display = 'block';
+                    
+                    // Social Section anzeigen
+                    const socialSection = document.querySelector('.social-section');
+                    if (socialSection) socialSection.style.display = 'block';
+                    
+                    // Footer anzeigen
+                    const footer = document.querySelector('.footer');
+                    if (footer) footer.style.display = 'block';
+                    
+                    // PWA Status anzeigen
+                    const pwaStatus = document.getElementById('pwaStatusIndicator');
+                    if (pwaStatus) pwaStatus.style.display = 'block';
+                    
+                    console.log('✅ Preloader ausgeblendet, Inhalt angezeigt');
+                }, 500); // Warte auf Fade-Out Animation
+            }
+        }, 2000); // Preloader für 2 Sekunden anzeigen
+    });
+    
+    // Fallback: Wenn load Event nicht ausgelöst wird, nach 4 Sekunden anzeigen
+    setTimeout(function() {
+        if (!document.body.classList.contains('loaded')) {
+            console.log('⚠️ Load Event nicht ausgelöst, zeige Inhalt nach Timeout');
+            const preloader = document.getElementById('preloader');
+            if (preloader) preloader.style.display = 'none';
+            document.body.classList.add('loaded');
+            
+            const mainContent = document.getElementById('main-content');
+            if (mainContent) mainContent.style.display = 'block';
+            
+            const socialSection = document.querySelector('.social-section');
+            if (socialSection) socialSection.style.display = 'block';
+            
+            const footer = document.querySelector('.footer');
+            if (footer) footer.style.display = 'block';
+        }
+    }, 4000);
 </script>
 
 <!-- WICHTIG: Korrekte Reihenfolge der Skripte -->
-<script src="assets/js/dark-mode.js"></script>
-<script src="assets/js/global.js"></script>
-<script src="assets/js/menu.js"></script>
 <script src="assets/js/main.js"></script>
 
 <!-- PWA Funktionen -->
@@ -349,21 +448,29 @@
         const statusIndicator = document.getElementById('pwaStatusIndicator');
         
         function setOnline() {
-            statusElement.innerHTML = '📶 Online';
-            statusElement.className = 'online';
-            statusText.textContent = 'Online';
-            statusText.style.color = '#4ade80';
-            statusIndicator.classList.add('online');
-            statusIndicator.classList.remove('offline');
+            if (statusElement) statusElement.innerHTML = '📶 Online';
+            if (statusElement) statusElement.className = 'online';
+            if (statusText) {
+                statusText.textContent = 'Online';
+                statusText.style.color = '#4ade80';
+            }
+            if (statusIndicator) {
+                statusIndicator.classList.add('online');
+                statusIndicator.classList.remove('offline');
+            }
         }
         
         function setOffline() {
-            statusElement.innerHTML = '📴 Offline';
-            statusElement.className = 'offline';
-            statusText.textContent = 'Offline';
-            statusText.style.color = '#f87171';
-            statusIndicator.classList.add('offline');
-            statusIndicator.classList.remove('online');
+            if (statusElement) statusElement.innerHTML = '📴 Offline';
+            if (statusElement) statusElement.className = 'offline';
+            if (statusText) {
+                statusText.textContent = 'Offline';
+                statusText.style.color = '#f87171';
+            }
+            if (statusIndicator) {
+                statusIndicator.classList.add('offline');
+                statusIndicator.classList.remove('online');
+            }
         }
         
         if (navigator.onLine) {
@@ -380,22 +487,24 @@
     let deferredPrompt;
     const installButton = document.getElementById('installButton');
     
-    window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        deferredPrompt = e;
-        installButton.style.display = 'block';
-        
-        installButton.addEventListener('click', () => {
-            deferredPrompt.prompt();
-            deferredPrompt.userChoice.then((choiceResult) => {
-                if (choiceResult.outcome === 'accepted') {
-                    console.log('PWA wurde installiert');
-                    installButton.style.display = 'none';
-                }
-                deferredPrompt = null;
+    if (installButton) {
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            installButton.style.display = 'block';
+            
+            installButton.addEventListener('click', () => {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('✅ PWA wurde installiert');
+                        installButton.style.display = 'none';
+                    }
+                    deferredPrompt = null;
+                });
             });
         });
-    });
+    }
 
     // Display Mode erkennen
     function getDisplayMode() {
@@ -425,7 +534,8 @@
         if (displayMode === 'standalone') {
             document.body.classList.add('pwa-installed');
             // PWA Status Indicator verstecken, wenn installiert
-            document.getElementById('pwaStatusIndicator').style.display = 'none';
+            const pwaStatusIndicator = document.getElementById('pwaStatusIndicator');
+            if (pwaStatusIndicator) pwaStatusIndicator.style.display = 'none';
         }
         
         // Netzwerk Status initialisieren
@@ -444,52 +554,3 @@
 
 </body>
 </html>
-<script>
-    // ... vorhandener Code ...
-
-    // Typewriter Effekt für Preloader (wenn gewünscht)
-    document.addEventListener('DOMContentLoaded', function() {
-        const typeTextElement = document.getElementById('type-text');
-        if (typeTextElement) {
-            // Einfacher Typewriter-Effekt
-            let text = 'Matthias Silberhain';
-            let i = 0;
-            function typeWriter() {
-                if (i < text.length) {
-                    typeTextElement.innerHTML += text.charAt(i);
-                    i++;
-                    setTimeout(typeWriter, 100);
-                }
-            }
-            typeWriter();
-        }
-    });
-
-    // Preloader entfernen
-    window.addEventListener('load', function() {
-        setTimeout(function() {
-            const preloader = document.getElementById('preloader');
-            if (preloader) {
-                preloader.style.opacity = '0';
-                setTimeout(function() {
-                    preloader.style.display = 'none';
-                    document.body.classList.add('loaded');
-                }, 500);
-            }
-        }, 1000);
-    });
-
-    // Fallback: Preloader nach 3 Sekunden ausblenden, falls load-Event nicht ausgelöst wird
-    setTimeout(function() {
-        const preloader = document.getElementById('preloader');
-        if (preloader && preloader.style.display !== 'none') {
-            preloader.style.opacity = '0';
-            setTimeout(function() {
-                preloader.style.display = 'none';
-                document.body.classList.add('loaded');
-            }, 500);
-        }
-    }, 3000);
-
-    // ... Rest des Codes (Display Mode, Service Worker, etc.) ...
-</script>
