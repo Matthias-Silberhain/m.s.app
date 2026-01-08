@@ -41,68 +41,7 @@
     <!-- CSS -->
     <link rel="stylesheet" href="assets/css/style.css">
     
-    <!-- PWA Script -->
-    <script src="pwa.js" defer></script>
-    
     <style>
-        /* Temporäre Styles für Preloader */
-        #preloader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #000000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            transition: opacity 0.5s ease;
-        }
-        
-        .preloader-inner {
-            text-align: center;
-        }
-        
-        .preloader-logo {
-            width: 200px;
-            height: 200px;
-            margin-bottom: 40px;
-            animation: pulse 2s infinite;
-        }
-        
-        .preloader-text {
-            font-family: 'Cinzel', serif;
-            color: #ffffff;
-            font-size: 2rem;
-            margin-bottom: 30px;
-        }
-        
-        .preloader-line {
-            width: 0;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, #667eea, transparent);
-            margin: 0 auto;
-            animation: fillLine 2s ease-in-out infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.7; transform: scale(1.05); }
-        }
-        
-        @keyframes fillLine {
-            0% { width: 0; }
-            50% { width: 200px; }
-            100% { width: 0; }
-        }
-        
-        /* Verstecke Preloader wenn Seite geladen ist */
-        body.loaded #preloader {
-            opacity: 0;
-            pointer-events: none;
-        }
-        
         /* PWA-spezifische Styles */
         @media (display-mode: standalone) {
             body {
@@ -123,6 +62,7 @@
             font-family: monospace;
             border: 1px solid rgba(102, 126, 234, 0.3);
             z-index: 9990;
+            display: none;
         }
         
         .pwa-status.online {
@@ -132,6 +72,79 @@
         .pwa-status.offline {
             color: #f87171;
         }
+        
+        /* PWA Install Button */
+        #pwaInstallButton {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(45deg, rgba(192,192,192,0.3), rgba(192,192,192,0.2));
+            color: #d6d9de;
+            border: 1px solid rgba(200,205,215,0.5);
+            border-radius: 4px;
+            font-family: 'Cinzel', serif;
+            letter-spacing: 0.1em;
+            text-decoration: none;
+            font-size: 0.95rem;
+            padding: 12px 20px;
+            cursor: pointer;
+            z-index: 9998;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .dark-mode #pwaInstallButton {
+            background: linear-gradient(45deg, rgba(255,255,255,0.3), rgba(255,255,255,0.2));
+            border-color: rgba(255,255,255,0.4);
+            color: #ffffff;
+        }
+        
+        /* PWA Install Section */
+        .pwa-section {
+            margin-top: 60px;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .pwa-section h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+        
+        .pwa-section p {
+            color: #ccc;
+            margin-bottom: 30px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+        }
+        
+        /* Preloader Anpassungen */
+        body.loaded .inhalt,
+        body.loaded .social-section,
+        body.loaded .footer {
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+        
+        .inhalt,
+        .social-section,
+        .footer {
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s ease;
+        }
     </style>
 </head>
 
@@ -140,14 +153,14 @@
 <!-- Preloader -->
 <div id="preloader" role="status" aria-label="Ladevorgang">
     <div class="preloader-inner">
-        <img src="assets/images/logo.png" alt="Logo" class="preloader-logo">
+        <img src="assets/images/logo.png" alt="Logo" class="preloader-logo" width="200" height="200">
         <div class="text-container">
             <h1 class="preloader-text" aria-live="polite">
-                <span id="type-text">Matthias Silberhain</span>
+                <span id="type-text"></span>
             </h1>
         </div>
         <!-- Silberner Strich -->
-        <div class="preloader-line"></div>
+        <div class="preloader-line" id="preloaderLine" aria-hidden="true"></div>
     </div>
 </div>
 
@@ -196,7 +209,7 @@
 <div class="lichtkante" aria-hidden="true"></div>
 
 <!-- ================= HAUPTINHALT ================= -->
-<main class="inhalt" id="main-content" role="main" style="display: none;">
+<main class="inhalt" id="main-content" role="main">
     <section class="startseite">
         <!-- HAUPTTITEL -->
         <div class="credo-container">
@@ -261,11 +274,9 @@
         </div>
         
         <!-- PWA Install Section -->
-        <div class="section" style="margin-top: 60px; padding: 40px; background: rgba(255, 255, 255, 0.05); border-radius: 20px; text-align: center;">
-            <h2 class="section-title" style="font-family: 'Cinzel', serif; font-size: 2rem; margin-bottom: 20px; color: #fff;">
-                PWA Installation
-            </h2>
-            <p style="color: #ccc; margin-bottom: 30px; max-width: 600px; margin-left: auto; margin-right: auto;">
+        <div class="pwa-section">
+            <h2>PWA Installation</h2>
+            <p>
                 Installiere diese Progressive Web App auf deinem Gerät für eine native App-Erfahrung.
                 Funktioniert offline und kann direkt vom Startbildschirm geöffnet werden.
             </p>
@@ -277,7 +288,7 @@
 </main>
 
 <!-- ================= SOCIAL MEDIA ================= -->
-<section class="social-section" aria-labelledby="social-title" style="display: none;">
+<section class="social-section" aria-labelledby="social-title">
     <h3 class="social-title" id="social-title">Folgen Sie den Gedanken</h3>
     <div class="social-grid" role="list">
         <!-- Snapchat -->
@@ -356,7 +367,7 @@
 </section>
 
 <!-- ================= FOOTER ================= -->
-<footer class="footer" role="contentinfo" style="display: none;">
+<footer class="footer" role="contentinfo">
     <div class="footer-links">
         <a href="impressum.html">Impressum</a>
         <a href="datenschutz.html">Datenschutz</a>
@@ -366,190 +377,25 @@
 </footer>
 
 <!-- PWA Status Indicator -->
-<div class="pwa-status" id="pwaStatusIndicator" style="display: none;">
+<div class="pwa-status" id="pwaStatusIndicator">
     <span id="connectionStatus">📶 Online</span>
 </div>
 
 <!-- ================= JAVASCRIPT ================= -->
+<!-- WICHTIG: Reihenfolge beibehalten -->
+<script src="assets/js/dark-mode.js"></script>
+<script src="assets/js/global.js"></script>
+<script src="assets/js/menu.js"></script>
+<script src="assets/js/pwa.js"></script>
+
+<!-- Service Worker Registration Fallback -->
 <script>
-    // Entferne no-js Klasse wenn JS aktiv ist
-    document.documentElement.classList.remove('no-js');
-    document.documentElement.classList.add('js');
-    
-    // Setze aktuelles Jahr im Footer
+    // Setze aktuelles Jahr im Footer (Fallback)
     document.getElementById('currentYear').textContent = new Date().getFullYear();
     
-    // Preloader Logic - Einfache Version
-    window.addEventListener('load', function() {
-        console.log('✅ Seite vollständig geladen');
-        
-        // Warte 2 Sekunden, dann Preloader ausblenden
-        setTimeout(function() {
-            const preloader = document.getElementById('preloader');
-            if (preloader) {
-                preloader.style.opacity = '0';
-                
-                // Nach der Animation Inhalt anzeigen
-                setTimeout(function() {
-                    preloader.style.display = 'none';
-                    document.body.classList.add('loaded');
-                    
-                    // Hauptinhalt anzeigen
-                    const mainContent = document.getElementById('main-content');
-                    if (mainContent) mainContent.style.display = 'block';
-                    
-                    // Social Section anzeigen
-                    const socialSection = document.querySelector('.social-section');
-                    if (socialSection) socialSection.style.display = 'block';
-                    
-                    // Footer anzeigen
-                    const footer = document.querySelector('.footer');
-                    if (footer) footer.style.display = 'block';
-                    
-                    // PWA Status anzeigen
-                    const pwaStatus = document.getElementById('pwaStatusIndicator');
-                    if (pwaStatus) pwaStatus.style.display = 'block';
-                    
-                    console.log('✅ Preloader ausgeblendet, Inhalt angezeigt');
-                }, 500); // Warte auf Fade-Out Animation
-            }
-        }, 2000); // Preloader für 2 Sekunden anzeigen
-    });
-    
-    // Fallback: Wenn load Event nicht ausgelöst wird, nach 4 Sekunden anzeigen
-    setTimeout(function() {
-        if (!document.body.classList.contains('loaded')) {
-            console.log('⚠️ Load Event nicht ausgelöst, zeige Inhalt nach Timeout');
-            const preloader = document.getElementById('preloader');
-            if (preloader) preloader.style.display = 'none';
-            document.body.classList.add('loaded');
-            
-            const mainContent = document.getElementById('main-content');
-            if (mainContent) mainContent.style.display = 'block';
-            
-            const socialSection = document.querySelector('.social-section');
-            if (socialSection) socialSection.style.display = 'block';
-            
-            const footer = document.querySelector('.footer');
-            if (footer) footer.style.display = 'block';
-        }
-    }, 4000);
-</script>
-
-<!-- WICHTIG: Korrekte Reihenfolge der Skripte -->
-<script src="assets/js/main.js"></script>
-
-<!-- PWA Funktionen -->
-<script>
-    // Netzwerk Status
-    function updateConnectionStatus() {
-        const statusElement = document.getElementById('connectionStatus');
-        const statusText = document.getElementById('pwaStatus');
-        const statusIndicator = document.getElementById('pwaStatusIndicator');
-        
-        function setOnline() {
-            if (statusElement) statusElement.innerHTML = '📶 Online';
-            if (statusElement) statusElement.className = 'online';
-            if (statusText) {
-                statusText.textContent = 'Online';
-                statusText.style.color = '#4ade80';
-            }
-            if (statusIndicator) {
-                statusIndicator.classList.add('online');
-                statusIndicator.classList.remove('offline');
-            }
-        }
-        
-        function setOffline() {
-            if (statusElement) statusElement.innerHTML = '📴 Offline';
-            if (statusElement) statusElement.className = 'offline';
-            if (statusText) {
-                statusText.textContent = 'Offline';
-                statusText.style.color = '#f87171';
-            }
-            if (statusIndicator) {
-                statusIndicator.classList.add('offline');
-                statusIndicator.classList.remove('online');
-            }
-        }
-        
-        if (navigator.onLine) {
-            setOnline();
-        } else {
-            setOffline();
-        }
-        
-        window.addEventListener('online', setOnline);
-        window.addEventListener('offline', setOffline);
-    }
-
-    // Install Button
-    let deferredPrompt;
-    const installButton = document.getElementById('installButton');
-    
-    if (installButton) {
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            installButton.style.display = 'block';
-            
-            installButton.addEventListener('click', () => {
-                deferredPrompt.prompt();
-                deferredPrompt.userChoice.then((choiceResult) => {
-                    if (choiceResult.outcome === 'accepted') {
-                        console.log('✅ PWA wurde installiert');
-                        installButton.style.display = 'none';
-                    }
-                    deferredPrompt = null;
-                });
-            });
-        });
-    }
-
-    // Display Mode erkennen
-    function getDisplayMode() {
-        const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
-        const isFullscreen = window.matchMedia('(display-mode: fullscreen)').matches;
-        const isMinimalUi = window.matchMedia('(display-mode: minimal-ui)').matches;
-        
-        if (isStandalone) {
-            console.log('📱 App läuft im Standalone-Modus (installiert)');
-            return 'standalone';
-        } else if (isFullscreen) {
-            return 'fullscreen';
-        } else if (isMinimalUi) {
-            return 'minimal-ui';
-        } else {
-            console.log('🌐 App läuft im Browser-Tab');
-            return 'browser';
-        }
-    }
-
-    // Display Mode beim Laden prüfen
-    document.addEventListener('DOMContentLoaded', () => {
-        const displayMode = getDisplayMode();
-        console.log(`Display Mode: ${displayMode}`);
-        
-        // Für installierte Apps: Anpassungen
-        if (displayMode === 'standalone') {
-            document.body.classList.add('pwa-installed');
-            // PWA Status Indicator verstecken, wenn installiert
-            const pwaStatusIndicator = document.getElementById('pwaStatusIndicator');
-            if (pwaStatusIndicator) pwaStatusIndicator.style.display = 'none';
-        }
-        
-        // Netzwerk Status initialisieren
-        updateConnectionStatus();
-    });
-
-    // Service Worker Registrierung
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js').then(() => {
-            console.log('✅ Service Worker registriert');
-        }).catch(error => {
-            console.warn('Service Worker Registrierung fehlgeschlagen:', error);
-        });
-    }
+    // Debug Info
+    console.log('🚀 Matthias Silberhain PWA gestartet');
+    console.log('📱 Gerät:', /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ? 'Mobile' : 'Desktop');
 </script>
 
 </body>
