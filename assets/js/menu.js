@@ -1,40 +1,62 @@
 /**
- * MOBILE MENU - Matthias Silberhain PWA
- * Burger Menu für mobile Navigation in PWA
- * Version 3.0 - PWA optimiert
+ * MOBILE MENÜ - Matthias Silberhain PWA
+ * Version 2.0 - Korrigierte Menü-Logik
  */
 
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('🍔 Menu.js geladen (PWA Version)');
+    console.log('🍔 Menu.js geladen');
     
-    // Defensive Prüfung aller Elemente
     const burgerButton = document.getElementById('burgerButton');
     const mainNav = document.getElementById('mainNav');
-    const menuOverlay = document.querySelector('.menu-overlay');
+    const menuOverlay = document.getElementById('menuOverlay');
     
-    // Warnung wenn Elemente fehlen (nur loggen, nicht abbrechen)
-    if (!burgerButton) {
-        console.warn('Menu.js: Burger Button (id="burgerButton") fehlt auf dieser Seite!');
-    }
-    
-    if (!mainNav) {
-        console.warn('Menu.js: Navigation (id="mainNav") fehlt auf dieser Seite!');
-    }
-    
+    // Prüfe ob alle Elemente existieren
     if (!burgerButton || !mainNav) {
-        return; // Abbrechen wenn essentielle Elemente fehlen
+        console.error('❌ Menü-Elemente nicht gefunden!');
+        return;
     }
     
-    const navLinks = mainNav.querySelectorAll('a');
+    // Event Listener für Burger Button
+    burgerButton.addEventListener('click', function(e) {
+        e.stopPropagation();
+        toggleMenu();
+    });
     
-    // Menü umschalten
-    function toggleMenu() {
-        const isOpen = burgerButton.classList.contains('aktiv');
-        
-        if (!isOpen) {
-            openMenu();
-        } else {
+    // Event Listener für Overlay (schließen)
+    if (menuOverlay) {
+        menuOverlay.addEventListener('click', function() {
             closeMenu();
+        });
+    }
+    
+    // Schließen bei Klick auf Nav Links
+    const navLinks = mainNav.querySelectorAll('a');
+    navLinks.forEach(link => {
+        link.addEventListener('click', function() {
+            closeMenu();
+        });
+    });
+    
+    // Schließen bei Escape Taste
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && mainNav.classList.contains('aktiv')) {
+            closeMenu();
+        }
+    });
+    
+    // Schließen bei Fenster-Resize (wenn zu Desktop wechselt)
+    window.addEventListener('resize', function() {
+        if (window.innerWidth > 768 && mainNav.classList.contains('aktiv')) {
+            closeMenu();
+        }
+    });
+    
+    // Toggle Funktion
+    function toggleMenu() {
+        if (mainNav.classList.contains('aktiv')) {
+            closeMenu();
+        } else {
+            openMenu();
         }
     }
     
@@ -42,98 +64,36 @@ document.addEventListener('DOMContentLoaded', function() {
     function openMenu() {
         burgerButton.classList.add('aktiv');
         mainNav.classList.add('aktiv');
-        
-        if (menuOverlay) {
-            menuOverlay.classList.add('active');
-            setTimeout(() => {
-                menuOverlay.style.opacity = '1';
-            }, 10);
-        }
-        
+        if (menuOverlay) menuOverlay.classList.add('active');
         document.body.classList.add('menu-open');
         
-        // Fokus auf ersten Link setzen für Accessibility
-        setTimeout(() => {
-            if (navLinks.length > 0) {
-                navLinks[0].focus();
-            }
-        }, 300);
+        // Accessibility
+        burgerButton.setAttribute('aria-expanded', 'true');
+        mainNav.setAttribute('aria-hidden', 'false');
         
-        console.log('Mobile Menu geöffnet');
+        console.log('📱 Menü geöffnet');
     }
     
     // Menü schließen
     function closeMenu() {
         burgerButton.classList.remove('aktiv');
         mainNav.classList.remove('aktiv');
-        
-        if (menuOverlay) {
-            menuOverlay.classList.remove('active');
-            menuOverlay.style.opacity = '0';
-        }
-        
+        if (menuOverlay) menuOverlay.classList.remove('active');
         document.body.classList.remove('menu-open');
-        burgerButton.focus(); // Fokus zurück auf Burger Button
         
-        console.log('Mobile Menu geschlossen');
-    }
-    
-    // Event Listeners
-    burgerButton.addEventListener('click', toggleMenu);
-    
-    if (menuOverlay) {
-        menuOverlay.addEventListener('click', closeMenu);
-    }
-    
-    // Menü schließen bei Link-Klick (mobile)
-    navLinks.forEach(link => {
-        link.addEventListener('click', () => {
-            if (window.innerWidth < 768 || isMobile) {
-                setTimeout(closeMenu, 100);
-            }
-        });
-    });
-    
-    // ESC Taste zum Schließen
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && burgerButton.classList.contains('aktiv')) {
-            closeMenu();
-        }
-    });
-    
-    // Automatisch schließen bei Fenster-Resize zu Desktop
-    window.addEventListener('resize', () => {
-        if (window.innerWidth > 768 && burgerButton.classList.contains('aktiv')) {
-            closeMenu();
-        }
-    });
-    
-    // ARIA Attribute für Accessibility
-    function updateAriaAttributes() {
-        const isExpanded = burgerButton.classList.contains('aktiv');
-        burgerButton.setAttribute('aria-expanded', isExpanded.toString());
-        burgerButton.setAttribute('aria-label', 
-            isExpanded ? 'Hauptmenü schließen' : 'Hauptmenü öffnen'
-        );
+        // Accessibility
+        burgerButton.setAttribute('aria-expanded', 'false');
+        mainNav.setAttribute('aria-hidden', 'true');
         
-        // Navigation sichtbar/unsichtbar für Screen Reader
-        mainNav.setAttribute('aria-hidden', (!isExpanded).toString());
+        console.log('📱 Menü geschlossen');
     }
     
-    // Initiale ARIA Attribute
-    updateAriaAttributes();
+    // Setze initiale Accessibility-Attribute
+    burgerButton.setAttribute('aria-expanded', 'false');
+    mainNav.setAttribute('aria-hidden', 'true');
     
-    // Observer für Zustandsänderungen
-    const observer = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
-            if (mutation.attributeName === 'class') {
-                updateAriaAttributes();
-            }
-        });
-    });
+    // Hilfsfunktion für andere Skripte
+    window.closeMobileMenu = closeMenu;
     
-    observer.observe(burgerButton, { attributes: true });
-    observer.observe(mainNav, { attributes: true });
-    
-    console.log('✅ Menu.js für PWA initialisiert');
+    console.log('✅ Menu.js initialisiert');
 });
