@@ -1802,3 +1802,132 @@ body.loaded .social-section,
 body.loaded .footer {
     opacity: 1;
 }
+/* ==========================================================================
+   TEXT FORMATIERUNG KORREKTUREN
+   ========================================================================== */
+
+/* Hauptinhalt Textformatierung */
+.inhalt p {
+    font-size: 1.15rem;
+    line-height: 1.75;
+    color: #b0b5bc;
+    margin-bottom: 1.5rem;
+    text-align: left;
+    font-family: "EB Garamond", Garamond, serif;
+}
+
+/* Lead-Text spezifisch */
+.lead-text {
+    font-size: 1.4rem;
+    text-align: center;
+    color: #e4e6ea;
+    margin-bottom: 2rem;
+    font-weight: 500;
+    font-family: "Cinzel", serif;
+}
+
+/* Highlight Box */
+.highlight {
+    font-size: 1.3rem;
+    color: #e4e6ea;
+    text-align: center;
+    font-style: italic;
+    margin: 2.5rem 0;
+    padding: 1.5rem;
+    border-left: 2px solid rgba(200, 205, 215, 0.4);
+    border-right: 2px solid rgba(200, 205, 215, 0.4);
+    background: rgba(20, 20, 20, 0.4);
+    border-radius: 4px;
+    font-family: "EB Garamond", Garamond, serif;
+}
+
+/* Zitat Box */
+.zitat {
+    text-align: center;
+    font-size: 1.4rem;
+    color: #e4e6ea;
+    margin: 3rem 0;
+    padding: 2rem;
+    position: relative;
+    background: rgba(20, 20, 20, 0.4);
+    border-radius: 8px;
+    font-family: "Cinzel", serif;
+    font-weight: 500;
+}
+
+.zitat-autor {
+    display: block;
+    margin-top: 1rem;
+    font-size: 1rem;
+    color: #b0b5bc;
+    font-style: normal;
+    font-family: "EB Garamond", Garamond, serif;
+}
+
+/* Social Media Titel */
+.social-title {
+    font-family: "Cinzel", serif;
+    color: #e4e6ea;
+    margin-bottom: 2rem;
+    font-size: 1.4rem;
+    letter-spacing: 0.1em;
+    text-align: center;
+}
+
+/* ==========================================================================
+   MOBILE TEXT OPTIMIERUNGEN
+   ========================================================================== */
+@media screen and (max-width: 768px) {
+    .inhalt p {
+        font-size: 1.1rem;
+        line-height: 1.7;
+        text-align: center;
+        margin-bottom: 1.25rem;
+    }
+    
+    .lead-text {
+        font-size: 1.2rem;
+    }
+    
+    .highlight {
+        font-size: 1.15rem;
+        padding: 1rem;
+        margin: 2rem 0;
+    }
+    
+    .zitat {
+        font-size: 1.2rem;
+        padding: 1.5rem;
+        margin: 2.5rem 0;
+    }
+    
+    h1 {
+        font-size: 1.8rem;
+        line-height: 1.3;
+        margin-bottom: 1.5rem;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .inhalt p {
+        font-size: 1rem;
+        line-height: 1.6;
+    }
+    
+    .lead-text {
+        font-size: 1.1rem;
+    }
+    
+    .highlight {
+        font-size: 1.05rem;
+    }
+    
+    .zitat {
+        font-size: 1.1rem;
+        padding: 1.25rem;
+    }
+    
+    h1 {
+        font-size: 1.6rem;
+    }
+}
