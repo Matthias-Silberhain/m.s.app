@@ -17,8 +17,7 @@ const urlsToCache = [
   './assets/icons/web-app-manifest-192x192.png',
   './assets/icons/web-app-manifest-512x512.png',
   
-  // Bilder
-  // Füge hier wichtige Bilder hinzu, z.B.:
+  // Bilder (füge hier wichtige Bilder hinzu)
   // './assets/images/logo.png',
 ];
 
