@@ -1,24 +1,23 @@
 /**
- * DARK MODE TOGGLE - Matthias Silberhain PWA
- * Version 2.0 - Korrigierte Dark-Mode Logik
+ * DARK MODE - Matthias Silberhain PWA
  */
 
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('🌙 Dark-Mode.js geladen');
+    console.log('🌙 Darkmode.js geladen');
     
     const darkModeToggle = document.getElementById('darkModeToggle');
     const body = document.body;
     
     if (!darkModeToggle) {
-        console.error('❌ Dark-Mode Toggle Button nicht gefunden!');
+        console.warn('⚠️ Dark Mode Toggle nicht gefunden');
         return;
     }
     
-    // Prüfe gespeicherte Einstellung oder Systempräferenz
+    // Prüfe gespeicherten Modus
     const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
     const savedMode = localStorage.getItem('darkMode');
     
-    // Initialisiere Dark Mode
+    // Setze initialen Modus
     if (savedMode === 'enabled' || (!savedMode && prefersDarkScheme.matches)) {
         enableDarkMode();
     } else {
@@ -34,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Systempräferenz-Änderungen überwachen
+    // System Preference Änderungen
     prefersDarkScheme.addEventListener('change', function(e) {
         if (!localStorage.getItem('darkMode')) {
             if (e.matches) {
@@ -45,32 +44,33 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
+    // Funktionen
     function enableDarkMode() {
         body.classList.add('dark-mode');
         localStorage.setItem('darkMode', 'enabled');
+        updateToggleIcon(true);
         console.log('🌙 Dark Mode aktiviert');
-        
-        // Dispatch Event für andere Skripte
-        window.dispatchEvent(new CustomEvent('darkModeChanged', {
-            detail: { enabled: true }
-        }));
     }
     
     function disableDarkMode() {
         body.classList.remove('dark-mode');
         localStorage.setItem('darkMode', 'disabled');
+        updateToggleIcon(false);
         console.log('☀️ Dark Mode deaktiviert');
-        
-        // Dispatch Event für andere Skripte
-        window.dispatchEvent(new CustomEvent('darkModeChanged', {
-            detail: { enabled: false }
-        }));
     }
     
-    // Hilfsfunktion für andere Skripte
-    window.isDarkModeEnabled = function() {
-        return body.classList.contains('dark-mode');
-    };
+    function updateToggleIcon(isDark) {
+        const moonIcon = document.querySelector('.moon-icon');
+        const sunIcon = document.querySelector('.sun-icon');
+        
+        if (isDark) {
+            if (moonIcon) moonIcon.style.display = 'none';
+            if (sunIcon) sunIcon.style.display = 'block';
+        } else {
+            if (moonIcon) moonIcon.style.display = 'block';
+            if (sunIcon) sunIcon.style.display = 'none';
+        }
+    }
     
-    console.log('✅ Dark-Mode.js initialisiert');
+    console.log('✅ Darkmode.js initialisiert');
 });
