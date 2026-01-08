@@ -118,3 +118,27 @@ self.addEventListener('push', event => {
     self.registration.showNotification('Matthias Silberhain', options)
   );
 });
+// Dateien, die im Cache gespeichert werden sollen
+const urlsToCache = [
+  // HTML
+  '/m.s.app/',
+  '/m.s.app/index.html',
+  
+  // PWA Dateien
+  '/m.s.app/manifest.json',
+  '/m.s.app/sw.js',
+  '/m.s.app/pwa.js',
+  
+  // CSS
+  '/m.s.app/assets/css/style.css',
+  
+  // Logo
+  '/m.s.app/assets/images/logo.png',
+  
+  // Icons
+  '/m.s.app/icons/icon-192x192.png',
+  '/m.s.app/icons/icon-512x512.png',
+  
+  // Fonts
+  'https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap'
+];
