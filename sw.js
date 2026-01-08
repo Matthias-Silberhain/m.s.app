@@ -1,13 +1,13 @@
 // Service Worker für Matthias Silberhain Portfolio
-const CACHE_NAME = 'ms-portfolio-v1.0';
+const CACHE_NAME = 'ms-portfolio-v1.1';
 const urlsToCache = [
   './',
   './index.html',
   './manifest.json',
-  './style.css',
   './assets/css/style.css',
   './assets/js/main.js',
   './pwa.js',
+  './sw.js',
   
   // Icons
   './assets/icons/favicon.ico',
@@ -17,8 +17,10 @@ const urlsToCache = [
   './assets/icons/web-app-manifest-192x192.png',
   './assets/icons/web-app-manifest-512x512.png',
   
-  // Bilder (füge hier wichtige Bilder hinzu)
-  // './assets/images/logo.png',
+  // Externe Ressourcen (Google Fonts)
+  'https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&display=swap',
+  'https://fonts.gstatic.com/s/cinzel/v19/8vIU7ww63mVu7gtR-kwKxNvkNOjw-tbnfYP5srfw.woff2',
+  'https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyeMZhrib2Bg-4.woff2'
 ];
 
 // Install Event
@@ -26,8 +28,11 @@ self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => {
-        console.log('📦 Cache geöffnet');
-        return cache.addAll(urlsToCache);
+        console.log('📦 Cache geöffnet:', CACHE_NAME);
+        return cache.addAll(urlsToCache.map(url => new Request(url, { mode: 'no-cors' })));
+      })
+      .catch(error => {
+        console.error('Cache Fehler:', error);
       })
   );
   self.skipWaiting();
@@ -52,28 +57,54 @@ self.addEventListener('activate', event => {
 
 // Fetch Event
 self.addEventListener('fetch', event => {
+  // Nur GET Requests cachen
+  if (event.request.method !== 'GET') return;
+  
   event.respondWith(
     caches.match(event.request)
       .then(response => {
         if (response) {
+          console.log('✅ Aus Cache geladen:', event.request.url);
           return response;
         }
+        
+        console.log('🌐 Netzwerkanfrage:', event.request.url);
         return fetch(event.request)
           .then(response => {
             if (!response || response.status !== 200 || response.type !== 'basic') {
               return response;
             }
+            
             const responseToCache = response.clone();
             caches.open(CACHE_NAME)
               .then(cache => {
                 cache.put(event.request, responseToCache);
+                console.log('💾 Im Cache gespeichert:', event.request.url);
               });
+            
             return response;
           })
-          .catch(() => {
-            // Optional: Fallback-Seite für Offline
-            // return caches.match('./offline.html');
+          .catch(error => {
+            console.error('❌ Fetch fehlgeschlagen:', error);
+            // Fallback für HTML-Seiten
+            if (event.request.headers.get('accept').includes('text/html')) {
+              return caches.match('./index.html');
+            }
+            return new Response('Offline', {
+              status: 503,
+              statusText: 'Service Unavailable',
+              headers: new Headers({
+                'Content-Type': 'text/plain'
+              })
+            });
           });
       })
   );
+});
+
+// Message Handler
+self.addEventListener('message', event => {
+  if (event.data.action === 'skipWaiting') {
+    self.skipWaiting();
+  }
 });
