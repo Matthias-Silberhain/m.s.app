@@ -1,0 +1,20 @@
+<!-- Manifest -->
+<link rel="manifest" href="/m.s.app/manifest.json">
+
+<!-- Theme Color -->
+<meta name="theme-color" content="#3b82f6">
+
+<!-- Apple Touch Icon -->
+<link rel="apple-touch-icon" href="/m.s.app/icons/icon-192x192.png">
+
+<!-- Viewport für Mobile -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Service Worker Registration -->
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/m.s.app/sw.js');
+  });
+}
+</script>
