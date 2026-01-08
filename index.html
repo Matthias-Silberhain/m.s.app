@@ -453,5 +453,36 @@ window.addEventListener('load', function() {
 });
 </script>
     </script>
+
+<!-- Debug Script für Preloader -->
+<script>
+// Debug-Modus aktivieren (in URL: ?debug=preloader)
+if (window.location.search.includes('debug=preloader')) {
+    const preloader = document.getElementById('preloader');
+    if (preloader) {
+        preloader.classList.add('debug');
+        console.log('🔧 Debug-Modus aktiviert für Preloader');
+        
+        // Log Preloader Status
+        console.log('Preloader Display:', preloader.style.display);
+        console.log('Preloader Opacity:', preloader.style.opacity);
+        console.log('Preloader Visibility:', preloader.style.visibility);
+        console.log('Preloader Classes:', preloader.className);
+        
+        // Füge Status-Anzeige hinzu
+        const statusDiv = document.createElement('div');
+        statusDiv.style.position = 'fixed';
+        statusDiv.style.bottom = '10px';
+        statusDiv.style.right = '10px';
+        statusDiv.style.background = 'rgba(0,0,0,0.8)';
+        statusDiv.style.color = 'white';
+        statusDiv.style.padding = '10px';
+        statusDiv.style.zIndex = '100000';
+        statusDiv.style.fontSize = '12px';
+        statusDiv.innerHTML = 'Preloader Debug<br>Status: ACTIVE';
+        document.body.appendChild(statusDiv);
+    }
+}
+</script>
 </body>
 </html>
