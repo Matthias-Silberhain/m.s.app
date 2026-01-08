@@ -1,26 +1,29 @@
-// Service Worker für Matthias Silberhain Portfolio
-const CACHE_NAME = 'ms-portfolio-v1.1';
+// Service Worker für Matthias Silberhain Portfolio PWA
+const CACHE_NAME = 'ms-pwa-v2.0';
 const urlsToCache = [
   './',
   './index.html',
   './manifest.json',
+  
+  // CSS
   './assets/css/style.css',
-  './assets/js/main.js',
-  './pwa.js',
-  './sw.js',
+  
+  // JS
+  './assets/js/dark-mode.js',
+  './assets/js/global.js',
+  './assets/js/menu.js',
+  './assets/js/pwa.js',
   
   // Icons
   './assets/icons/favicon.ico',
   './assets/icons/favicon.svg',
   './assets/icons/apple-touch-icon.png',
-  './assets/icons/favicon-96x96.png',
-  './assets/icons/web-app-manifest-192x192.png',
-  './assets/icons/web-app-manifest-512x512.png',
   
-  // Externe Ressourcen (Google Fonts)
-  'https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&display=swap',
-  'https://fonts.gstatic.com/s/cinzel/v19/8vIU7ww63mVu7gtR-kwKxNvkNOjw-tbnfYP5srfw.woff2',
-  'https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyeMZhrib2Bg-4.woff2'
+  // Logo
+  './assets/images/logo.png',
+  
+  // Fonts (cachen für Offline-Nutzung)
+  'https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=EB+Garamond:wght@400;500&family=Great+Vibes&family=Inter:wght@300;400;600&display=swap'
 ];
 
 // Install Event
@@ -28,11 +31,15 @@ self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => {
-        console.log('📦 Cache geöffnet:', CACHE_NAME);
-        return cache.addAll(urlsToCache.map(url => new Request(url, { mode: 'no-cors' })));
-      })
-      .catch(error => {
-        console.error('Cache Fehler:', error);
+        console.log('📦 PWA Cache geöffnet:', CACHE_NAME);
+        return cache.addAll(urlsToCache.map(url => {
+          return new Request(url, { 
+            mode: 'no-cors',
+            credentials: 'same-origin'
+          });
+        })).catch(error => {
+          console.log('⚠️ Einige Ressourcen konnten nicht gecached werden:', error);
+        });
       })
   );
   self.skipWaiting();
@@ -55,41 +62,45 @@ self.addEventListener('activate', event => {
   self.clients.claim();
 });
 
-// Fetch Event
+// Fetch Event - Network First, dann Cache
 self.addEventListener('fetch', event => {
-  // Nur GET Requests cachen
+  // Skip non-GET requests
   if (event.request.method !== 'GET') return;
   
+  // Für API oder externe Requests: Network Only
+  if (event.request.url.includes('api.') || 
+      event.request.url.includes('analytics')) {
+    return;
+  }
+  
   event.respondWith(
-    caches.match(event.request)
+    fetch(event.request)
       .then(response => {
-        if (response) {
-          console.log('✅ Aus Cache geladen:', event.request.url);
-          return response;
+        // Wenn die Antwort gut ist, cache sie
+        if (response.status === 200) {
+          const responseToCache = response.clone();
+          caches.open(CACHE_NAME)
+            .then(cache => {
+              cache.put(event.request, responseToCache);
+            });
         }
-        
-        console.log('🌐 Netzwerkanfrage:', event.request.url);
-        return fetch(event.request)
+        return response;
+      })
+      .catch(error => {
+        // Network fehlgeschlagen, versuche aus Cache
+        console.log('🌐 Netzwerk fehlgeschlagen, versuche Cache:', event.request.url);
+        return caches.match(event.request)
           .then(response => {
-            if (!response || response.status !== 200 || response.type !== 'basic') {
+            if (response) {
               return response;
             }
             
-            const responseToCache = response.clone();
-            caches.open(CACHE_NAME)
-              .then(cache => {
-                cache.put(event.request, responseToCache);
-                console.log('💾 Im Cache gespeichert:', event.request.url);
-              });
-            
-            return response;
-          })
-          .catch(error => {
-            console.error('❌ Fetch fehlgeschlagen:', error);
             // Fallback für HTML-Seiten
             if (event.request.headers.get('accept').includes('text/html')) {
               return caches.match('./index.html');
             }
+            
+            // Fallback für andere Ressourcen
             return new Response('Offline', {
               status: 503,
               statusText: 'Service Unavailable',
@@ -102,7 +113,7 @@ self.addEventListener('fetch', event => {
   );
 });
 
-// Message Handler
+// Message Handler für Updates
 self.addEventListener('message', event => {
   if (event.data.action === 'skipWaiting') {
     self.skipWaiting();
