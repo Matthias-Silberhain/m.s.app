@@ -1,6 +1,6 @@
 // Service Worker für Matthias Silberhain Portfolio PWA
-const CACHE_NAME = 'ms-portfolio-v2';
-const APP_VERSION = '2.0.0';
+const CACHE_NAME = 'ms-portfolio-v1';
+const APP_VERSION = '1.0.0';
 
 // Dateien, die im Cache gespeichert werden sollen
 const urlsToCache = [
@@ -11,19 +11,17 @@ const urlsToCache = [
   // PWA Dateien
   '/m.s.app/manifest.json',
   '/m.s.app/sw.js',
+  '/m.s.app/pwa.js',
   
   // CSS
-  '/m.s.app/style.css',
+  '/m.s.app/assets/css/style.css',
   
-  // Icons (wichtigste)
+  // Icons
   '/m.s.app/icons/icon-192x192.png',
   '/m.s.app/icons/icon-512x512.png',
   
-  // Fonts (EB Garamond, Cinzel)
-  'https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap',
-  
-  // Externe Icons (falls verwendet)
-  'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css'
+  // Fonts
+  'https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap'
 ];
 
 // ========== INSTALL ==========
@@ -34,15 +32,9 @@ self.addEventListener('install', event => {
     caches.open(CACHE_NAME)
       .then(cache => {
         console.log('[Service Worker] Caching wichtige Dateien');
-        return cache.addAll(urlsToCache)
-          .then(() => {
-            console.log('[Service Worker] Alle Dateien gecached');
-            return self.skipWaiting();
-          })
-          .catch(error => {
-            console.error('[Service Worker] Fehler beim Caching:', error);
-          });
+        return cache.addAll(urlsToCache);
       })
+      .then(() => self.skipWaiting())
   );
 });
 
@@ -61,10 +53,7 @@ self.addEventListener('activate', event => {
         })
       );
     })
-    .then(() => {
-      console.log('[Service Worker] Jetzt Kontrolle über alle Tabs übernehmen');
-      return self.clients.claim();
-    })
+    .then(() => self.clients.claim())
   );
 });
 
@@ -73,21 +62,15 @@ self.addEventListener('fetch', event => {
   // Nur GET Requests cachen
   if (event.request.method !== 'GET') return;
   
-  // Externe Ressourcen (CDNs) und interne behandeln
-  const url = new URL(event.request.url);
-  
-  // Strategie: Cache First, dann Netzwerk
   event.respondWith(
     caches.match(event.request)
       .then(cachedResponse => {
         // Wenn im Cache gefunden, zurückgeben
         if (cachedResponse) {
-          console.log('[Service Worker] Aus Cache:', url.pathname);
           return cachedResponse;
         }
         
         // Sonst vom Netzwerk laden
-        console.log('[Service Worker] Lade vom Netzwerk:', url.pathname);
         return fetch(event.request)
           .then(response => {
             // Prüfen ob die Antwort gültig ist
@@ -95,88 +78,43 @@ self.addEventListener('fetch', event => {
               return response;
             }
             
-            // Response klonen (stream kann nur einmal gelesen werden)
+            // Response klonen und im Cache speichern
             const responseToCache = response.clone();
             
-            // Im Cache speichern für nächste Anfragen
             caches.open(CACHE_NAME)
               .then(cache => {
-                // Prüfen ob es eine HTML-Datei ist
-                if (event.request.url.includes('/m.s.app/') && 
-                    event.request.headers.get('accept').includes('text/html')) {
-                  console.log('[Service Worker] HTML im Cache gespeichert:', url.pathname);
-                }
                 cache.put(event.request, responseToCache);
               });
             
             return response;
           })
-          .catch(error => {
-            console.error('[Service Worker] Fetch fehlgeschlagen:', error);
-            
+          .catch(() => {
             // Fallback für Offline: Startseite zurückgeben
             if (event.request.mode === 'navigate') {
               return caches.match('/m.s.app/index.html');
             }
             
-            // Fallback für CSS/JS: Leere Antwort
-            if (event.request.destination === 'style' || 
-                event.request.destination === 'script') {
-              return new Response('/* Offline */', {
+            // Fallback für CSS
+            if (event.request.destination === 'style') {
+              return new Response('/* Offline Mode */', {
                 headers: { 'Content-Type': 'text/css' }
               });
             }
-            
-            return new Response('Offline - Bitte Netzwerkverbindung prüfen', {
-              status: 408,
-              statusText: 'Offline'
-            });
           });
       })
   );
 });
 
-// ========== BACKGROUND SYNC (optional) ==========
-self.addEventListener('sync', event => {
-  if (event.tag === 'sync-data') {
-    console.log('[Service Worker] Background Sync gestartet');
-    event.waitUntil(syncOfflineData());
-  }
-});
-
-// ========== PUSH NOTIFICATIONS (optional) ==========
+// ========== PUSH NOTIFICATIONS ==========
 self.addEventListener('push', event => {
   const options = {
     body: event.data.text(),
     icon: '/m.s.app/icons/icon-192x192.png',
     badge: '/m.s.app/icons/icon-72x72.png',
-    vibrate: [100, 50, 100],
-    data: {
-      dateOfArrival: Date.now(),
-      primaryKey: '1'
-    },
-    actions: [
-      {
-        action: 'explore',
-        title: 'Öffnen',
-        icon: '/m.s.app/icons/open-icon.png'
-      },
-      {
-        action: 'close',
-        title: 'Schließen',
-        icon: '/m.s.app/icons/close-icon.png'
-      }
-    ]
+    vibrate: [100, 50, 100]
   };
   
   event.waitUntil(
     self.registration.showNotification('Matthias Silberhain', options)
   );
 });
-
-// ========== HELPER FUNCTIONS ==========
-async function syncOfflineData() {
-  // Hier können offline Daten synchronisiert werden
-  console.log('[Service Worker] Synchronisiere Offline-Daten...');
-  // Implementierung je nach Bedarf
-}
