@@ -301,23 +301,157 @@
     });
     </script>
     
-    <!-- Externe JavaScript Dateien -->
-    <script src="assets/js/dark-mode.js"></script>
-    <script src="assets/js/menu.js"></script>
+  <!-- JavaScript für Preloader und Typewriter -->
+<script>
+// ================= PRELOADER MIT TYPEWRITER =================
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🌐 Seite geladen - Starte Preloader');
     
-    <!-- Service Worker -->
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js')
-                    .then(registration => {
-                        console.log('✅ Service Worker registriert');
-                    })
-                    .catch(error => {
-                        console.log('❌ Service Worker fehlgeschlagen:', error);
-                    });
-            });
+    const preloader = document.getElementById('preloader');
+    const typeTextElement = document.getElementById('type-text');
+    const currentYearElement = document.getElementById('currentYear');
+    
+    // 1. Preloader sofort anzeigen
+    if (preloader) {
+        preloader.style.display = 'flex';
+        preloader.style.opacity = '1';
+        preloader.style.visibility = 'visible';
+    }
+    
+    // 2. Aktuelles Jahr setzen
+    if (currentYearElement) {
+        currentYearElement.textContent = new Date().getFullYear();
+    }
+    
+    // 3. Mobile Detection
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    
+    // 4. Typewriter nur auf Desktop (auf Mobile zu langsam)
+    if (typeTextElement && !isMobile) {
+        const text = "MATTHIAS SILBERHAIN";
+        let index = 0;
+        const typingSpeed = 80;
+        
+        function typeWriter() {
+            if (index < text.length) {
+                typeTextElement.textContent += text.charAt(index);
+                index++;
+                setTimeout(typeWriter, typingSpeed);
+            } else {
+                // Typewriter fertig, Preloader beenden
+                setTimeout(finishPreloader, 500);
+            }
         }
+        
+        // Starte Typewriter nach kurzer Verzögerung
+        setTimeout(() => {
+            if (typeTextElement.textContent === '') {
+                typeWriter();
+            }
+        }, 300);
+    } else {
+        // Auf Mobile: Kein Typewriter, kürzerer Preloader
+        console.log('📱 Mobile erkannt - Kein Typewriter');
+        setTimeout(finishPreloader, 1500);
+    }
+    
+    // 5. Sicherheits-Timeout (max 3 Sekunden)
+    setTimeout(finishPreloader, 3000);
+    
+    function finishPreloader() {
+        if (preloader && !preloader.classList.contains('loaded')) {
+            console.log('✅ Beende Preloader');
+            preloader.classList.add('loaded');
+            
+            // Fade-out Animation
+            setTimeout(() => {
+                preloader.style.opacity = '0';
+                
+                setTimeout(() => {
+                    preloader.style.display = 'none';
+                    document.body.classList.add('loaded');
+                    
+                    // Inhalt sichtbar machen
+                    const contentElements = document.querySelectorAll('.inhalt, .social-section, .footer');
+                    contentElements.forEach(el => {
+                        if (el) {
+                            el.style.opacity = '1';
+                            el.style.visibility = 'visible';
+                        }
+                    });
+                    
+                    // Starte Preloader-Line Animation
+                    const preloaderLine = document.querySelector('.preloader-line');
+                    if (preloaderLine) {
+                        preloaderLine.classList.add('active');
+                    }
+                    
+                }, 500);
+            }, 100);
+        }
+    }
+    
+    // 6. Smooth Scrolling
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            const href = this.getAttribute('href');
+            if (href !== '#' && href.startsWith('#')) {
+                e.preventDefault();
+                const targetElement = document.getElementById(href.substring(1));
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 100,
+                        behavior: 'smooth'
+                    });
+                }
+            }
+        });
+    });
+    
+    // 7. Mobile Menu Helper
+    window.closeMobileMenu = function() {
+        const burger = document.getElementById('burgerButton');
+        const nav = document.getElementById('mainNav');
+        const overlay = document.getElementById('menuOverlay');
+        
+        if (burger && nav && burger.classList.contains('aktiv')) {
+            burger.classList.remove('aktiv');
+            nav.classList.remove('aktiv');
+            if (overlay) overlay.classList.remove('active');
+            document.body.classList.remove('menu-open');
+        }
+    };
+    
+    console.log('✅ Preloader initialisiert');
+});
+
+// ================= WINDOW.LOAD FALLBACK =================
+// Falls Preloader hängen bleibt, erzwinge Abschluss
+window.addEventListener('load', function() {
+    console.log('📦 Alle Ressourcen geladen');
+    
+    setTimeout(function() {
+        const preloader = document.getElementById('preloader');
+        if (preloader && preloader.style.display !== 'none') {
+            console.warn('⚠️ Preloader hängt - Erzwinge Abschluss');
+            
+            preloader.classList.add('loaded');
+            preloader.style.opacity = '0';
+            
+            setTimeout(() => {
+                preloader.style.display = 'none';
+                document.body.classList.add('loaded');
+                
+                // Inhalt sichtbar machen
+                document.querySelectorAll('.inhalt, .social-section, .footer').forEach(el => {
+                    el.style.opacity = '1';
+                    el.style.visibility = 'visible';
+                });
+            }, 500);
+        }
+    }, 4000); // 4 Sekunden maximal
+});
+</script>
     </script>
 </body>
 </html>
