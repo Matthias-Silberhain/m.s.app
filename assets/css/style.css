@@ -1294,3 +1294,128 @@ body.dark-mode .footer-links a:hover {
     text-align: justify !important;
   }
 }
+/* ==========================================================================
+   MOBILE PRELOADER FIXES
+   ========================================================================== */
+
+/* Preloader auf Mobile sicherstellen */
+@media screen and (max-width: 768px) {
+    #preloader {
+        background: #000000 !important;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 100vh !important;
+        height: 100dvh !important;
+        z-index: 9999 !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+    }
+    
+    /* Preloader Text auf Mobile */
+    .preloader-text {
+        font-size: 22px !important;
+        margin-bottom: 80px !important;
+        min-height: 40px !important;
+    }
+    
+    /* Preloader Logo auf Mobile */
+    .preloader-logo {
+        width: 140px !important;
+        margin-bottom: 60px !important;
+    }
+    
+    /* Cursor auf Mobile anpassen */
+    .preloader-text::after {
+        font-size: 22px !important;
+    }
+    
+    /* Preloader Line Animation auf Mobile */
+    .preloader-line {
+        top: calc(70% + 20px) !important;
+    }
+    
+    /* Verhindere Scrollen während Preloader */
+    body:not(.loaded) {
+        overflow: hidden !important;
+        height: 100vh !important;
+    }
+}
+
+/* Extra kleine Screens */
+@media screen and (max-width: 480px) {
+    .preloader-text {
+        font-size: 18px !important;
+        letter-spacing: 0.1em !important;
+        margin-bottom: 60px !important;
+    }
+    
+    .preloader-logo {
+        width: 100px !important;
+        margin-bottom: 40px !important;
+    }
+    
+    .preloader-text::after {
+        font-size: 18px !important;
+    }
+}
+
+/* ==========================================================================
+   PRELOADER DEBUG STYLES
+   ========================================================================== */
+
+/* Debug: Preloader sichtbar machen */
+#preloader.debug {
+    border: 3px solid red !important;
+}
+
+#preloader.debug::before {
+    content: 'Preloader sichtbar';
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: red;
+    color: white;
+    padding: 5px 10px;
+    font-size: 12px;
+    z-index: 100000;
+}
+
+/* ==========================================================================
+   PRELOADER ANIMATION FIXES
+   ========================================================================== */
+
+/* Sicherstellen, dass Preloader-Line Animation funktioniert */
+.preloader-line.active {
+    animation: 
+        lineExpand 2s cubic-bezier(0.4, 0, 0.2, 1) forwards,
+        lineGlow 2s ease-in-out !important;
+}
+
+/* Preloader Fade-out */
+#preloader.loaded {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    transition: opacity 0.5s ease, visibility 0.5s ease !important;
+}
+
+/* Body loaded state */
+body.loaded {
+    overflow: auto !important;
+}
+
+/* Inhalt Fade-in */
+.inhalt, .social-section, .footer {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease 0.2s, visibility 0.5s ease 0.2s;
+}
+
+body.loaded .inhalt,
+body.loaded .social-section,
+body.loaded .footer {
+    opacity: 1 !important;
+    visibility: visible !important;
+}
