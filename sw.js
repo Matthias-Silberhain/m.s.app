@@ -1,21 +1,25 @@
-// Service Worker für m.s.app
-const CACHE_NAME = 'm.s.app-v1.0';
-// In sw.js, aktualisiere die urlsToCache:
+// Service Worker für Matthias Silberhain Portfolio
+const CACHE_NAME = 'ms-portfolio-v1.0';
 const urlsToCache = [
   './',
   './index.html',
   './manifest.json',
-  // Alle Icons
-  './icons/icon-16x16.png',
-  './icons/icon-32x32.png',
-  './icons/icon-72x72.png',
-  './icons/icon-96x96.png',
-  './icons/icon-128x128.png',
-  './icons/icon-144x144.png',
-  './icons/icon-192x192.png',
-  './icons/icon-256x256.png',
-  './icons/icon-384x384.png',
-  './icons/icon-512x512.png'
+  './style.css',
+  './assets/css/style.css',
+  './assets/js/main.js',
+  './pwa.js',
+  
+  // Icons
+  './assets/icons/favicon.ico',
+  './assets/icons/favicon.svg',
+  './assets/icons/apple-touch-icon.png',
+  './assets/icons/favicon-96x96.png',
+  './assets/icons/web-app-manifest-192x192.png',
+  './assets/icons/web-app-manifest-512x512.png',
+  
+  // Bilder
+  // Füge hier wichtige Bilder hinzu, z.B.:
+  // './assets/images/logo.png',
 ];
 
 // Install Event
@@ -47,42 +51,29 @@ self.addEventListener('activate', event => {
   self.clients.claim();
 });
 
-// Fetch Event (Cache First Strategy)
+// Fetch Event
 self.addEventListener('fetch', event => {
   event.respondWith(
     caches.match(event.request)
       .then(response => {
-        // Cache-Treffer: Zurückgeben
         if (response) {
           return response;
         }
-        
-        // Nicht im Cache: Netzwerkanfrage
         return fetch(event.request)
           .then(response => {
-            // Nur erfolgreiche Antworten cachen
             if (!response || response.status !== 200 || response.type !== 'basic') {
               return response;
             }
-            
-            // Antwort klonen und cachen
             const responseToCache = response.clone();
             caches.open(CACHE_NAME)
               .then(cache => {
                 cache.put(event.request, responseToCache);
               });
-            
             return response;
           })
           .catch(() => {
-            // Fallback für Fehler (optional)
-            return new Response('Offline-Inhalt', {
-              status: 503,
-              statusText: 'Service Unavailable',
-              headers: new Headers({
-                'Content-Type': 'text/plain'
-              })
-            });
+            // Optional: Fallback-Seite für Offline
+            // return caches.match('./offline.html');
           });
       })
   );
