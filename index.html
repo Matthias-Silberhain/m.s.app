@@ -444,3 +444,52 @@
 
 </body>
 </html>
+<script>
+    // ... vorhandener Code ...
+
+    // Typewriter Effekt für Preloader (wenn gewünscht)
+    document.addEventListener('DOMContentLoaded', function() {
+        const typeTextElement = document.getElementById('type-text');
+        if (typeTextElement) {
+            // Einfacher Typewriter-Effekt
+            let text = 'Matthias Silberhain';
+            let i = 0;
+            function typeWriter() {
+                if (i < text.length) {
+                    typeTextElement.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(typeWriter, 100);
+                }
+            }
+            typeWriter();
+        }
+    });
+
+    // Preloader entfernen
+    window.addEventListener('load', function() {
+        setTimeout(function() {
+            const preloader = document.getElementById('preloader');
+            if (preloader) {
+                preloader.style.opacity = '0';
+                setTimeout(function() {
+                    preloader.style.display = 'none';
+                    document.body.classList.add('loaded');
+                }, 500);
+            }
+        }, 1000);
+    });
+
+    // Fallback: Preloader nach 3 Sekunden ausblenden, falls load-Event nicht ausgelöst wird
+    setTimeout(function() {
+        const preloader = document.getElementById('preloader');
+        if (preloader && preloader.style.display !== 'none') {
+            preloader.style.opacity = '0';
+            setTimeout(function() {
+                preloader.style.display = 'none';
+                document.body.classList.add('loaded');
+            }, 500);
+        }
+    }, 3000);
+
+    // ... Rest des Codes (Display Mode, Service Worker, etc.) ...
+</script>
