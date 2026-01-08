@@ -1,1 +1,157 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
+body {
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    color: white;
+}
+/* ==========================================================================
+   PWA SPEZIFISCHE STYLES
+   ========================================================================== */
+
+/* Install Button Styling (passt zu deinem Design) */
+#installButton {
+  animation: silverGlow 3s infinite ease-in-out !important;
+  background: linear-gradient(45deg, 
+    rgba(192, 192, 192, 0.3), 
+    rgba(192, 192, 192, 0.2)) !important;
+  border: 1px solid rgba(192, 192, 192, 0.4) !important;
+  box-shadow: 
+    0 5px 25px rgba(192, 192, 192, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25),
+    0 0 15px rgba(192, 192, 192, 0.4) !important;
+}
+
+body.dark-mode #installButton {
+  background: linear-gradient(45deg, 
+    rgba(255, 255, 255, 0.3), 
+    rgba(255, 255, 255, 0.2)) !important;
+  border: 1px solid rgba(255, 255, 255, 0.5) !important;
+  box-shadow: 
+    0 5px 30px rgba(255, 255, 255, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    0 0 20px rgba(255, 255, 255, 0.6) !important;
+}
+
+/* Animationen für PWA Elements */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOutDown {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+}
+
+/* Standalone Mode Anpassungen */
+@media (display-mode: standalone) {
+  body {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  
+  .header {
+    padding-top: max(35px, env(safe-area-inset-top));
+  }
+}
+
+/* Touch Action Optimierungen für PWA */
+button, 
+a, 
+.silber-button, 
+.dark-mode-toggle, 
+.burger {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Verbesserte Scroll-Performance */
+html {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Safe Area Unterstützung für Notch Phones */
+@supports(padding: max(0px)) {
+  body {
+    padding-left: min(0vmin, env(safe-area-inset-left));
+    padding-right: min(0vmin, env(safe-area-inset-right));
+  }
+}
+/* ==========================================================================
+   PWA SPEZIFISCHE STYLES
+   ========================================================================== */
+
+/* Install Button Animation */
+@keyframes pwaButtonPulse {
+  0%, 100% { 
+    box-shadow: 
+      0 0 10px rgba(192, 192, 192, 0.3),
+      0 0 5px rgba(192, 192, 192, 0.2); 
+  }
+  50% { 
+    box-shadow: 
+      0 0 20px rgba(192, 192, 192, 0.6),
+      0 0 15px rgba(192, 192, 192, 0.4); 
+  }
+}
+
+#pwaInstallButton {
+  animation: pwaButtonPulse 3s infinite ease-in-out;
+}
+
+/* Dark Mode für Install Button */
+body.dark-mode #pwaInstallButton {
+  animation: pwaButtonPulse 2s infinite ease-in-out;
+}
+
+/* Safe Area für iPhones mit Notch */
+@supports(padding: max(0px)) {
+  body {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+}
+
+/* Standalone Mode (wenn als PWA installiert) */
+@media (display-mode: standalone) {
+  body {
+    padding-top: max(20px, env(safe-area-inset-top));
+  }
+  
+  .header {
+    padding-top: max(35px, env(safe-area-inset-top));
+  }
+}
+
+/* Verbesserte Touch Targets für Mobile */
+button, 
+a, 
+.silber-button, 
+.dark-mode-toggle, 
+.burger,
+#pwaInstallButton {
+  min-height: 44px;
+  min-width: 44px;
+  touch-action: manipulation;
+}
