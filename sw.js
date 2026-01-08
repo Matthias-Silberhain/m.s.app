@@ -1,14 +1,20 @@
 // Service Worker für m.s.app
 const CACHE_NAME = 'm.s.app-v1.0';
+// In sw.js, aktualisiere die urlsToCache:
 const urlsToCache = [
   './',
   './index.html',
   './manifest.json',
+  // Alle Icons
+  './icons/icon-16x16.png',
+  './icons/icon-32x32.png',
   './icons/icon-72x72.png',
   './icons/icon-96x96.png',
   './icons/icon-128x128.png',
   './icons/icon-144x144.png',
   './icons/icon-192x192.png',
+  './icons/icon-256x256.png',
+  './icons/icon-384x384.png',
   './icons/icon-512x512.png'
 ];
 
