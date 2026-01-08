@@ -2,22 +2,24 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>Matthias Silberhain - Portfolio</title>
-    <meta name="description" content="Eleganter Dark Mode Portfolio mit animierten Lichtkanten">
+    <meta name="description" content="Eleganter Dark Mode Portfolio">
     
     <!-- PWA Meta Tags -->
-    <link rel="manifest" href="/m.s.app/manifest.json">
+    <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#000000">
     
-    <!-- Apple Touch Icon -->
-    <link rel="apple-touch-icon" href="/m.s.app/icons/icon-180x180.png">
+    <!-- Apple Touch Icons -->
+    <link rel="apple-touch-icon" href="icons/icon-180x180.png">
+    <link rel="apple-touch-startup-image" href="icons/splash-640x1136.png">
     
     <!-- Favicon -->
-    <link rel="icon" type="image/png" sizes="32x32" href="/m.s.app/icons/icon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/m.s.app/icons/icon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="icons/icon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="icons/icon-16x16.png">
     
-    <!-- Styles -->
     <style>
         * {
             margin: 0;
@@ -34,96 +36,102 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            text-align: center;
             padding: 20px;
-        }
-        
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            background: linear-gradient(90deg, #00dbde, #fc00ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 30px rgba(0, 219, 222, 0.5);
-        }
-        
-        p {
-            font-size: 1.2rem;
-            max-width: 600px;
-            line-height: 1.6;
-            margin-bottom: 2rem;
-            color: #ccc;
+            text-align: center;
         }
         
         .logo {
             width: 150px;
             height: 150px;
             margin-bottom: 2rem;
-            border-radius: 20px;
-            background: linear-gradient(135deg, #00dbde, #fc00ff);
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 3rem;
-            box-shadow: 0 0 50px rgba(0, 219, 222, 0.3);
+            font-size: 48px;
+            font-weight: bold;
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            max-width: 600px;
+            margin-bottom: 2rem;
+            color: #aaa;
         }
         
         .status {
             margin-top: 2rem;
             padding: 1rem 2rem;
-            border-radius: 10px;
             background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
             font-family: monospace;
+            font-size: 0.9rem;
         }
         
-        .install-button {
+        .install-btn {
             margin-top: 2rem;
-            padding: 1rem 2rem;
-            font-size: 1.2rem;
-            background: linear-gradient(90deg, #00dbde, #fc00ff);
+            padding: 12px 24px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
             border: none;
-            border-radius: 50px;
+            border-radius: 25px;
             color: white;
+            font-size: 1rem;
+            font-weight: bold;
             cursor: pointer;
-            transition: transform 0.3s, box-shadow 0.3s;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
         
-        .install-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        .install-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        @media (display-mode: standalone) {
+            body {
+                padding-top: env(safe-area-inset-top);
+                padding-bottom: env(safe-area-inset-bottom);
+            }
         }
     </style>
 </head>
 <body>
     <div class="logo">MS</div>
     <h1>Matthias Silberhain</h1>
-    <p>Eleganter Dark Mode Portfolio mit animierten Lichtkanten. Diese Progressive Web App kann auf Ihrem Startbildschirm installiert werden und funktioniert offline.</p>
+    <p>Willkommen in meinem Portfolio. Diese Progressive Web App funktioniert offline und kann auf deinem Startbildschirm installiert werden.</p>
     
-    <button class="install-button" id="installButton">App installieren</button>
+    <button class="install-btn" id="installButton">App installieren</button>
     
     <div class="status" id="status">
-        PWA Status: Warte auf Interaktion...
+        PWA Status: Wird initialisiert...
     </div>
 
     <script>
         // Service Worker Registrierung
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/m.s.app/sw.js')
+                navigator.serviceWorker.register('sw.js')
                     .then(registration => {
-                        console.log('ServiceWorker registriert:', registration);
-                        document.getElementById('status').innerHTML = 
-                            'PWA Status: Service Worker registriert!';
+                        console.log('Service Worker registriert:', registration);
+                        document.getElementById('status').textContent = 
+                            '✅ PWA bereit! Service Worker aktiv.';
                     })
                     .catch(error => {
-                        console.log('ServiceWorker Registrierung fehlgeschlagen:', error);
-                        document.getElementById('status').innerHTML = 
-                            'PWA Status: Service Worker fehlgeschlagen.';
+                        console.log('Service Worker fehlgeschlagen:', error);
+                        document.getElementById('status').textContent = 
+                            '⚠️ Service Worker konnte nicht registriert werden.';
                     });
             });
-        } else {
-            document.getElementById('status').innerHTML = 
-                'PWA Status: Service Worker werden von diesem Browser nicht unterstützt.';
         }
 
         // Installations-Button
@@ -134,30 +142,46 @@
             e.preventDefault();
             deferredPrompt = e;
             installButton.style.display = 'block';
-            document.getElementById('status').innerHTML = 
-                'PWA Status: Kann installiert werden! Klicken Sie auf "App installieren".';
+            document.getElementById('status').textContent = 
+                '📱 App kann installiert werden! Klicke auf "App installieren".';
         });
 
-        installButton.addEventListener('click', () => {
+        installButton.addEventListener('click', async () => {
             if (deferredPrompt) {
                 deferredPrompt.prompt();
-                deferredPrompt.userChoice.then((choiceResult) => {
-                    if (choiceResult.outcome === 'accepted') {
-                        document.getElementById('status').innerHTML = 
-                            'PWA Status: App wird installiert!';
-                        installButton.style.display = 'none';
-                    }
-                    deferredPrompt = null;
-                });
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    document.getElementById('status').textContent = 
+                        '🎉 App wird installiert!';
+                    installButton.style.display = 'none';
+                }
+                deferredPrompt = null;
             }
         });
 
-        // Prüfen, ob die App bereits installiert ist
+        // App bereits installiert?
         window.addEventListener('appinstalled', () => {
-            document.getElementById('status').innerHTML = 
-                'PWA Status: App erfolgreich installiert!';
+            document.getElementById('status').textContent = 
+                '✅ App erfolgreich installiert!';
             installButton.style.display = 'none';
         });
+
+        // Offline-Status
+        window.addEventListener('online', () => {
+            document.getElementById('status').textContent = 
+                '✅ Online - PWA funktioniert optimal';
+        });
+
+        window.addEventListener('offline', () => {
+            document.getElementById('status').textContent = 
+                '📴 Offline - PWA nutzt gecachte Daten';
+        });
+
+        // Initialer Online-Status
+        if (!navigator.onLine) {
+            document.getElementById('status').textContent = 
+                '📴 Offline - PWA funktioniert trotzdem';
+        }
     </script>
 </body>
 </html>
