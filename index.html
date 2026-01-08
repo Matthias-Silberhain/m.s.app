@@ -3,24 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Matthias Silberhain - Portfolio</title>
-    <meta name="description" content="Eleganter Dark Mode Portfolio">
     
     <!-- PWA Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Matthias">
+    
+    <!-- SEO Meta Tags -->
+    <title>Matthias Silberhain | Portfolio</title>
+    <meta name="description" content="Eleganter Dark Mode Portfolio von Matthias Silberhain - Progressive Web App">
+    <meta name="keywords" content="Portfolio, Webentwicklung, PWA, Matthias Silberhain">
+    <meta name="author" content="Matthias Silberhain">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph / Social Media -->
+    <meta property="og:title" content="Matthias Silberhain Portfolio">
+    <meta property="og:description" content="Eleganter Dark Mode Portfolio">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://deine-domain.de">
+    <meta property="og:image" content="assets/icons/web-app-manifest-512x512.png">
+    
+    <!-- PWA Manifest -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#000000">
     
-    <!-- Apple Touch Icons -->
-    <link rel="apple-touch-icon" href="icons/icon-180x180.png">
-    <link rel="apple-touch-startup-image" href="icons/splash-640x1136.png">
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="assets/icons/favicon.ico">
+    <link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg">
+    <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
+    <link rel="apple-touch-startup-image" href="assets/icons/apple-touch-icon.png">
     
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" sizes="32x32" href="icons/icon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="icons/icon-16x16.png">
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <!-- PWA Script -->
+    <script src="pwa.js" defer></script>
     
     <style>
+        /* Temporäre Styles bis dein Haupt-CSS geladen ist */
         * {
             margin: 0;
             padding: 0;
@@ -28,73 +54,190 @@
         }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background-color: #000;
-            color: #fff;
+            font-family: 'Inter', sans-serif;
+            background-color: #000000;
+            color: #ffffff;
             min-height: 100vh;
+            overflow-x: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        /* Preloader */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
             display: flex;
-            flex-direction: column;
-            align-items: center;
             justify-content: center;
-            padding: 20px;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+        
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Haupt-Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        
+        body.loaded .container {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Header */
+        .header {
             text-align: center;
+            margin-bottom: 60px;
+            padding: 40px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
         
         .logo {
             width: 150px;
             height: 150px;
-            margin-bottom: 2rem;
-            border-radius: 50%;
+            margin: 0 auto 30px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-family: 'Cinzel', serif;
             font-size: 48px;
             font-weight: bold;
+            color: white;
             box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
         }
         
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
+        .title {
+            font-family: 'Cinzel', serif;
+            font-size: 3rem;
+            margin-bottom: 10px;
             background: linear-gradient(90deg, #667eea, #764ba2);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            letter-spacing: 0.1em;
         }
         
-        p {
-            font-size: 1.1rem;
-            line-height: 1.6;
-            max-width: 600px;
-            margin-bottom: 2rem;
+        .subtitle {
+            font-size: 1.2rem;
             color: #aaa;
+            font-weight: 300;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
         }
         
-        .status {
-            margin-top: 2rem;
-            padding: 1rem 2rem;
-            background: rgba(255, 255, 255, 0.1);
+        /* Content Sections */
+        .section {
+            margin-bottom: 80px;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .section-title {
+            font-family: 'Cinzel', serif;
+            font-size: 2rem;
+            margin-bottom: 30px;
+            color: #fff;
+            text-align: center;
+        }
+        
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
+        }
+        
+        .card-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #667eea;
+        }
+        
+        .card-content {
+            color: #ccc;
+            line-height: 1.6;
+        }
+        
+        /* PWA Status */
+        .pwa-status {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 10px 20px;
             border-radius: 10px;
-            font-family: monospace;
             font-size: 0.9rem;
+            font-family: monospace;
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            z-index: 9990;
         }
         
-        .install-btn {
-            margin-top: 2rem;
-            padding: 12px 24px;
-            background: linear-gradient(90deg, #667eea, #764ba2);
-            border: none;
-            border-radius: 25px;
-            color: white;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
+        .online {
+            color: #4ade80;
         }
         
-        .install-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        .offline {
+            color: #f87171;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px 15px;
+            }
+            
+            .title {
+                font-size: 2.2rem;
+            }
+            
+            .section {
+                padding: 25px;
+            }
+            
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
         }
         
         @media (display-mode: standalone) {
@@ -102,111 +245,238 @@
                 padding-top: env(safe-area-inset-top);
                 padding-bottom: env(safe-area-inset-bottom);
             }
+            
+            .pwa-status {
+                display: none;
+            }
         }
     </style>
-    
-    <!-- ... bestehende Meta-Tags ... -->
-    
-    <!-- PWA Manifest -->
-    <link rel="manifest" href="manifest.json">
-    
-    <!-- Favicons -->
-    <link rel="icon" type="image/x-icon" href="assets/icons/favicon.ico">
-    <link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg">
-    <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
-    
-    <!-- Für iOS/MacOS -->
-    <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
-    <link rel="apple-touch-startup-image" href="assets/icons/apple-touch-icon.png">
-    
-    <!-- Theme Color -->
-    <meta name="theme-color" content="#000000">
-    
-    <!-- ... deine CSS/JS Links ... -->
-    
-    <!-- PWA Script -->
-    <script src="pwa.js" defer></script>
-</head>
-
-    
 </head>
 <body>
-    <div class="logo">MS</div>
-    <h1>Matthias Silberhain</h1>
-    <p>Willkommen in meinem Portfolio. Diese Progressive Web App funktioniert offline und kann auf deinem Startbildschirm installiert werden.</p>
-    
-    <button class="install-btn" id="installButton">App installieren</button>
-    
-    <div class="status" id="status">
-        PWA Status: Wird initialisiert...
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="spinner"></div>
     </div>
 
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">MS</div>
+            <h1 class="title">Matthias Silberhain</h1>
+            <p class="subtitle">Webentwickler & UX Designer - Elegante Lösungen im Dark Mode Design</p>
+        </header>
+
+        <!-- About Section -->
+        <section class="section">
+            <h2 class="section-title">Über mich</h2>
+            <p class="card-content" style="text-align: center; max-width: 800px; margin: 0 auto;">
+                Willkommen in meinem Portfolio! Dies ist eine Progressive Web App (PWA), die speziell für Dark Mode optimiert wurde. 
+                Die App funktioniert offline, ist auf dem Startbildschirm installierbar und bietet eine native App-ähnliche Erfahrung.
+            </p>
+            
+            <div class="content-grid">
+                <div class="card">
+                    <h3 class="card-title">PWA Features</h3>
+                    <p class="card-content">
+                        • Offline-Funktionalität<br>
+                        • Installierbar auf Startbildschirm<br>
+                        • Push-Benachrichtigungen<br>
+                        • Schnelle Ladezeiten<br>
+                        • Dark Mode First Design
+                    </p>
+                </div>
+                
+                <div class="card">
+                    <h3 class="card-title">Technologien</h3>
+                    <p class="card-content">
+                        • HTML5, CSS3, JavaScript<br>
+                        • Service Workers<br>
+                        • Web App Manifest<br>
+                        • Responsive Design<br>
+                        • Modern CSS Features
+                    </p>
+                </div>
+                
+                <div class="card">
+                    <h3 class="card-title">Installation</h3>
+                    <p class="card-content">
+                        Klicke auf "App installieren" oder verwende das Menü deines Browsers, um diese PWA auf deinem Gerät zu installieren. 
+                        Danach funktioniert sie wie eine native App.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section class="section">
+            <h2 class="section-title">Projekte</h2>
+            <div class="content-grid">
+                <div class="card">
+                    <h3 class="card-title">Dark Mode Portfolio</h3>
+                    <p class="card-content">
+                        Diese PWA selbst ist mein aktuelles Hauptprojekt. Ein vollständig responsives Portfolio mit 
+                        animierten Übergängen und perfekter Offline-Funktionalität.
+                    </p>
+                </div>
+                
+                <div class="card">
+                    <h3 class="card-title">Web Components</h3>
+                    <p class="card-content">
+                        Sammlung wiederverwendbarer Web Components für moderne Webanwendungen mit Fokus auf 
+                        Performance und Zugänglichkeit.
+                    </p>
+                </div>
+                
+                <div class="card">
+                    <h3 class="card-title">UI/UX Design</h3>
+                    <p class="card-content">
+                        Dark-First Design System mit Fokus auf Benutzerfreundlichkeit und ästhetischem Erlebnis 
+                        im Low-Light-Umgebungen.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section class="section">
+            <h2 class="section-title">Kontakt</h2>
+            <div style="text-align: center; max-width: 600px; margin: 0 auto;">
+                <p class="card-content" style="margin-bottom: 30px;">
+                    Interessiert an einer Zusammenarbeit oder möchtest du mehr über PWAs erfahren?
+                </p>
+                <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+                    <button class="contact-btn" onclick="showContactForm()">Nachricht senden</button>
+                    <button class="contact-btn secondary" onclick="showInstallInstructions()">Installationshilfe</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer style="text-align: center; margin-top: 80px; padding-top: 40px; border-top: 1px solid rgba(255, 255, 255, 0.1);">
+            <p style="color: #888; font-size: 0.9rem;">
+                &copy; 2024 Matthias Silberhain. Alle Rechte vorbehalten.<br>
+                <span style="color: #667eea;">PWA Status: <span id="statusText">Online</span></span>
+            </p>
+        </footer>
+    </div>
+
+    <!-- PWA Status Indicator -->
+    <div class="pwa-status">
+        <span id="connectionStatus">📶 Online</span>
+    </div>
+
+    <!-- Custom JavaScript -->
     <script>
-        // Service Worker Registrierung
+        // Preloader entfernen
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                const preloader = document.getElementById('preloader');
+                preloader.style.opacity = '0';
+                setTimeout(function() {
+                    preloader.style.display = 'none';
+                    document.body.classList.add('loaded');
+                    
+                    // PWA Status aktualisieren
+                    updateConnectionStatus();
+                }, 500);
+            }, 1000);
+        });
+
+        // Netzwerk Status
+        function updateConnectionStatus() {
+            const statusElement = document.getElementById('connectionStatus');
+            const statusText = document.getElementById('statusText');
+            
+            function setOnline() {
+                statusElement.innerHTML = '📶 Online';
+                statusElement.className = 'online';
+                statusText.textContent = 'Online';
+                statusText.style.color = '#4ade80';
+            }
+            
+            function setOffline() {
+                statusElement.innerHTML = '📴 Offline';
+                statusElement.className = 'offline';
+                statusText.textContent = 'Offline';
+                statusText.style.color = '#f87171';
+            }
+            
+            if (navigator.onLine) {
+                setOnline();
+            } else {
+                setOffline();
+            }
+            
+            window.addEventListener('online', setOnline);
+            window.addEventListener('offline', setOffline);
+        }
+
+        // Button Functions
+        function showContactForm() {
+            alert('Kontaktformular wird geöffnet...\n\nHinweis: In der vollständigen Version würde hier ein Kontaktformular erscheinen.');
+        }
+
+        function showInstallInstructions() {
+            alert('📱 PWA Installation:\n\n1. Klicke auf "App installieren" (rechts unten)\n2. Oder: Browser-Menu → "Zum Startbildschirm hinzufügen"\n3. App öffnet sich ohne Browser-Umgebung');
+        }
+
+        // Service Worker Debugging
         if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js')
-                    .then(registration => {
-                        console.log('Service Worker registriert:', registration);
-                        document.getElementById('status').textContent = 
-                            '✅ PWA bereit! Service Worker aktiv.';
-                    })
-                    .catch(error => {
-                        console.log('Service Worker fehlgeschlagen:', error);
-                        document.getElementById('status').textContent = 
-                            '⚠️ Service Worker konnte nicht registriert werden.';
-                    });
+            navigator.serviceWorker.addEventListener('controllerchange', () => {
+                console.log('🔄 Service Worker Controller geändert - Seite neu laden für Updates');
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1000);
             });
         }
 
-        // Installations-Button
-        let deferredPrompt;
-        const installButton = document.getElementById('installButton');
-        
+        // Install Prompt Handling
         window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            installButton.style.display = 'block';
-            document.getElementById('status').textContent = 
-                '📱 App kann installiert werden! Klicke auf "App installieren".';
+            console.log('📱 beforeinstallprompt Event gefangen');
+            // Dein pwa.js wird den Rest übernehmen
         });
 
-        installButton.addEventListener('click', async () => {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                if (outcome === 'accepted') {
-                    document.getElementById('status').textContent = 
-                        '🎉 App wird installiert!';
-                    installButton.style.display = 'none';
-                }
-                deferredPrompt = null;
+        // Display Mode erkennen
+        function getDisplayMode() {
+            const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+            const isFullscreen = window.matchMedia('(display-mode: fullscreen)').matches;
+            const isMinimalUi = window.matchMedia('(display-mode: minimal-ui)').matches;
+            
+            if (isStandalone) {
+                console.log('📱 App läuft im Standalone-Modus (installiert)');
+                return 'standalone';
+            } else if (isFullscreen) {
+                return 'fullscreen';
+            } else if (isMinimalUi) {
+                return 'minimal-ui';
+            } else {
+                console.log('🌐 App läuft im Browser-Tab');
+                return 'browser';
+            }
+        }
+
+        // Display Mode beim Laden prüfen
+        document.addEventListener('DOMContentLoaded', () => {
+            const displayMode = getDisplayMode();
+            console.log(`Display Mode: ${displayMode}`);
+            
+            // Für installierte Apps: Anpassungen
+            if (displayMode === 'standalone') {
+                document.body.classList.add('pwa-installed');
             }
         });
 
-        // App bereits installiert?
-        window.addEventListener('appinstalled', () => {
-            document.getElementById('status').textContent = 
-                '✅ App erfolgreich installiert!';
-            installButton.style.display = 'none';
-        });
-
-        // Offline-Status
-        window.addEventListener('online', () => {
-            document.getElementById('status').textContent = 
-                '✅ Online - PWA funktioniert optimal';
-        });
-
-        window.addEventListener('offline', () => {
-            document.getElementById('status').textContent = 
-                '📴 Offline - PWA nutzt gecachte Daten';
-        });
-
-        // Initialer Online-Status
-        if (!navigator.onLine) {
-            document.getElementById('status').textContent = 
-                '📴 Offline - PWA funktioniert trotzdem';
+        // Service Worker Registrierung Fallback
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js').catch(error => {
+                console.warn('Service Worker Registrierung fehlgeschlagen:', error);
+                document.getElementById('statusText').textContent = 'Offline (kein Service Worker)';
+            });
         }
     </script>
+
+    <!-- Externe JS -->
+    <script src="assets/js/main.js" defer></script>
 </body>
 </html>
