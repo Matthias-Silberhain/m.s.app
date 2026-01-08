@@ -4,7 +4,7 @@
 function registerServiceWorker() {
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/m.s.app/sw.js')
+      navigator.serviceWorker.register('sw.js')  // Pfad korrigiert (kein /m.s.app/)
         .then(registration => {
           console.log('✅ Service Worker registriert:', registration);
           
