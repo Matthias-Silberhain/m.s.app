@@ -1,403 +1,233 @@
 <!DOCTYPE html>
-<html lang="de" class="no-js">
+<html lang="de">
 <head>
-    <!-- PWA Meta Tags -->
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-title" content="Matthias Silberhain">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Matthias Silberhain</title>
     
-    <!-- PWA Manifest -->
+    <!-- PWA -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#000000">
-    
-    <!-- SEO Meta Tags -->
-    <title>Matthias Silberhain | Portfolio</title>
-    <meta name="description" content="Matthias Silberhain - Autor zu Macht, Verantwortung und gesellschaftlichen Mechanismen">
-    <meta name="keywords" content="Portfolio, Webentwicklung, PWA, Matthias Silberhain">
-    <meta name="author" content="Matthias Silberhain">
-    <meta name="robots" content="index, follow">
-    
-    <!-- Open Graph / Social Media -->
-    <meta property="og:title" content="Matthias Silberhain Portfolio">
-    <meta property="og:description" content="Eleganter Dark Mode Portfolio">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://matthias-silberhain.github.io/m.s.app/">
-    <meta property="og:image" content="https://matthias-silberhain.github.io/m.s.app/assets/images/logo.png">
-    
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=EB+Garamond:wght@400;500&family=Great+Vibes&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-    
-    <!-- Favicon -->
-    <link rel="icon" href="assets/images/logo.png" type="image/png">
-    <link rel="icon" type="image/x-icon" href="assets/icons/favicon.ico">
-    <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     
     <!-- CSS -->
     <link rel="stylesheet" href="assets/css/style.css">
     
-    <style>
-        /* PWA-spezifische Styles */
-        @media (display-mode: standalone) {
-            body {
-                padding-top: env(safe-area-inset-top);
-                padding-bottom: env(safe-area-inset-bottom);
-            }
-        }
-        
-        /* PWA Status Indicator */
-        .pwa-status {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            background: rgba(0, 0, 0, 0.8);
-            padding: 10px 20px;
-            border-radius: 10px;
-            font-size: 0.9rem;
-            font-family: monospace;
-            border: 1px solid rgba(102, 126, 234, 0.3);
-            z-index: 9990;
-            display: none;
-        }
-        
-        .pwa-status.online {
-            color: #4ade80;
-        }
-        
-        .pwa-status.offline {
-            color: #f87171;
-        }
-        
-        /* PWA Install Button */
-        #pwaInstallButton {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: linear-gradient(45deg, rgba(192,192,192,0.3), rgba(192,192,192,0.2));
-            color: #d6d9de;
-            border: 1px solid rgba(200,205,215,0.5);
-            border-radius: 4px;
-            font-family: 'Cinzel', serif;
-            letter-spacing: 0.1em;
-            text-decoration: none;
-            font-size: 0.95rem;
-            padding: 12px 20px;
-            cursor: pointer;
-            z-index: 9998;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-        }
-        
-        .dark-mode #pwaInstallButton {
-            background: linear-gradient(45deg, rgba(255,255,255,0.3), rgba(255,255,255,0.2));
-            border-color: rgba(255,255,255,0.4);
-            color: #ffffff;
-        }
-        
-        /* PWA Install Section */
-        .pwa-section {
-            margin-top: 60px;
-            padding: 40px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 20px;
-            text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .pwa-section h2 {
-            font-family: 'Cinzel', serif;
-            font-size: 2rem;
-            margin-bottom: 20px;
-            color: #fff;
-        }
-        
-        .pwa-section p {
-            color: #ccc;
-            margin-bottom: 30px;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-            line-height: 1.6;
-        }
-        
-        /* Preloader Anpassungen */
-        body.loaded .inhalt,
-        body.loaded .social-section,
-        body.loaded .footer {
-            opacity: 1 !important;
-            visibility: visible !important;
-        }
-        
-        .inhalt,
-        .social-section,
-        .footer {
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.5s ease;
-        }
-    </style>
-</head>
-
-<body>
-
-<!-- Preloader -->
-<div id="preloader" role="status" aria-label="Ladevorgang">
-    <div class="preloader-inner">
-        <img src="assets/images/logo.png" alt="Logo" class="preloader-logo" width="200" height="200">
-        <div class="text-container">
-            <h1 class="preloader-text" aria-live="polite">
-                <span id="type-text"></span>
-            </h1>
-        </div>
-        <!-- Silberner Strich -->
-        <div class="preloader-line" id="preloaderLine" aria-hidden="true"></div>
-    </div>
-</div>
-
-<!-- Menu Overlay -->
-<div class="menu-overlay" tabindex="-1" aria-hidden="true" role="button" aria-label="Menü schließen"></div>
-
-<!-- ================= HEADER ================= -->
-<header class="header" role="banner">
-    <img src="assets/images/logo.png" alt="Matthias Silberhain Logo" class="logo" width="420" height="auto">
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
     
-    <!-- Dark Mode Toggle Button -->
-    <button id="themeToggle" class="dark-mode-toggle" aria-label="Dark Mode umschalten" aria-pressed="false" title="Dark Mode umschalten">
-        <svg class="moon-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-        </svg>
-        <svg class="sun-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="5"></circle>
-            <line x1="12" y1="1" x2="12" y2="3"></line>
-            <line x1="12" y1="21" x2="12" y2="23"></line>
-            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-            <line x1="1" y1="12" x2="3" y2="12"></line>
-            <line x1="21" y1="12" x2="23" y2="12"></line>
-            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-        </svg>
-    </button>
+    <!-- Icons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon-16x16.png">
+</head>
+<body>
+    <!-- PRELOADER -->
+    <div id="preloader">
+        <div class="preloader-inner">
+            <!-- Hier muss dein Logo hin -->
+            <img src="assets/images/logo.png" class="preloader-logo" alt="Logo">
+            <div class="preloader-text" id="type-text"></div>
+            <div class="preloader-line"></div>
+        </div>
+    </div>
 
-    <!-- Burger Menu Button -->
-    <button class="burger" id="burgerButton" aria-expanded="false" aria-controls="mainNav" aria-label="Hauptmenü öffnen">
-        <span></span>
-        <span></span>
-        <span></span>
-    </button>
+    <!-- HEADER -->
+    <header class="header">
+        <!-- Dark Mode Toggle Button - WICHTIG für dark-mode.js -->
+        <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Dark mode umschalten">
+            <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M12,3a9,9,0,1,0,9,9,9,9,0,0,0-9-9Zm0,16a7,7,0,0,1,0-14,7,7,0,0,1,0,14Z"/>
+            </svg>
+            <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="5"/>
+                <line x1="12" y1="1" x2="12" y2="3"/>
+                <line x1="12" y1="21" x2="12" y2="23"/>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                <line x1="1" y1="12" x2="3" y2="12"/>
+                <line x1="21" y1="12" x2="23" y2="12"/>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+            </svg>
+        </button>
 
-    <!-- Hauptnavigation -->
-    <nav class="hauptnavigation" id="mainNav" aria-label="Hauptnavigation" role="navigation" aria-hidden="false">
-        <a href="index.html" class="active" aria-current="page">Startseite</a>
-        <a href="ueber-mich.html">Über mich</a>
-        <a href="werke.html">Werke</a>
-        <a href="termine.html">Termine</a>
-        <a href="kontakt.html">Kontakt</a>
-    </nav>
-</header>
+        <!-- Burger Menu Button - WICHTIG für menu.js -->
+        <button id="burgerButton" class="burger" aria-label="Menü öffnen">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
 
-<div class="lichtkante" aria-hidden="true"></div>
+        <!-- Logo -->
+        <img src="assets/images/logo.png" class="logo" alt="Matthias Silberhain Logo">
 
-<!-- ================= HAUPTINHALT ================= -->
-<main class="inhalt" id="main-content" role="main">
-    <section class="startseite">
-        <!-- HAUPTTITEL -->
+        <!-- Navigation - WICHTIG für menu.js -->
+        <nav class="hauptnavigation" id="mainNav">
+            <a href="index.html">Home</a>
+            <a href="about.html">Über mich</a>
+            <a href="philosophie.html">Philosophie</a>
+            <a href="projekte.html">Projekte</a>
+            <a href="kontakt.html">Kontakt</a>
+        </nav>
+
+        <!-- Menu Overlay für Mobile -->
+        <div class="menu-overlay" id="menuOverlay"></div>
+    </header>
+
+    <!-- LICHTBALKEN -->
+    <div class="lichtkante"></div>
+
+    <!-- MAIN CONTENT -->
+    <main class="inhalt startseite">
+        <h1>Willkommen bei Matthias Silberhain</h1>
+        
+        <div class="einleitung">
+            <p class="lead-text">Ihre Exzellenz beginnt hier</p>
+            <p class="sub-lead-text">Ein Ort für Präzision, Eleganz und herausragende Leistung</p>
+        </div>
+
         <div class="credo-container">
             <div class="credo-quote-wrapper">
-                <div class="credo-quote">
-                    <p class="quote-text kalligrafie-text">Wenn Wahrheit unbequem wird, braucht sie eine Stimme.</p>
+                <div class="kalligrafie-text">
+                    "Das Außergewöhnliche liegt im Detail"
                 </div>
             </div>
         </div>
-        
-        <!-- EINLEITUNGSTEXT -->
-        <div class="einleitung">
-            <p class="lead-text">
-                Diese Seite ist kein Ort für einfache Antworten oder beruhigende Geschichten.
-            </p>
-            
-            <p class="sub-lead-text">
-                Hier geht es um Macht, Verantwortung und die Fragen, die selten laut gestellt werden.<br>
-                Um historische Spuren, gesellschaftliche Strukturen und Entscheidungen, deren Folgen bis heute nachwirken.
-            </p>
-        </div>
-        
-        <!-- KERNINHALT -->
+
         <div class="kerninhalt">
-            <p>
-                Ich schreibe über das, was unter der Oberfläche liegt. Über Mechanismen, die oft unsichtbar bleiben, aber unser Zusammenleben prägen. Meine Bücher sind das Ergebnis intensiver Recherche und kritischer Analyse – keine Unterhaltung, sondern Auseinandersetzung.
-            </p>
+            <p>In einer Welt des Durchschnitts setzen wir auf Exzellenz. Jedes Projekt, jede Zusammenarbeit und jede Lösung wird mit höchster Präzision und Leidenschaft umgesetzt.</p>
             
-            <p class="highlight">
-                Literatur mit Haltung, Tiefe und Substanz. Für Leser, die bereit sind, genauer hinzusehen.
-            </p>
+            <div class="highlight">
+                Qualität ist niemals ein Zufall. Sie ist immer das Ergebnis intelligenter Anstrengung.
+            </div>
             
-            <p>
-                In einer Zeit, in der Komplexität oft vereinfacht wird, halte ich es für notwendig, genau hinzuschauen. Meine Texte sollen nicht nur informieren, sondern zum Denken anregen. Sie stellen Fragen, wo andere Antworten vorgeben. Sie zeigen Zusammenhänge, wo andere isolieren.
-            </p>
+            <p>Unsere Philosophie basiert auf drei Säulen: <strong>Präzision</strong>, <strong>Ästhetik</strong> und <strong>Nachhaltigkeit</strong>. Diese Prinzipien leiten jedes unserer Vorhaben.</p>
             
-            <blockquote class="zitat" cite="#">
-                <p style="text-align: center; font-style: italic; font-size: 1.5rem; margin-bottom: 15px; text-shadow: 0 1px 2px rgba(0,0,0,0.5);">
-                    "Ich schreibe, weil die Wahrheit eine Stimme braucht."
-                </p>
-                <footer class="zitat-autor" style="text-align: center; margin-top: 15px; font-size: 1.1rem; color: #b0b5bc; font-family: 'Cinzel', serif; letter-spacing: 0.05em;">
-                    Matthias Silberhain
-                </footer>
-            </blockquote>
+            <div class="zitat">
+                "Das Geheimnis des Erfolgs liegt darin, das zu tun, was andere für unmöglich halten."
+                <span class="zitat-autor">– Unbekannt</span>
+            </div>
             
-            <p>
-                Auf diesen Seiten finden Sie Einblicke in meine Arbeit, Informationen zu aktuellen Projekten und die Möglichkeit, mit mir in Kontakt zu treten. Willkommen bei Matthias Silberhain.
-            </p>
+            <p>Wir glauben an langfristige Partnerschaften und messbaren Erfolg. Jeder Kunde erhält eine maßgeschneiderte Lösung, die genau auf seine Bedürfnisse zugeschnitten ist.</p>
         </div>
-        
-        <!-- CTA Buttons -->
+
         <div class="cta-container">
-            <a href="werke.html" class="silber-button">
-                <span>Meine Werke entdecken</span>
-                <svg class="button-arrow" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                    <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/>
+            <a href="projekte.html" class="silber-button">
+                Meine Projekte
+                <svg class="button-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M13.025 1l-2.847 2.828 6.176 6.176h-16.354v3.992h16.354l-6.176 6.176 2.847 2.828 10.975-11z"/>
                 </svg>
             </a>
-            <a href="ueber-mich.html" class="silber-button secondary">
-                <span>Über den Autor</span>
+            <a href="kontakt.html" class="silber-button">
+                Kontakt aufnehmen
+                <svg class="button-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M13.025 1l-2.847 2.828 6.176 6.176h-16.354v3.992h16.354l-6.176 6.176 2.847 2.828 10.975-11z"/>
+                </svg>
             </a>
         </div>
-        
-        <!-- PWA Install Section -->
-        <div class="pwa-section">
-            <h2>PWA Installation</h2>
-            <p>
-                Installiere diese Progressive Web App auf deinem Gerät für eine native App-Erfahrung.
-                Funktioniert offline und kann direkt vom Startbildschirm geöffnet werden.
-            </p>
-            <button id="installButton" class="silber-button" style="font-size: 1.1rem; padding: 15px 30px;">
-                <span>App installieren</span>
-            </button>
+    </main>
+
+    <!-- SOCIAL MEDIA LICHTBALKEN -->
+    <div class="social-lichtkante"></div>
+
+    <!-- SOCIAL MEDIA SECTION -->
+    <section class="social-section">
+        <h2 class="social-title">Verbinden Sie sich mit mir</h2>
+        <div class="social-grid">
+            <a href="#" class="social-link" target="_blank" rel="noopener">
+                <div class="social-icon-wrapper">
+                    <svg class="social-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm3 8h-1.35c-.538 0-.65.221-.65.778v1.222h2l-.209 2h-1.791v7h-3v-7h-2v-2h2v-2.308c0-1.769.931-2.692 3.029-2.692h1.971v3z"/>
+                    </svg>
+                </div>
+                <span class="social-name">Facebook</span>
+            </a>
+            <a href="#" class="social-link" target="_blank" rel="noopener">
+                <div class="social-icon-wrapper">
+                    <svg class="social-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm6.066 9.645c.183 4.04-2.83 8.544-8.164 8.544-1.622 0-3.131-.476-4.402-1.291 1.524.18 3.045-.244 4.252-1.189-1.256-.023-2.317-.854-2.684-1.995.451.086.895.061 1.298-.049-1.381-.278-2.335-1.522-2.304-2.853.388.215.83.344 1.301.359-1.279-.855-1.641-2.544-.889-3.835 1.416 1.738 3.533 2.881 5.92 3.001-.419-1.796.944-3.527 2.799-3.527.825 0 1.572.373 2.002.964.617-.122 1.27-.34 1.824-.639-.202.632-.627 1.163-1.187 1.5.546-.066 1.12-.21 1.646-.417-.363.544-.82 1.044-1.374 1.447z"/>
+                    </svg>
+                </div>
+                <span class="social-name">Twitter</span>
+            </a>
+            <a href="#" class="social-link" target="_blank" rel="noopener">
+                <div class="social-icon-wrapper">
+                    <svg class="social-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm3.663 9h-1.307c-.517 0-.78.343-.78.685v1.707h2.402l-.313 2.451h-2.089v6.285h-2.536v-6.285h-2.119v-2.451h2.119v-1.802c0-2.089 1.276-3.225 3.138-3.225.876 0 1.628.065 1.848.094v2.148z"/>
+                    </svg>
+                </div>
+                <span class="social-name">LinkedIn</span>
+            </a>
+            <a href="#" class="social-link" target="_blank" rel="noopener">
+                <div class="social-icon-wrapper">
+                    <svg class="social-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm4.441 16.892c-2.102.144-6.784.144-8.883 0-2.276-.156-2.541-1.27-2.558-4.892.017-3.629.285-4.736 2.558-4.892 2.099-.144 6.782-.144 8.883 0 2.277.156 2.542 1.27 2.559 4.892-.017 3.629-.285 4.736-2.559 4.892zm-6.441-7.234l4.917 2.338-4.917 2.346v-4.684z"/>
+                    </svg>
+                </div>
+                <span class="social-name">YouTube</span>
+            </a>
+            <a href="#" class="social-link" target="_blank" rel="noopener">
+                <div class="social-icon-wrapper">
+                    <svg class="social-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm3.445 17.827c-1.102.075-2.292.113-3.445.113-1.153 0-2.343-.038-3.445-.113-2.179-.15-2.545-1.35-2.555-5.827.01-4.477.376-5.677 2.555-5.827 1.102-.075 2.292-.113 3.445-.113 1.153 0 2.343.038 3.445.113 2.179.15 2.545 1.35 2.555 5.827-.01 4.477-.376 5.677-2.555 5.827zm-5.445-9.074v6.494l5.803-3.247-5.803-3.247z"/>
+                    </svg>
+                </div>
+                <span class="social-name">Instagram</span>
+            </a>
         </div>
     </section>
-</main>
 
-<!-- ================= SOCIAL MEDIA ================= -->
-<section class="social-section" aria-labelledby="social-title">
-    <h3 class="social-title" id="social-title">Folgen Sie den Gedanken</h3>
-    <div class="social-grid" role="list">
-        <!-- Snapchat -->
-        <a href="https://snapchat.com/t/8wVZ1Wpu" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Snapchat (Öffnet in neuem Tab)" role="listitem">
-            <div class="social-icon-wrapper">
-                <svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                    <path d="M5.83 2H18.2c1.14 0 2.07.93 2.07 2.07v15.86c0 1.14-.93 2.07-2.07 2.07H5.83A2.07 2.07 0 0 1 3.76 19.9V4.07C3.76 2.93 4.69 2 5.83 2zm6.44 16.27c1.33 0 2.41-1.08 2.41-2.41 0-.44-.12-.85-.32-1.21.23-.05.47-.08.72-.08 1.33 0 2.41 1.08 2.41 2.41 0 1.33-1.08 2.41-2.41 2.41-1.33 0-2.41-1.08-2.41-2.41 0-.44.12-.85.32-1.21-.23.05-.47.08-.72.08-1.33 0-2.41-1.08-2.41-2.41 0-1.33 1.08-2.41 2.41-2.41.44 0 .85.12 1.21.32.05-.23.08-.47.08-.72 0-1.33-1.08-2.41-2.41-2.41-1.33 0-2.41 1.08-2.41 2.41 0 1.33 1.08 2.41 2.41 2.41.44 0 .85-.12 1.21-.32-.05.23-.08.47-.08.72 0 1.33 1.08 2.41 2.41 2.41z"/>
-                </svg>
-            </div>
-            <span class="social-name">Snapchat</span>
-        </a>
-        
-        <!-- Clapper -->
-        <a href="https://clapperapp.com/M.Silberhain" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Clapper (Öffnet in neuem Tab)" role="listitem">
-            <div class="social-icon-wrapper">
-                <svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                    <path d="M19.5 3H4.5C3.67 3 3 3.67 3 4.5v15C3 20.33 3.67 21 4.5 21h15c.83 0 1.5-.67 1.5-1.5v-15C21 3.67 20.33 3 19.5 3zM10 17H6v-2h4v2zm0-4H6v-2h4v2zm0-4H6V7h4v2zm8 8h-6v-2h6v2zm0-4h-6v-2h6v2zm0-4h-6V7h6v2z"/>
-                </svg>
-            </div>
-            <span class="social-name">Clapper</span>
-        </a>
-        
-        <!-- TikTok -->
-        <a href="https://www.tiktok.com/@m.silberhain" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="TikTok (Öffnet in neuem Tab)" role="listitem">
-            <div class="social-icon-wrapper">
-                <svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                    <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.10-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/>
-                </svg>
-            </div>
-            <span class="social-name">TikTok</span>
-        </a>
-        
-        <!-- Telegram -->
-        <a href="https://t.me/matthiassilberhain" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Telegram (Öffnet in neuem Tab)" role="listitem">
-            <div class="social-icon-wrapper">
-                <svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                    <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.697.064-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
-                </svg>
-            </div>
-            <span class="social-name">Telegram</span>
-        </a>
-        
-        <!-- Instagram -->
-        <a href="https://www.instagram.com/matthiassilberhain" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Instagram (Öffnet in neuem Tab)" role="listitem">
-            <div class="social-icon-wrapper">
-                <svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zM12 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.88 1.44 1.44 0 000-2.88z"/>
-                </svg>
-            </div>
-            <span class="social-name">Instagram</span>
-        </a>
-        
-        <!-- Facebook -->
-        <a href="https://www.facebook.com/share/17ZahbpKWN/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Facebook (Öffnet in neuem Tab)" role="listitem">
-            <div class="social-icon-wrapper">
-                <svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                </svg>
-            </div>
-            <span class="social-name">Facebook</span>
-        </a>
-        
-        <!-- YouTube -->
-        <a href="https://youtube.com/@matthiassilberhain" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="YouTube (Öffnet in neuem Tab)" role="listitem">
-            <div class="social-icon-wrapper">
-                <svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                    <path d="M23.495 6.205a3.007 3.007 0 00-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.506 0-9.396.501A3.007 3.007 0 00.528 6.205a31.247 31.247 0 00-.522 5.805 31.247 31.247 0 00.522 5.783 3.007 3.007 0 002.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 002.088-2.088 31.247 31.247 0 00.5-5.783 31.247 31.247 0 00-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/>
-                </svg>
-            </div>
-            <span class="social-name">YouTube</span>
-        </a>
-    </div>
+    <!-- FOOTER LICHTBALKEN -->
+    <div class="footer-lichtkante"></div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="impressum.html">Impressum</a>
+            <a href="datenschutz.html">Datenschutz</a>
+            <a href="agb.html">AGB</a>
+            <a href="kontakt.html">Kontakt</a>
+        </div>
+        <p>&copy; <span id="currentYear"></span> Matthias Silberhain. Alle Rechte vorbehalten.</p>
+    </footer>
+
+    <!-- PWA Install Button (wird von pwa.js hinzugefügt) -->
+    <div id="pwaStatusIndicator" style="display: none;"></div>
+
+    <!-- JavaScript Dateien in RICHTIGER REIHENFOLGE laden -->
+    <!-- ZUERST: Global.js (für Preloader und Basis-Funktionen) -->
+    <script src="assets/js/global.js"></script>
     
-    <!-- SILBERNER LICHTBALKEN -->
-    <div class="lichtkante social-lichtkante" aria-hidden="true"></div>
-</section>
-
-<!-- ================= FOOTER ================= -->
-<footer class="footer" role="contentinfo">
-    <div class="footer-links">
-        <a href="impressum.html">Impressum</a>
-        <a href="datenschutz.html">Datenschutz</a>
-    </div>
-    <p>© <span id="currentYear"></span> Matthias Silberhain. Alle Rechte vorbehalten.</p>
-    <p style="margin-top: 10px; font-size: 0.9rem; color: #667eea;">PWA Status: <span id="pwaStatus">Online</span></p>
-</footer>
-
-<!-- PWA Status Indicator -->
-<div class="pwa-status" id="pwaStatusIndicator">
-    <span id="connectionStatus">📶 Online</span>
-</div>
-
-<!-- ================= JAVASCRIPT ================= -->
-<!-- WICHTIG: Reihenfolge beibehalten -->
-<script src="assets/js/dark-mode.js"></script>
-<script src="assets/js/global.js"></script>
-<script src="assets/js/menu.js"></script>
-<script src="assets/js/pwa.js"></script>
-<script src="assets/js/main.js"></script>
-
-<!-- Service Worker Registration Fallback -->
-<script>
-    // Setze aktuelles Jahr im Footer (Fallback)
-    document.getElementById('currentYear').textContent = new Date().getFullYear();
+    <!-- DANACH: Dark-Mode.js (benötigt DOM aus Global.js) -->
+    <script src="assets/js/dark-mode.js"></script>
     
-    // Debug Info
-    console.log('🚀 Matthias Silberhain PWA gestartet');
-    console.log('📱 Gerät:', /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ? 'Mobile' : 'Desktop');
-</script>
-
+    <!-- DANACH: Menu.js (benötigt DOM aus Global.js) -->
+    <script src="assets/js/menu.js"></script>
+    
+    <!-- DANACH: PWA.js (kann asynchron geladen werden) -->
+    <script src="assets/js/pwa.js" async></script>
+    
+    <!-- Optional: Weitere JS-Dateien -->
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/app.js"></script>
+    
+    <!-- Service Worker registrieren -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(registration => {
+                        console.log('✅ Service Worker registriert:', registration);
+                    })
+                    .catch(error => {
+                        console.log('❌ Service Worker Registrierung fehlgeschlagen:', error);
+                    });
+            });
+        }
+    </script>
 </body>
 </html>
