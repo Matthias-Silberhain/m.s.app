@@ -1,6 +1,6 @@
 /**
  * MOBILE MENÜ - Matthias Silberhain PWA
- * Version 2.0 - Korrigierte Menü-Logik
+ * Version 2.1 - Stabil
  */
 
 document.addEventListener('DOMContentLoaded', function() {
