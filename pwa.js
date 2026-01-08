@@ -15,7 +15,7 @@ function registerServiceWorker() {
             
             newWorker.addEventListener('statechange', () => {
               if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                console.log('🔄 Neue Version verfügbar! Seite neu laden.');
+                console.log('🔄 Neue Version verfügbar!');
                 showUpdateNotification();
               }
             });
@@ -30,196 +30,205 @@ function registerServiceWorker() {
 
 // ========== INSTALL PROMPT ==========
 let deferredPrompt;
-const installButton = document.createElement('button');
 
 function initInstallPrompt() {
   window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     deferredPrompt = e;
     
-    // Install Button erstellen (optional - kann in deinem Design integriert werden)
-    installButton.innerHTML = `
-      <svg class="button-arrow" viewBox="0 0 24 24">
-        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-      </svg>
-      <span>App installieren</span>
-    `;
-    installButton.className = 'silber-button';
-    installButton.id = 'installButton';
-    installButton.style.display = 'none';
-    installButton.style.margin = '20px auto';
-    installButton.style.opacity = '0';
-    installButton.style.transition = 'opacity 0.3s ease';
-    
-    // Finde einen geeigneten Platz für den Button (z.B. vor dem Footer)
-    const footer = document.querySelector('.footer');
-    if (footer) {
-      footer.parentNode.insertBefore(installButton, footer);
-      
-      // Button nach 5 Sekunden zeigen
-      setTimeout(() => {
-        installButton.style.display = 'block';
-        setTimeout(() => {
-          installButton.style.opacity = '1';
-        }, 100);
-      }, 5000);
-    }
-    
-    installButton.addEventListener('click', () => {
-      installButton.style.opacity = '0';
-      setTimeout(() => {
-        installButton.style.display = 'none';
-      }, 300);
-      
-      deferredPrompt.prompt();
-      deferredPrompt.userChoice.then((choiceResult) => {
-        if (choiceResult.outcome === 'accepted') {
-          console.log('✅ User hat die PWA installiert');
-          ga('send', 'event', 'PWA', 'install', 'accepted');
-        } else {
-          console.log('❌ User hat die Installation abgelehnt');
-          ga('send', 'event', 'PWA', 'install', 'declined');
-        }
-        deferredPrompt = null;
-      });
-    });
+    // Install Button nach 5 Sekunden zeigen
+    setTimeout(() => {
+      showInstallButton();
+    }, 5000);
   });
   
   // Verstecke Button nach erfolgreicher Installation
   window.addEventListener('appinstalled', () => {
     console.log('🎉 PWA wurde erfolgreich installiert!');
-    if (installButton) {
-      installButton.style.display = 'none';
-    }
+    hideInstallButton();
     deferredPrompt = null;
   });
 }
 
+// ========== INSTALL BUTTON FUNCTIONS ==========
+function showInstallButton() {
+  // Überprüfe ob bereits installiert
+  if (window.matchMedia('(display-mode: standalone)').matches) {
+    return; // Bereits installiert
+  }
+  
+  // Erstelle Install Button
+  const installButton = document.createElement('button');
+  installButton.id = 'pwaInstallButton';
+  installButton.innerHTML = `
+    <svg class="button-arrow" viewBox="0 0 24 24" style="width:18px;height:18px;">
+      <path fill="currentColor" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"/>
+    </svg>
+    <span>App installieren</span>
+  `;
+  
+  // Styling
+  installButton.style.cssText = `
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: linear-gradient(45deg, rgba(192,192,192,0.3), rgba(192,192,192,0.2));
+    color: #d6d9de;
+    border: 1px solid rgba(200,205,215,0.5);
+    border-radius: 4px;
+    font-family: 'Cinzel', serif;
+    letter-spacing: 0.1em;
+    text-decoration: none;
+    font-size: 0.95rem;
+    padding: 12px 20px;
+    cursor: pointer;
+    z-index: 9998;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+  `;
+  
+  // Dark Mode Styling
+  if (document.body.classList.contains('dark-mode')) {
+    installButton.style.background = 'linear-gradient(45deg, rgba(255,255,255,0.3), rgba(255,255,255,0.2))';
+    installButton.style.borderColor = 'rgba(255,255,255,0.4)';
+    installButton.style.color = '#ffffff';
+  }
+  
+  document.body.appendChild(installButton);
+  
+  // Animation einblenden
+  setTimeout(() => {
+    installButton.style.opacity = '1';
+    installButton.style.transform = 'translateY(0)';
+  }, 100);
+  
+  // Click Event
+  installButton.addEventListener('click', () => {
+    if (!deferredPrompt) return;
+    
+    installButton.style.opacity = '0';
+    installButton.style.transform = 'translateY(20px)';
+    
+    setTimeout(() => {
+      installButton.remove();
+    }, 300);
+    
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then((choiceResult) => {
+      if (choiceResult.outcome === 'accepted') {
+        console.log('✅ User hat die PWA installiert');
+      } else {
+        console.log('❌ User hat die Installation abgelehnt');
+      }
+      deferredPrompt = null;
+    });
+  });
+  
+  // Auto-hide nach 30 Sekunden
+  setTimeout(() => {
+    if (installButton.parentNode) {
+      installButton.style.opacity = '0';
+      installButton.style.transform = 'translateY(20px)';
+      setTimeout(() => {
+        if (installButton.parentNode) {
+          installButton.remove();
+        }
+      }, 300);
+    }
+  }, 30000);
+}
+
+function hideInstallButton() {
+  const button = document.getElementById('pwaInstallButton');
+  if (button) {
+    button.remove();
+  }
+}
+
 // ========== OFFLINE DETECTION ==========
 function initOfflineDetection() {
-  const offlineIndicator = document.createElement('div');
-  offlineIndicator.id = 'offlineIndicator';
-  offlineIndicator.innerHTML = `
-    <div style="
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: rgba(0,0,0,0.9);
-      color: #ff6b6b;
-      padding: 10px 20px;
-      border-radius: 4px;
-      border: 1px solid #ff6b6b;
-      z-index: 10000;
-      font-family: 'Cinzel', serif;
-      font-size: 0.9rem;
-      display: none;
-      align-items: center;
-      gap: 10px;
-    ">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-      </svg>
-      <span>Offline Modus</span>
-    </div>
-  `;
-  document.body.appendChild(offlineIndicator);
-  
   function updateOnlineStatus() {
-    const indicator = document.getElementById('offlineIndicator');
-    if (navigator.onLine) {
-      indicator.style.display = 'none';
-    } else {
-      indicator.style.display = 'flex';
+    // Optional: Zeige Offline-Status irgendwo an
+    if (!navigator.onLine) {
+      console.log('📴 Offline Modus aktiv');
     }
   }
   
   window.addEventListener('online', updateOnlineStatus);
   window.addEventListener('offline', updateOnlineStatus);
-  updateOnlineStatus(); // Initial check
+  updateOnlineStatus();
 }
 
 // ========== UPDATE NOTIFICATION ==========
 function showUpdateNotification() {
-  // Sanfte Benachrichtigung für Updates
+  // Nur zeigen, wenn nicht zu oft
+  const lastUpdateTime = localStorage.getItem('lastUpdatePrompt');
+  const now = Date.now();
+  
+  if (lastUpdateTime && (now - lastUpdateTime < 24 * 60 * 60 * 1000)) {
+    return; // Nur einmal pro Tag anzeigen
+  }
+  
+  localStorage.setItem('lastUpdatePrompt', now);
+  
   const updateNotification = document.createElement('div');
   updateNotification.innerHTML = `
     <div style="
       position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(192,192,192,0.95);
-      color: #000;
-      padding: 15px 25px;
+      bottom: 70px;
+      right: 20px;
+      background: rgba(0,0,0,0.9);
+      color: #ffffff;
+      padding: 15px;
       border-radius: 8px;
-      z-index: 10001;
+      border: 1px solid rgba(192,192,192,0.3);
       font-family: 'Cinzel', serif;
       font-size: 0.9rem;
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.3);
-      animation: fadeInUp 0.3s ease;
+      max-width: 250px;
+      z-index: 9997;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.5);
     ">
-      <span>Neue Version verfügbar!</span>
-      <button id="reloadButton" style="
-        background: #000;
-        color: #fff;
-        border: none;
-        padding: 8px 16px;
+      <p style="margin:0 0 10px 0;">Neue Version verfügbar!</p>
+      <button id="reloadBtn" style="
+        background: rgba(192,192,192,0.3);
+        color: white;
+        border: 1px solid rgba(192,192,192,0.5);
+        padding: 5px 15px;
         border-radius: 4px;
         cursor: pointer;
         font-family: inherit;
-        font-size: 0.8rem;
+        margin-right: 10px;
       ">Aktualisieren</button>
       <button id="closeUpdate" style="
         background: transparent;
         border: none;
-        color: #000;
+        color: #999;
         cursor: pointer;
-        font-size: 1.2rem;
-        padding: 0 5px;
-      ">×</button>
+      ">Später</button>
     </div>
   `;
+  
   document.body.appendChild(updateNotification);
   
-  document.getElementById('reloadButton').addEventListener('click', () => {
+  document.getElementById('reloadBtn').addEventListener('click', () => {
     window.location.reload();
   });
   
   document.getElementById('closeUpdate').addEventListener('click', () => {
-    updateNotification.style.animation = 'fadeOutDown 0.3s ease';
-    setTimeout(() => {
-      updateNotification.remove();
-    }, 300);
+    updateNotification.remove();
   });
   
-  // Auto-remove nach 30 Sekunden
+  // Auto-remove nach 20 Sekunden
   setTimeout(() => {
     if (updateNotification.parentNode) {
       updateNotification.remove();
     }
-  }, 30000);
-}
-
-// ========== PWA FEATURE DETECTION ==========
-function checkPWASupport() {
-  const features = {
-    serviceWorker: 'serviceWorker' in navigator,
-    pushNotifications: 'PushManager' in window,
-    backgroundSync: 'SyncManager' in window,
-    installPrompt: 'onbeforeinstallprompt' in window,
-    standalone: window.matchMedia('(display-mode: standalone)').matches
-  };
-  
-  console.log('📱 PWA Support:', features);
-  
-  // Wenn bereits als PWA installiert
-  if (features.standalone) {
-    console.log('📱 Läuft als installierte PWA');
-    // Hier können wir spezielle PWA-only Features aktivieren
-  }
+  }, 20000);
 }
 
 // ========== INITIALIZE EVERYTHING ==========
@@ -227,18 +236,22 @@ document.addEventListener('DOMContentLoaded', () => {
   console.log('🚀 Initialisiere PWA Features...');
   
   // Warte bis Preloader fertig ist
-  setTimeout(() => {
-    registerServiceWorker();
-    initInstallPrompt();
-    initOfflineDetection();
-    checkPWASupport();
-  }, 1000);
+  const initPWA = () => {
+    if (document.body.classList.contains('loaded')) {
+      registerServiceWorker();
+      initInstallPrompt();
+      initOfflineDetection();
+    } else {
+      setTimeout(initPWA, 500);
+    }
+  };
+  
+  initPWA();
 });
 
 // ========== EXPOSE FOR DEBUGGING ==========
 window.PWA = {
   registerServiceWorker,
   initInstallPrompt,
-  initOfflineDetection,
-  checkPWASupport
+  initOfflineDetection
 };
