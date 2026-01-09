@@ -25,7 +25,6 @@ body {
     min-height: 100vh;
     transition: background-color 0.3s ease, color 0.3s ease;
     overflow-y: auto;
-    position: relative;
 }
 
 /* ==========================================================================
@@ -175,26 +174,6 @@ body {
     50% { opacity: 0; }
 }
 
-@keyframes logoPulse {
-    0%, 100% { 
-        transform: scale(1); 
-        filter: brightness(1.1) drop-shadow(0 0 15px rgba(192, 192, 192, 0.2)); 
-    }
-    50% { 
-        transform: scale(1.03); 
-        filter: brightness(1.25) drop-shadow(0 0 20px rgba(192, 192, 192, 0.5)); 
-    }
-}
-
-@keyframes silberWelle {
-    0% {
-        background-position: -200% 0;
-    }
-    100% {
-        background-position: 200% 0;
-    }
-}
-
 /* ==========================================================================
    HEADER
    ========================================================================== */
@@ -213,143 +192,90 @@ body {
     margin: 0 auto 25px;
     display: block;
     filter: brightness(1.1) drop-shadow(0 0 15px rgba(192, 192, 192, 0.2));
-    animation: logoPulse 5s infinite ease-in-out;
 }
 
 /* ==========================================================================
-   DARK MODE TOGGLE - RECHTS
+   DARK MODE TOGGLE - Desktop: RECHTS, Mobile: LINKS
    ========================================================================== */
 .dark-mode-toggle {
     position: absolute;
     top: 35px;
     right: 20px;
-    background: rgba(0, 0, 0, 0.85);
-    border: 2px solid rgba(192, 192, 192, 0.5);
+    background: rgba(0, 0, 0, 0.8);
+    border: 1px solid rgba(200, 205, 215, 0.4);
     color: #c0c0c0;
     cursor: pointer;
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: 10001;
+    transition: all 0.3s ease;
+    z-index: 10002;
     padding: 0;
-    overflow: hidden;
-    box-shadow: 
-        0 4px 15px rgba(0, 0, 0, 0.5),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    -webkit-appearance: none;
+    touch-action: manipulation;
 }
 
 .dark-mode-toggle:hover {
-    transform: scale(1.1);
-    border-color: rgba(192, 192, 192, 0.8);
     background: rgba(20, 20, 20, 0.9);
-    box-shadow: 
-        0 8px 25px rgba(192, 192, 192, 0.4),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.7);
+    transform: scale(1.15);
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
 }
 
 .moon-icon, .sun-icon {
-    font-size: 22px;
-    position: absolute;
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 20px;
+    height: 20px;
+    fill: #c0c0c0;
+    transition: all 0.3s ease;
 }
 
 .moon-icon {
-    opacity: 1;
-    transform: scale(1) rotate(0deg);
-}
-
-.sun-icon {
-    opacity: 0;
-    transform: scale(0.5) rotate(180deg);
-    display: none;
-    color: #FFD700;
-}
-
-/* Dark Mode States */
-body.dark-mode .dark-mode-toggle {
-    background: rgba(40, 40, 40, 0.9);
-    border-color: rgba(255, 215, 0, 0.5);
-    box-shadow: 
-        0 4px 15px rgba(255, 215, 0, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, 0.15);
-}
-
-body.dark-mode .dark-mode-toggle:hover {
-    border-color: rgba(255, 215, 0, 0.8);
-    background: rgba(50, 50, 50, 0.95);
-    box-shadow: 
-        0 6px 25px rgba(255, 215, 0, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2);
-}
-
-body.dark-mode .moon-icon {
-    opacity: 0;
-    transform: scale(0.5) rotate(-180deg);
-    display: none;
-}
-
-body.dark-mode .sun-icon {
-    opacity: 1;
-    transform: scale(1) rotate(0deg);
     display: block;
 }
 
+.sun-icon {
+    display: none;
+}
+
 /* ==========================================================================
-   BURGER MENÜ - LINKS
+   BURGER MENÜ - Nur Mobile, RECHTS
    ========================================================================== */
 .burger {
     display: none;
     position: absolute;
     top: 35px;
-    left: 20px;
+    right: 20px;
     width: 40px;
     height: 40px;
-    background: rgba(0, 0, 0, 0.8);
-    border: 2px solid rgba(192, 192, 192, 0.5);
-    border-radius: 8px;
+    margin: 0;
     cursor: pointer;
+    background: none;
+    border: none;
     padding: 0;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 5px;
+    gap: 6px;
     z-index: 10002;
-    transition: all 0.3s ease;
+    -webkit-appearance: none;
+    touch-action: manipulation;
 }
 
 .burger span {
     display: block;
-    width: 22px;
+    width: 100%;
     height: 2px;
     background-color: #cfd2d6;
     transition: all 0.3s ease;
     border-radius: 1px;
-    box-shadow: 0 0 3px rgba(192, 192, 192, 0.3);
-}
-
-.burger:hover {
-    background: rgba(20, 20, 20, 0.9);
-    border-color: rgba(192, 192, 192, 0.7);
-    transform: scale(1.05);
-}
-
-.burger:hover span {
-    background-color: rgba(192, 192, 192, 0.9);
-    box-shadow: 0 0 5px rgba(192, 192, 192, 0.5);
-}
-
-.burger.aktiv {
-    border-color: rgba(192, 192, 192, 0.8);
-    background: rgba(30, 30, 30, 0.95);
+    transform-origin: center;
 }
 
 .burger.aktiv span:nth-child(1) {
-    transform: rotate(45deg) translate(5px, 5px);
-    background-color: #ffffff;
+    transform: rotate(45deg) translate(6px, 6px);
 }
 
 .burger.aktiv span:nth-child(2) {
@@ -358,8 +284,12 @@ body.dark-mode .sun-icon {
 }
 
 .burger.aktiv span:nth-child(3) {
-    transform: rotate(-45deg) translate(5px, -5px);
-    background-color: #ffffff;
+    transform: rotate(-45deg) translate(6px, -6px);
+}
+
+.burger:hover span {
+    background-color: rgba(192, 192, 192, 0.9);
+    box-shadow: 0 0 8px rgba(192, 192, 192, 0.5);
 }
 
 /* ==========================================================================
@@ -368,38 +298,71 @@ body.dark-mode .sun-icon {
 .hauptnavigation {
     display: flex;
     justify-content: center;
-    gap: 20px;
+    gap: 28px;
     flex-wrap: wrap;
-    padding: 15px;
+    padding: 15px 30px;
     z-index: 100;
     background: rgba(10, 10, 10, 0.96);
+    backdrop-filter: blur(12px);
     border-radius: 8px;
     margin: 0 auto;
     max-width: fit-content;
     border: 1px solid rgba(192, 192, 192, 0.3);
+    box-shadow: 
+        0 12px 35px rgba(0, 0, 0, 0.7),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1),
+        0 0 20px rgba(192, 192, 192, 0.2);
 }
 
 .hauptnavigation a {
     font-family: "Cinzel", serif;
     color: rgba(232, 234, 236, 0.95);
     text-decoration: none;
-    letter-spacing: 0.1em;
-    font-size: 0.9rem;
-    padding: 10px 15px;
+    letter-spacing: 0.15em;
+    font-size: 0.95rem;
+    padding: 10px 18px;
     transition: all 0.3s ease;
+    position: relative;
     font-weight: 500;
+    text-shadow: 
+        0 1px 3px rgba(0, 0, 0, 0.7),
+        0 0 8px rgba(192, 192, 192, 0.4);
+    -webkit-tap-highlight-color: rgba(192, 192, 192, 0.2);
+    touch-action: manipulation;
+    background: rgba(20, 20, 20, 0.5);
+    border-radius: 4px;
 }
 
 .hauptnavigation a:hover {
     color: #ffffff;
+    text-shadow: 
+        0 0 20px rgba(192, 192, 192, 0.9),
+        0 0 30px rgba(192, 192, 192, 0.6);
     transform: translateY(-2px);
+    background: linear-gradient(45deg, 
+        rgba(192, 192, 192, 0.25), 
+        rgba(192, 192, 192, 0.15));
+    box-shadow: 
+        0 8px 25px rgba(192, 192, 192, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2),
+        0 0 15px rgba(192, 192, 192, 0.4);
 }
 
 .hauptnavigation a.active {
     color: #ffffff;
     font-weight: 600;
-    background: rgba(192, 192, 192, 0.1);
-    border-radius: 4px;
+    text-shadow: 
+        0 0 15px rgba(192, 192, 192, 0.9),
+        0 0 25px rgba(192, 192, 192, 0.5),
+        0 2px 3px rgba(0, 0, 0, 0.6);
+    background: linear-gradient(45deg, 
+        rgba(192, 192, 192, 0.3), 
+        rgba(192, 192, 192, 0.2));
+    border: 1px solid rgba(192, 192, 192, 0.4);
+    box-shadow: 
+        0 5px 25px rgba(192, 192, 192, 0.6),
+        inset 0 1px 0 rgba(255, 255, 255, 0.25),
+        0 0 15px rgba(192, 192, 192, 0.4);
 }
 
 /* ==========================================================================
@@ -418,6 +381,15 @@ body.dark-mode .sun-icon {
     );
     background-size: 200% 100%;
     animation: silberWelle 8s infinite linear;
+}
+
+@keyframes silberWelle {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
 }
 
 /* ==========================================================================
@@ -546,40 +518,41 @@ h1 {
         min-height: 120px;
     }
     
-    /* Burger Menu - LINKS */
-    .burger {
-        display: flex;
+    .logo {
+        width: 200px;
+        margin: 0 auto 15px;
+        order: 1;
+    }
+    
+    /* Dark Mode Toggle - LINKS auf Mobile */
+    .dark-mode-toggle {
         position: absolute;
         top: 20px;
         left: 15px;
         right: auto;
+        z-index: 10001;
+        order: 2;
         width: 36px;
         height: 36px;
     }
     
-    /* Dark Mode Toggle - RECHTS */
-    .dark-mode-toggle {
+    /* Burger Menu - RECHTS auf Mobile */
+    .burger {
+        display: flex;
         position: absolute;
         top: 20px;
         right: 15px;
-        left: auto;
-        width: 42px;
-        height: 42px;
+        z-index: 10002;
+        order: 3;
+        width: 36px;
+        height: 36px;
     }
     
-    /* Logo - MITTE */
-    .logo {
-        width: 180px;
-        margin: 10px auto 15px;
-        display: block;
-        order: 1;
-    }
-    
-    /* Mobile Navigation - Versteckt, kommt von links */
+    /* Mobile Navigation */
     .hauptnavigation {
         position: fixed;
         top: 0;
-        left: -100%;
+        right: -100%;
         width: 280px;
         height: 100vh;
         background: rgba(15, 15, 15, 0.99);
@@ -591,15 +564,15 @@ h1 {
         gap: 12px;
         z-index: 10000;
         padding: 100px 20px 40px;
-        transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: 5px 0 40px rgba(0, 0, 0, 0.9);
         overflow-y: auto;
+        transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: -5px 0 40px rgba(0, 0, 0, 0.9);
         border: none;
         border-radius: 0;
     }
     
     .hauptnavigation.aktiv {
-        left: 0;
+        right: 0;
     }
     
     .hauptnavigation a {
@@ -627,6 +600,7 @@ h1 {
         visibility: hidden;
         transition: opacity 0.3s ease, visibility 0.3s ease;
         backdrop-filter: blur(3px);
+        touch-action: none;
         cursor: pointer;
     }
     
@@ -635,12 +609,11 @@ h1 {
         visibility: visible;
     }
     
-    /* Verhindere Scrollen wenn Menü offen */
+    /* Scroll-Verhalten FIX */
+    html.menu-open,
     body.menu-open {
         overflow: hidden;
-        position: fixed;
-        width: 100%;
-        height: 100%;
+        height: 100vh;
     }
     
     /* Mobile Preloader */
@@ -697,18 +670,18 @@ h1 {
         width: 160px;
     }
     
-    .burger {
-        top: 15px;
-        left: 10px;
-        width: 34px;
-        height: 34px;
-    }
-    
     .dark-mode-toggle {
         top: 15px;
+        left: 10px;
+        width: 32px;
+        height: 32px;
+    }
+    
+    .burger {
+        top: 15px;
         right: 10px;
-        width: 38px;
-        height: 38px;
+        width: 32px;
+        height: 32px;
     }
     
     .hauptnavigation {
@@ -751,6 +724,36 @@ body.dark-mode .header {
     border-bottom: 1px solid rgba(255, 255, 255, 0.15);
 }
 
+body.dark-mode .dark-mode-toggle {
+    background: rgba(40, 40, 40, 0.9);
+    border-color: rgba(255, 255, 255, 0.5);
+    color: #c0c0c0;
+}
+
+body.dark-mode .dark-mode-toggle:hover {
+    background: rgba(60, 60, 60, 0.95);
+    border-color: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 0 25px rgba(255, 255, 255, 0.6);
+}
+
+body.dark-mode .moon-icon {
+    display: none;
+}
+
+body.dark-mode .sun-icon {
+    display: block;
+    fill: #c0c0c0;
+}
+
+body.dark-mode .burger span {
+    background-color: #ffffff;
+}
+
+body.dark-mode .burger:hover span {
+    background-color: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+}
+
 body.dark-mode .hauptnavigation {
     background: rgba(30, 30, 30, 0.97);
     border: 1px solid rgba(255, 255, 255, 0.25);
@@ -768,7 +771,6 @@ body.dark-mode .inhalt {
 
 body.dark-mode .footer {
     background-color: rgba(20, 20, 20, 0.98);
-    border-top: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 /* ==========================================================================
@@ -785,17 +787,4 @@ body.loaded .footer {
     opacity: 1;
     visibility: visible;
     transition: opacity 0.5s ease 0.3s, visibility 0.5s ease 0.3s;
-}
-
-/* ==========================================================================
-   REDUCED MOTION
-   ========================================================================== */
-@media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-    }
 }
