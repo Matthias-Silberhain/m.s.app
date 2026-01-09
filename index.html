@@ -23,38 +23,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
-    
-    <!-- Emergency CSS -->
-    <style>
-        /* Emergency: Menü sicher geschlossen halten */
-        .hauptnavigation {
-            position: fixed;
-            top: 0;
-            left: -100%;
-            transition: left 0.3s ease;
-        }
-        
-        .hauptnavigation.aktiv {
-            left: 0;
-        }
-        
-        /* Emergency: Preloader sichtbar am Anfang */
-        #preloader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            background: #000;
-            z-index: 9999;
-            display: flex;
-        }
-        
-        body.loaded #preloader {
-            opacity: 0;
-            visibility: hidden;
-        }
-    </style>
 </head>
 <body>
     <!-- PRELOADER -->
@@ -68,20 +36,32 @@
 
     <!-- HEADER -->
     <header class="header">
-        <!-- Burger Menu - Links -->
+        <!-- Logo - Mitte -->
+        <img src="assets/images/logo.png" class="logo" alt="Matthias Silberhain Logo">
+
+        <!-- Dark Mode Toggle - Rechts (Desktop) / Links (Mobile) -->
+        <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Dark mode umschalten">
+            <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M12,3a9,9,0,1,0,9,9,9,9,0,0,0-9-9Zm0,16a7,7,0,0,1,0-14,7,7,0,0,1,0,14Z"/>
+            </svg>
+            <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="5"/>
+                <line x1="12" y1="1" x2="12" y2="3"/>
+                <line x1="12" y1="21" x2="12" y2="23"/>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                <line x1="1" y1="12" x2="3" y2="12"/>
+                <line x1="21" y1="12" x2="23" y2="12"/>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+            </svg>
+        </button>
+
+        <!-- Burger Menu - Rechts (nur Mobile) -->
         <button id="burgerButton" class="burger" aria-label="Menü öffnen">
             <span></span>
             <span></span>
             <span></span>
-        </button>
-
-        <!-- Logo - Mitte -->
-        <img src="assets/images/logo.png" class="logo" alt="Matthias Silberhain Logo">
-
-        <!-- Dark Mode Toggle - Rechts -->
-        <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Dark mode umschalten">
-            <span class="moon-icon">🌙</span>
-            <span class="sun-icon">☀️</span>
         </button>
 
         <!-- Navigation -->
@@ -140,29 +120,12 @@
     <!-- JavaScript -->
     <script src="assets/js/preloader.js"></script>
     <script src="assets/js/menu.js"></script>
-    <script src="assets/js/darkmode.js"></script>
+    <script src="assets/js/darkmode-fixed.js"></script>
     <script src="assets/js/pwa.js"></script>
     
-    <!-- Emergency Script -->
+    <!-- Aktuelles Jahr Script -->
     <script>
-        // SICHERSTELLEN: Menü startet geschlossen
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('🚨 Emergency: Menü geschlossen halten');
-            
-            const nav = document.getElementById('mainNav');
-            const burger = document.getElementById('burgerButton');
-            const overlay = document.getElementById('menuOverlay');
-            const body = document.body;
-            
-            if (nav) {
-                nav.classList.remove('aktiv');
-                nav.style.left = '-100%';
-            }
-            if (burger) burger.classList.remove('aktiv');
-            if (overlay) overlay.classList.remove('active');
-            body.classList.remove('menu-open');
-            
-            // Aktuelles Jahr
             const yearElement = document.getElementById('currentYear');
             if (yearElement) {
                 yearElement.textContent = new Date().getFullYear();
