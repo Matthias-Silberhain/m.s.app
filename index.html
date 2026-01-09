@@ -45,32 +45,71 @@
             align-items: center !important;
         }
         
-        /* Emergency Header Layout */
-        .header {
-            position: relative !important;
-            min-height: 120px !important;
+        /* Emergency Mobile Layout */
+        @media screen and (max-width: 768px) {
+            .header {
+                padding: 20px 15px 15px !important;
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+                position: relative !important;
+                min-height: 120px !important;
+            }
+            
+            /* Burger Menu - LINKS */
+            .burger {
+                position: absolute !important;
+                top: 25px !important;
+                left: 15px !important;
+                right: auto !important;
+                display: flex !important;
+                width: 36px !important;
+                height: 36px !important;
+                z-index: 10002 !important;
+            }
+            
+            /* Dark Mode Toggle - RECHTS */
+            .dark-mode-toggle {
+                position: absolute !important;
+                top: 25px !important;
+                right: 15px !important;
+                left: auto !important;
+                width: 45px !important;
+                height: 45px !important;
+                z-index: 10001 !important;
+            }
+            
+            /* Logo - MITTE */
+            .logo {
+                width: 200px !important;
+                margin: 0 auto 15px !important;
+                display: block !important;
+                order: 1 !important;
+            }
         }
         
-        /* Burger Menu - LINKS */
-        .burger {
-            position: absolute !important;
-            top: 25px !important;
-            left: 20px !important;
-            z-index: 10001 !important;
-        }
-        
-        /* Dark Mode Toggle - RECHTS */
-        .dark-mode-toggle {
-            position: absolute !important;
-            top: 25px !important;
-            right: 20px !important;
-            z-index: 10000 !important;
-        }
-        
-        /* Logo zentrieren */
-        .logo {
-            position: relative !important;
-            z-index: 9999 !important;
+        /* Desktop Layout */
+        @media screen and (min-width: 769px) {
+            .header {
+                padding: 30px 20px 20px !important;
+                position: relative !important;
+            }
+            
+            .burger {
+                display: none !important;
+            }
+            
+            .dark-mode-toggle {
+                position: absolute !important;
+                top: 35px !important;
+                right: 20px !important;
+                z-index: 10001 !important;
+            }
+            
+            .logo {
+                width: 300px !important;
+                margin: 0 auto 25px !important;
+            }
         }
         
         /* Icons */
@@ -104,21 +143,21 @@
 
     <!-- HEADER -->
     <header class="header">
-        <!-- Burger Menu - LINKS -->
+        <!-- Burger Menu - LINKS (nur auf Mobile) -->
         <button id="burgerButton" class="burger" aria-label="Menü öffnen">
             <span></span>
             <span></span>
             <span></span>
         </button>
 
+        <!-- Logo - MITTE -->
+        <img src="assets/images/logo.png" class="logo" alt="Matthias Silberhain Logo">
+
         <!-- Dark Mode Toggle - RECHTS -->
         <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Dark mode umschalten">
             <span class="moon-icon">🌙</span>
             <span class="sun-icon">☀️</span>
         </button>
-
-        <!-- Logo - MITTE -->
-        <img src="assets/images/logo.png" class="logo" alt="Matthias Silberhain Logo">
 
         <!-- Navigation -->
         <nav class="hauptnavigation" id="mainNav">
@@ -156,7 +195,7 @@
         <p>In einer Zeit, in der Komplexität oft vereinfacht wird, halte ich es für notwendig, genau hinzuschauen. Meine Texte sollen nicht nur informieren, sondern zum Denken anregen. Sie stellen Fragen, wo andere Antworten vorgeben. Sie zeigen Zusammenhänge, wo andere isolieren.</p>
         
         <div class="zitat">
-            "Ich schreibe, weil die Wahrheit eine Stimmae braucht."
+            "Ich schreibe, weil die Wahrheit eine Stimme braucht."
             <span class="zitat-autor">– Matthias Silberhain</span>
         </div>
         
@@ -231,38 +270,25 @@
     <script>
         // Absolute Sicherheit für Layout
         setTimeout(function() {
-            // Dark Mode Toggle - RECHTS
-            const toggle = document.getElementById('darkModeToggle');
-            if (toggle) {
-                toggle.style.position = 'absolute';
-                toggle.style.top = '25px';
-                toggle.style.right = '20px';
-                toggle.style.left = 'auto';
-            }
-            
-            // Burger Menu - LINKS
-            const burger = document.getElementById('burgerButton');
-            if (burger) {
-                burger.style.position = 'absolute';
-                burger.style.top = '25px';
-                burger.style.left = '20px';
-                burger.style.right = 'auto';
-            }
-            
-            // Logo zentrieren
-            const logo = document.querySelector('.logo');
-            if (logo) {
-                logo.style.margin = '0 auto';
-                logo.style.display = 'block';
-            }
-            
-            // Preloader Fallback
-            const preloader = document.getElementById('preloader');
-            if (preloader && preloader.style.display !== 'none') {
-                setTimeout(function() {
-                    preloader.style.display = 'none';
-                    document.body.classList.add('loaded');
-                }, 4000);
+            // Mobile Layout erzwingen
+            if (window.innerWidth <= 768) {
+                // Burger Menu - LINKS
+                const burger = document.getElementById('burgerButton');
+                if (burger) {
+                    burger.style.position = 'absolute';
+                    burger.style.top = '25px';
+                    burger.style.left = '15px';
+                    burger.style.right = 'auto';
+                }
+                
+                // Dark Mode Toggle - RECHTS
+                const toggle = document.getElementById('darkModeToggle');
+                if (toggle) {
+                    toggle.style.position = 'absolute';
+                    toggle.style.top = '25px';
+                    toggle.style.right = '15px';
+                    toggle.style.left = 'auto';
+                }
             }
             
             // Aktuelles Jahr setzen
