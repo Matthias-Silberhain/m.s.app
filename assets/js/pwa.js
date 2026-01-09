@@ -1,32 +1,30 @@
 /**
- * PWA - Installation & Service Worker Registration
- * Datei: assets/js/pwa.js
+ * PWA - Service Worker & Installation
  */
 
 (function() {
     'use strict';
     
-    console.log('📱 PWA Initialisierung gestartet');
+    console.log('📱 PWA Initialisierung');
     
-    // 1. Service Worker Registration
+    // Service Worker Registration
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', function() {
-            // WICHTIG: Service Worker liegt im Root-Verzeichnis
+            // Service Worker liegt im Root
             const swUrl = '/m.s.app/sw.js';
             
             navigator.serviceWorker.register(swUrl)
                 .then(function(registration) {
-                    console.log('✅ Service Worker registriert. Scope:', registration.scope);
+                    console.log('✅ Service Worker registriert:', registration.scope);
                     
-                    // Update-Check
+                    // Update Check
                     registration.addEventListener('updatefound', () => {
                         const newWorker = registration.installing;
                         console.log('🔄 Neuer Service Worker gefunden');
                         
                         newWorker.addEventListener('statechange', () => {
                             if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                                console.log('🆕 Neuer Service Worker bereit. Seite neu laden für Update.');
-                                // Optional: Update-Banner anzeigen
+                                console.log('🆕 Neuer Service Worker verfügbar');
                             }
                         });
                     });
@@ -35,11 +33,9 @@
                     console.error('❌ Service Worker Registrierung fehlgeschlagen:', error);
                 });
         });
-    } else {
-        console.log('ℹ️ Service Worker nicht unterstützt');
     }
     
-    // 2. PWA Installation Prompt
+    // Installation
     let deferredPrompt;
     
     window.addEventListener('beforeinstallprompt', (e) => {
@@ -47,8 +43,8 @@
         deferredPrompt = e;
         console.log('📲 PWA Installation verfügbar');
         
-        // Optional: Install Button anzeigen nach 3 Sekunden
-        setTimeout(showInstallButton, 3000);
+        // Install Button nach 5 Sekunden zeigen
+        setTimeout(showInstallButton, 5000);
     });
     
     window.addEventListener('appinstalled', () => {
@@ -57,7 +53,7 @@
         hideInstallButton();
     });
     
-    // 3. Install Button Functions
+    // Install Button
     function showInstallButton() {
         if (!deferredPrompt) return;
         
@@ -77,7 +73,6 @@
             font-size: 14px;
             cursor: pointer;
             z-index: 10000;
-            box-shadow: 0 2px 10px rgba(192,192,192,0.3);
         `;
         
         installBtn.addEventListener('click', async () => {
@@ -92,8 +87,8 @@
         
         document.body.appendChild(installBtn);
         
-        // Automatisch nach 10 Sekunden verstecken
-        setTimeout(hideInstallButton, 10000);
+        // Nach 15 Sekunden verstecken
+        setTimeout(hideInstallButton, 15000);
     }
     
     function hideInstallButton() {
@@ -103,19 +98,21 @@
         }
     }
     
-    // 4. Network Status
-    function updateNetworkStatus() {
-        if (!navigator.onLine) {
-            console.log('⚠️ Offline Modus');
-            document.body.classList.add('offline');
-        } else {
-            document.body.classList.remove('offline');
-        }
-    }
+    // Network Status
+    window.addEventListener('online', () => {
+        console.log('📶 Online');
+        document.body.classList.remove('offline');
+    });
     
-    window.addEventListener('online', updateNetworkStatus);
-    window.addEventListener('offline', updateNetworkStatus);
-    updateNetworkStatus(); // Initial check
+    window.addEventListener('offline', () => {
+        console.log('⚠️ Offline');
+        document.body.classList.add('offline');
+    });
+    
+    // Initial Check
+    if (!navigator.onLine) {
+        document.body.classList.add('offline');
+    }
     
     console.log('✅ PWA.js initialisiert');
 })();
