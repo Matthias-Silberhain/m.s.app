@@ -29,7 +29,7 @@ body {
 }
 
 /* ==========================================================================
-   PRELOADER - OPTIMIERT FÜR MOBILE
+   PRELOADER
    ========================================================================== */
 #preloader {
     position: fixed;
@@ -66,9 +66,9 @@ body {
 }
 
 .preloader-logo {
-    width: 180px;
+    width: 200px;
     height: auto;
-    margin-bottom: 40px;
+    margin-bottom: 60px;
     display: block;
     filter: brightness(1.1) drop-shadow(0 0 10px rgba(192, 192, 192, 0.3));
     animation: preloaderLogoPulse 3s infinite ease-in-out;
@@ -77,11 +77,11 @@ body {
 
 .preloader-text {
     font-family: "Cinzel", serif;
-    font-size: 24px;
+    font-size: 28px;
     letter-spacing: 0.15em;
     color: #e0e0e0;
     text-shadow: 0 0 10px rgba(200, 200, 200, 0.3);
-    margin-bottom: 60px;
+    margin-bottom: 100px;
     min-height: 40px;
     position: relative;
 }
@@ -95,7 +95,7 @@ body {
 
 .preloader-line {
     position: absolute;
-    top: calc(70% + 20px);
+    top: calc(70% + 40px);
     left: 50%;
     transform: translateX(-50%);
     width: 0;
@@ -175,11 +175,31 @@ body {
     50% { opacity: 0; }
 }
 
+@keyframes logoPulse {
+    0%, 100% { 
+        transform: scale(1); 
+        filter: brightness(1.1) drop-shadow(0 0 15px rgba(192, 192, 192, 0.2)); 
+    }
+    50% { 
+        transform: scale(1.03); 
+        filter: brightness(1.25) drop-shadow(0 0 20px rgba(192, 192, 192, 0.5)); 
+    }
+}
+
+@keyframes silberWelle {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
 /* ==========================================================================
    HEADER
    ========================================================================== */
 .header {
-    padding: 30px 20px 20px;
+    padding: 35px 20px 25px;
     text-align: center;
     background-color: rgba(0, 0, 0, 0.95);
     position: relative;
@@ -193,28 +213,28 @@ body {
     margin: 0 auto 25px;
     display: block;
     filter: brightness(1.1) drop-shadow(0 0 15px rgba(192, 192, 192, 0.2));
+    animation: logoPulse 5s infinite ease-in-out;
 }
 
 /* ==========================================================================
-   DARK MODE TOGGLE - VERBESSERT
+   DARK MODE TOGGLE - RECHTS
    ========================================================================== */
-
 .dark-mode-toggle {
     position: absolute;
     top: 35px;
     right: 20px;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background: rgba(0, 0, 0, 0.9);
-    border: 2px solid rgba(192, 192, 192, 0.6);
+    background: rgba(0, 0, 0, 0.85);
+    border: 2px solid rgba(192, 192, 192, 0.5);
     color: #c0c0c0;
     cursor: pointer;
+    width: 50px;
+    height: 50px;
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 10002;
+    border-radius: 50%;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 10001;
     padding: 0;
     overflow: hidden;
     box-shadow: 
@@ -223,22 +243,18 @@ body {
 }
 
 .dark-mode-toggle:hover {
-    transform: scale(1.1) rotate(15deg);
-    border-color: rgba(192, 192, 192, 0.9);
-    background: rgba(20, 20, 20, 0.95);
+    transform: scale(1.1);
+    border-color: rgba(192, 192, 192, 0.8);
+    background: rgba(20, 20, 20, 0.9);
     box-shadow: 
         0 8px 25px rgba(192, 192, 192, 0.4),
         inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
-.dark-mode-toggle:active {
-    transform: scale(0.95);
-}
-
 .moon-icon, .sun-icon {
-    font-size: 24px;
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    font-size: 22px;
     position: absolute;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .moon-icon {
@@ -249,100 +265,91 @@ body {
 .sun-icon {
     opacity: 0;
     transform: scale(0.5) rotate(180deg);
+    display: none;
+    color: #FFD700;
 }
 
-/* Dark Mode Toggle States */
+/* Dark Mode States */
 body.dark-mode .dark-mode-toggle {
-    background: rgba(30, 30, 30, 0.95);
-    border-color: rgba(255, 255, 255, 0.4);
-    color: #ffd700;
+    background: rgba(40, 40, 40, 0.9);
+    border-color: rgba(255, 215, 0, 0.5);
     box-shadow: 
-        0 4px 20px rgba(255, 215, 0, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        0 4px 15px rgba(255, 215, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 body.dark-mode .dark-mode-toggle:hover {
     border-color: rgba(255, 215, 0, 0.8);
-    background: rgba(40, 40, 40, 0.98);
+    background: rgba(50, 50, 50, 0.95);
     box-shadow: 
-        0 8px 30px rgba(255, 215, 0, 0.4),
-        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        0 6px 25px rgba(255, 215, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 body.dark-mode .moon-icon {
     opacity: 0;
     transform: scale(0.5) rotate(-180deg);
+    display: none;
 }
 
 body.dark-mode .sun-icon {
     opacity: 1;
     transform: scale(1) rotate(0deg);
-}
-
-/* Auf Mobile: Toggle links, Burger rechts */
-@media screen and (max-width: 768px) {
-    .dark-mode-toggle {
-        top: 25px;
-        left: 15px;
-        right: auto;
-        width: 45px;
-        height: 45px;
-    }
-    
-    .burger {
-        top: 25px;
-        right: 15px;
-        left: auto;
-    }
-}
-
-.moon-icon, .sun-icon {
-    width: 20px;
-    height: 20px;
-    fill: currentColor;
-    transition: all 0.3s ease;
-}
-
-.moon-icon {
     display: block;
 }
 
-.sun-icon {
-    display: none;
-}
-
 /* ==========================================================================
-   BURGER MENÜ
+   BURGER MENÜ - LINKS
    ========================================================================== */
 .burger {
     display: none;
+    position: absolute;
+    top: 35px;
+    left: 20px;
     width: 40px;
     height: 40px;
-    margin: 0;
+    background: rgba(0, 0, 0, 0.8);
+    border: 2px solid rgba(192, 192, 192, 0.5);
+    border-radius: 8px;
     cursor: pointer;
-    background: none;
-    border: none;
     padding: 0;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 6px;
-    position: absolute;
+    gap: 5px;
     z-index: 10002;
+    transition: all 0.3s ease;
 }
 
 .burger span {
     display: block;
-    width: 100%;
+    width: 22px;
     height: 2px;
     background-color: #cfd2d6;
     transition: all 0.3s ease;
     border-radius: 1px;
-    transform-origin: center;
+    box-shadow: 0 0 3px rgba(192, 192, 192, 0.3);
+}
+
+.burger:hover {
+    background: rgba(20, 20, 20, 0.9);
+    border-color: rgba(192, 192, 192, 0.7);
+    transform: scale(1.05);
+}
+
+.burger:hover span {
+    background-color: rgba(192, 192, 192, 0.9);
+    box-shadow: 0 0 5px rgba(192, 192, 192, 0.5);
+}
+
+.burger.aktiv {
+    border-color: rgba(192, 192, 192, 0.8);
+    background: rgba(30, 30, 30, 0.95);
 }
 
 .burger.aktiv span:nth-child(1) {
-    transform: rotate(45deg) translate(6px, 6px);
+    transform: rotate(45deg) translate(5px, 5px);
+    background-color: #ffffff;
 }
 
 .burger.aktiv span:nth-child(2) {
@@ -351,7 +358,8 @@ body.dark-mode .sun-icon {
 }
 
 .burger.aktiv span:nth-child(3) {
-    transform: rotate(-45deg) translate(6px, -6px);
+    transform: rotate(-45deg) translate(5px, -5px);
+    background-color: #ffffff;
 }
 
 /* ==========================================================================
@@ -410,15 +418,6 @@ body.dark-mode .sun-icon {
     );
     background-size: 200% 100%;
     animation: silberWelle 8s infinite linear;
-}
-
-@keyframes silberWelle {
-    0% {
-        background-position: -200% 0;
-    }
-    100% {
-        background-position: 200% 0;
-    }
 }
 
 /* ==========================================================================
@@ -500,83 +499,6 @@ h1 {
 }
 
 /* ==========================================================================
-   SOCIAL MEDIA
-   ========================================================================== */
-.social-section {
-    margin: 50px 0;
-    padding: 40px 20px;
-    text-align: center;
-    background-color: rgba(5, 5, 5, 0.9);
-    border-radius: 8px;
-}
-
-.social-title {
-    font-family: "Cinzel", serif;
-    color: #e4e6ea;
-    margin-bottom: 35px;
-    font-size: 1.4rem;
-    letter-spacing: 0.1em;
-}
-
-.social-grid {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 25px;
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-.social-link {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-decoration: none;
-    color: #9da2a8;
-    transition: all 0.3s ease;
-    width: 80px;
-}
-
-.social-icon-wrapper {
-    width: 55px;
-    height: 55px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid rgba(200, 205, 215, 0.3);
-    border-radius: 50%;
-    margin-bottom: 10px;
-    transition: all 0.3s ease;
-    background: rgba(15, 15, 15, 0.6);
-}
-
-.social-icon {
-    width: 26px;
-    height: 26px;
-    fill: #9da2a8;
-    transition: all 0.3s ease;
-}
-
-.social-name {
-    font-size: 0.8rem;
-    letter-spacing: 0.05em;
-}
-
-.social-link:hover {
-    color: #ffffff;
-    transform: translateY(-3px);
-}
-
-.social-link:hover .social-icon-wrapper {
-    border-color: rgba(192, 192, 192, 0.8);
-    background: rgba(192, 192, 192, 0.2);
-}
-
-.social-link:hover .social-icon {
-    fill: #ffffff;
-}
-
-/* ==========================================================================
    FOOTER
    ========================================================================== */
 .footer {
@@ -612,22 +534,6 @@ h1 {
 }
 
 /* ==========================================================================
-   DARK MODE
-   ========================================================================== */
-body.dark-mode {
-    background-color: #0a0a0a;
-    color: #e8e8e8;
-}
-
-body.dark-mode .moon-icon {
-    display: none;
-}
-
-body.dark-mode .sun-icon {
-    display: block;
-}
-
-/* ==========================================================================
    MOBILE STYLES
    ========================================================================== */
 @media screen and (max-width: 768px) {
@@ -637,37 +543,47 @@ body.dark-mode .sun-icon {
         flex-direction: column;
         align-items: center;
         position: relative;
+        min-height: 120px;
     }
     
-    .logo {
-        width: 200px;
-        margin: 0 auto 15px;
-    }
-    
+    /* Burger Menu - LINKS */
     .burger {
         display: flex;
         position: absolute;
-        top: 25px;
-        right: 15px;
-    }
-    
-    .dark-mode-toggle {
-        position: absolute;
-        top: 25px;
+        top: 20px;
         left: 15px;
         right: auto;
         width: 36px;
         height: 36px;
     }
     
-    /* Mobile Navigation */
+    /* Dark Mode Toggle - RECHTS */
+    .dark-mode-toggle {
+        position: absolute;
+        top: 20px;
+        right: 15px;
+        left: auto;
+        width: 42px;
+        height: 42px;
+    }
+    
+    /* Logo - MITTE */
+    .logo {
+        width: 180px;
+        margin: 10px auto 15px;
+        display: block;
+        order: 1;
+    }
+    
+    /* Mobile Navigation - Versteckt, kommt von links */
     .hauptnavigation {
         position: fixed;
         top: 0;
-        right: -100%;
+        left: -100%;
         width: 280px;
         height: 100vh;
         background: rgba(15, 15, 15, 0.99);
+        backdrop-filter: blur(15px);
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
@@ -675,11 +591,15 @@ body.dark-mode .sun-icon {
         gap: 12px;
         z-index: 10000;
         padding: 100px 20px 40px;
-        transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 5px 0 40px rgba(0, 0, 0, 0.9);
+        overflow-y: auto;
+        border: none;
+        border-radius: 0;
     }
     
     .hauptnavigation.aktiv {
-        right: 0;
+        left: 0;
     }
     
     .hauptnavigation a {
@@ -688,6 +608,10 @@ body.dark-mode .sun-icon {
         width: 100%;
         max-width: 260px;
         text-align: center;
+        border: 1px solid rgba(200, 205, 215, 0.3);
+        border-radius: 4px;
+        background: rgba(25, 25, 25, 0.9);
+        margin: 3px 0;
     }
     
     /* Menu Overlay */
@@ -702,6 +626,8 @@ body.dark-mode .sun-icon {
         opacity: 0;
         visibility: hidden;
         transition: opacity 0.3s ease, visibility 0.3s ease;
+        backdrop-filter: blur(3px);
+        cursor: pointer;
     }
     
     .menu-overlay.active {
@@ -709,15 +635,23 @@ body.dark-mode .sun-icon {
         visibility: visible;
     }
     
+    /* Verhindere Scrollen wenn Menü offen */
+    body.menu-open {
+        overflow: hidden;
+        position: fixed;
+        width: 100%;
+        height: 100%;
+    }
+    
     /* Mobile Preloader */
     .preloader-logo {
         width: 140px;
-        margin-bottom: 30px;
+        margin-bottom: 40px;
     }
     
     .preloader-text {
-        font-size: 20px;
-        margin-bottom: 40px;
+        font-size: 22px;
+        margin-bottom: 60px;
     }
     
     /* Mobile Inhalt */
@@ -760,7 +694,26 @@ body.dark-mode .sun-icon {
 
 @media screen and (max-width: 480px) {
     .logo {
-        width: 180px;
+        width: 160px;
+    }
+    
+    .burger {
+        top: 15px;
+        left: 10px;
+        width: 34px;
+        height: 34px;
+    }
+    
+    .dark-mode-toggle {
+        top: 15px;
+        right: 10px;
+        width: 38px;
+        height: 38px;
+    }
+    
+    .hauptnavigation {
+        width: 250px;
+        padding-top: 90px;
     }
     
     .preloader-logo {
@@ -786,282 +739,56 @@ body.dark-mode .sun-icon {
 }
 
 /* ==========================================================================
+   DARK MODE
+   ========================================================================== */
+body.dark-mode {
+    background-color: #0a0a0a;
+    color: #e8e8e8;
+}
+
+body.dark-mode .header {
+    background-color: rgba(20, 20, 20, 0.98);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+body.dark-mode .hauptnavigation {
+    background: rgba(30, 30, 30, 0.97);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+body.dark-mode .hauptnavigation a {
+    background: rgba(50, 50, 50, 0.7);
+    color: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+body.dark-mode .inhalt {
+    background-color: rgba(25, 25, 25, 0.95);
+}
+
+body.dark-mode .footer {
+    background-color: rgba(20, 20, 20, 0.98);
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* ==========================================================================
    PRELOADER LOADED STATE
    ========================================================================== */
 body:not(.loaded) .inhalt,
-body:not(.loaded) .social-section,
 body:not(.loaded) .footer {
     opacity: 0;
     visibility: hidden;
 }
 
 body.loaded .inhalt,
-body.loaded .social-section,
 body.loaded .footer {
     opacity: 1;
     visibility: visible;
     transition: opacity 0.5s ease 0.3s, visibility 0.5s ease 0.3s;
 }
-/* ==========================================================================
-   DARK MODE TOGGLE - VERBESSERT
-   ========================================================================== */
-.dark-mode-toggle {
-    position: absolute;
-    top: 35px;
-    right: 20px;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background: rgba(0, 0, 0, 0.9);
-    border: 2px solid rgba(192, 192, 192, 0.6);
-    color: #c0c0c0;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 10002;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    padding: 0;
-    overflow: hidden;
-    box-shadow: 
-        0 4px 15px rgba(0, 0, 0, 0.5),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
-}
-
-.dark-mode-toggle:hover {
-    transform: scale(1.1) rotate(15deg);
-    border-color: rgba(192, 192, 192, 0.9);
-    background: rgba(20, 20, 20, 0.95);
-    box-shadow: 
-        0 8px 25px rgba(192, 192, 192, 0.4),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2);
-}
-
-.dark-mode-toggle:active {
-    transform: scale(0.95);
-}
-
-.moon-icon, .sun-icon {
-    font-size: 24px;
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    position: absolute;
-}
-
-.moon-icon {
-    opacity: 1;
-    transform: scale(1) rotate(0deg);
-}
-
-.sun-icon {
-    opacity: 0;
-    transform: scale(0.5) rotate(180deg);
-}
-
-/* Dark Mode Toggle States */
-body.dark-mode .dark-mode-toggle {
-    background: rgba(30, 30, 30, 0.95);
-    border-color: rgba(255, 255, 255, 0.4);
-    color: #ffd700;
-    box-shadow: 
-        0 4px 20px rgba(255, 215, 0, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2);
-}
-
-body.dark-mode .dark-mode-toggle:hover {
-    border-color: rgba(255, 215, 0, 0.8);
-    background: rgba(40, 40, 40, 0.98);
-    box-shadow: 
-        0 8px 30px rgba(255, 215, 0, 0.4),
-        inset 0 1px 0 rgba(255, 255, 255, 0.3);
-}
-
-body.dark-mode .moon-icon {
-    opacity: 0;
-    transform: scale(0.5) rotate(-180deg);
-}
-
-body.dark-mode .sun-icon {
-    opacity: 1;
-    transform: scale(1) rotate(0deg);
-}
 
 /* ==========================================================================
-   ANIMATIONEN - VERBESSERT
-   ========================================================================== */
-
-/* Logo Pulsieren */
-@keyframes logoGlow {
-    0%, 100% {
-        filter: 
-            brightness(1.1) 
-            drop-shadow(0 0 10px rgba(192, 192, 192, 0.3));
-        transform: scale(1);
-    }
-    50% {
-        filter: 
-            brightness(1.4) 
-            drop-shadow(0 0 25px rgba(192, 192, 192, 0.7));
-        transform: scale(1.05);
-    }
-}
-
-.logo, .preloader-logo {
-    animation: logoGlow 4s infinite ease-in-out;
-}
-
-/* Text Schimmer */
-@keyframes textShimmer {
-    0% {
-        text-shadow: 
-            0 0 10px rgba(200, 200, 200, 0.3),
-            0 0 20px rgba(200, 200, 200, 0.2);
-    }
-    50% {
-        text-shadow: 
-            0 0 20px rgba(255, 255, 255, 0.6),
-            0 0 40px rgba(255, 255, 255, 0.4),
-            0 0 60px rgba(255, 255, 255, 0.2);
-    }
-    100% {
-        text-shadow: 
-            0 0 10px rgba(200, 200, 200, 0.3),
-            0 0 20px rgba(200, 200, 200, 0.2);
-    }
-}
-
-h1, .lead-text, .zitat {
-    animation: textShimmer 6s infinite ease-in-out;
-}
-
-/* Navigation Items Hover */
-@keyframes navItemPulse {
-    0%, 100% {
-        transform: translateY(0);
-        box-shadow: 0 2px 10px rgba(192, 192, 192, 0.2);
-    }
-    50% {
-        transform: translateY(-3px);
-        box-shadow: 0 8px 25px rgba(192, 192, 192, 0.5);
-    }
-}
-
-.hauptnavigation a:hover {
-    animation: navItemPulse 2s infinite ease-in-out;
-}
-
-/* Content Fade-in */
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.inhalt > * {
-    opacity: 0;
-    transform: translateY(20px);
-    animation: fadeInUp 0.6s ease forwards;
-}
-
-/* Verzögerte Animationen für Content */
-.inhalt p:nth-child(1) { animation-delay: 0.1s; }
-.inhalt p:nth-child(2) { animation-delay: 0.2s; }
-.inhalt p:nth-child(3) { animation-delay: 0.3s; }
-.inhalt p:nth-child(4) { animation-delay: 0.4s; }
-.highlight { animation-delay: 0.5s; }
-.inhalt p:nth-child(6) { animation-delay: 0.6s; }
-.zitat { animation-delay: 0.7s; }
-.inhalt p:nth-child(8) { animation-delay: 0.8s; }
-
-/* Silver Wave Animation für Lichtkanten */
-@keyframes silverWave {
-    0% {
-        background-position: -200% 0;
-        opacity: 0.7;
-    }
-    50% {
-        opacity: 1;
-    }
-    100% {
-        background-position: 200% 0;
-        opacity: 0.7;
-    }
-}
-
-.lichtkante {
-    animation: silverWave 6s infinite linear;
-    background: linear-gradient(
-        90deg,
-        transparent,
-        rgba(192, 192, 192, 0.4),
-        rgba(192, 192, 192, 0.8),
-        rgba(192, 192, 192, 0.4),
-        transparent
-    );
-    background-size: 200% 100%;
-    height: 1px;
-    margin: 30px 0;
-}
-
-/* Social Icons Hover */
-@keyframes socialIconFloat {
-    0%, 100% {
-        transform: translateY(0) rotate(0deg);
-    }
-    33% {
-        transform: translateY(-5px) rotate(5deg);
-    }
-    66% {
-        transform: translateY(-3px) rotate(-3deg);
-    }
-}
-
-.social-link:hover .social-icon-wrapper {
-    animation: socialIconFloat 2s infinite ease-in-out;
-}
-
-/* ==========================================================================
-   MOBILE ANIMATIONEN
-   ========================================================================== */
-@media screen and (max-width: 768px) {
-    .dark-mode-toggle {
-        top: 25px;
-        right: 15px;
-        width: 45px;
-        height: 45px;
-    }
-    
-    /* Sanftere Animationen für Mobile */
-    @keyframes mobileFadeIn {
-        from {
-            opacity: 0;
-        }
-        to {
-            opacity: 1;
-        }
-    }
-    
-    .inhalt > * {
-        animation: mobileFadeIn 0.4s ease forwards;
-    }
-    
-    /* Kürzere Verzögerungen */
-    .inhalt p:nth-child(1) { animation-delay: 0.05s; }
-    .inhalt p:nth-child(2) { animation-delay: 0.1s; }
-    .inhalt p:nth-child(3) { animation-delay: 0.15s; }
-    .inhalt p:nth-child(4) { animation-delay: 0.2s; }
-    .highlight { animation-delay: 0.25s; }
-    .inhalt p:nth-child(6) { animation-delay: 0.3s; }
-    .zitat { animation-delay: 0.35s; }
-    .inhalt p:nth-child(8) { animation-delay: 0.4s; }
-}
-
-/* ==========================================================================
-   REDUCED MOTION SUPPORT
+   REDUCED MOTION
    ========================================================================== */
 @media (prefers-reduced-motion: reduce) {
     *,
@@ -1070,798 +797,5 @@ h1, .lead-text, .zitat {
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
-    }
-    
-    .logo, .preloader-logo,
-    h1, .lead-text, .zitat,
-    .hauptnavigation a:hover,
-    .social-link:hover .social-icon-wrapper {
-        animation: none !important;
-    }
-}
-/* ==========================================================================
-   DARK MODE TOGGLE - FIXED POSITION
-   ========================================================================== */
-.dark-mode-toggle {
-    position: fixed !important;
-    top: 25px !important;
-    right: 25px !important;
-    width: 50px !important;
-    height: 50px !important;
-    border-radius: 50% !important;
-    background: rgba(0, 0, 0, 0.9) !important;
-    border: 2px solid rgba(192, 192, 192, 0.6) !important;
-    color: #c0c0c0 !important;
-    cursor: pointer !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    z-index: 10000 !important;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-    padding: 0 !important;
-    overflow: hidden !important;
-    box-shadow: 
-        0 4px 15px rgba(0, 0, 0, 0.5),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
-}
-
-.dark-mode-toggle:hover {
-    transform: scale(1.1) !important;
-    border-color: rgba(192, 192, 192, 0.9) !important;
-    background: rgba(20, 20, 20, 0.95) !important;
-    box-shadow: 
-        0 8px 25px rgba(192, 192, 192, 0.4),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
-}
-
-.moon-icon, .sun-icon {
-    font-size: 24px !important;
-    position: absolute !important;
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1) !important;
-}
-
-.moon-icon {
-    opacity: 1 !important;
-    transform: scale(1) rotate(0deg) !important;
-}
-
-.sun-icon {
-    opacity: 0 !important;
-    transform: scale(0.5) rotate(180deg) !important;
-    display: none !important;
-}
-
-/* Dark Mode States */
-body.dark-mode .dark-mode-toggle {
-    background: rgba(30, 30, 30, 0.95) !important;
-    border-color: rgba(255, 255, 255, 0.4) !important;
-    color: #ffd700 !important;
-    box-shadow: 
-        0 4px 20px rgba(255, 215, 0, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
-}
-
-body.dark-mode .moon-icon {
-    opacity: 0 !important;
-    transform: scale(0.5) rotate(-180deg) !important;
-    display: none !important;
-}
-
-body.dark-mode .sun-icon {
-    opacity: 1 !important;
-    transform: scale(1) rotate(0deg) !important;
-    display: block !important;
-}
-
-/* Mobile Anpassung */
-@media screen and (max-width: 768px) {
-    .dark-mode-toggle {
-        top: 20px !important;
-        right: 20px !important;
-        width: 45px !important;
-        height: 45px !important;
-    }
-    
-    /* Burger Button anpassen */
-    .burger {
-        top: 20px !important;
-        left: 20px !important;
-        right: auto !important;
-    }
-}
-
-@media screen and (max-width: 480px) {
-    .dark-mode-toggle {
-        top: 15px !important;
-        right: 15px !important;
-        width: 40px !important;
-        height: 40px !important;
-    }
-    
-    .moon-icon, .sun-icon {
-        font-size: 20px !important;
-    }
-}
-/* ==========================================================================
-   HEADER LAYOUT - KORRIGIERT
-   ========================================================================== */
-
-/* Header Container */
-.header {
-    position: relative;
-    padding: 35px 20px 25px;
-    text-align: center;
-    background-color: rgba(0, 0, 0, 0.95);
-    min-height: 120px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-/* Logo zentrieren */
-.logo {
-    width: min(75vw, 420px);
-    max-width: 380px;
-    height: auto;
-    margin: 0 auto 25px;
-    display: block;
-    filter: brightness(1.1) drop-shadow(0 0 15px rgba(192, 192, 192, 0.2));
-    animation: logoPulse 5s infinite ease-in-out;
-}
-
-/* Burger Menu - LINKS */
-.burger {
-    position: absolute;
-    top: 35px;
-    left: 20px;
-    width: 40px;
-    height: 40px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    display: none; /* Nur auf Mobile sichtbar */
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 6px;
-    z-index: 10002;
-}
-
-.burger span {
-    display: block;
-    width: 100%;
-    height: 2px;
-    background-color: #cfd2d6;
-    transition: all 0.3s ease;
-    border-radius: 1px;
-}
-
-/* Dark Mode Toggle - RECHTS */
-.dark-mode-toggle {
-    position: absolute;
-    top: 35px;
-    right: 20px;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background: rgba(0, 0, 0, 0.9);
-    border: 2px solid rgba(192, 192, 192, 0.6);
-    color: #c0c0c0;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 10001;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    padding: 0;
-    overflow: hidden;
-}
-
-/* Schöne Hover-Effekte */
-.dark-mode-toggle:hover {
-    transform: scale(1.1);
-    border-color: rgba(192, 192, 192, 0.9);
-    background: rgba(20, 20, 20, 0.95);
-    box-shadow: 
-        0 8px 25px rgba(192, 192, 192, 0.4),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2);
-}
-
-.dark-mode-toggle:active {
-    transform: scale(0.95);
-}
-
-/* Icons Animation */
-.moon-icon, .sun-icon {
-    font-size: 24px;
-    position: absolute;
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.moon-icon {
-    opacity: 1;
-    transform: scale(1) rotate(0deg);
-}
-
-.sun-icon {
-    opacity: 0;
-    transform: scale(0.5) rotate(180deg);
-}
-
-/* Dark Mode States */
-body.dark-mode .dark-mode-toggle {
-    background: rgba(30, 30, 30, 0.95);
-    border-color: rgba(255, 255, 255, 0.4);
-    color: #ffd700;
-    box-shadow: 
-        0 4px 20px rgba(255, 215, 0, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2);
-}
-
-body.dark-mode .dark-mode-toggle:hover {
-    border-color: rgba(255, 215, 0, 0.8);
-    background: rgba(40, 40, 40, 0.98);
-    box-shadow: 
-        0 8px 30px rgba(255, 215, 0, 0.4),
-        inset 0 1px 0 rgba(255, 255, 255, 0.3);
-}
-
-body.dark-mode .moon-icon {
-    opacity: 0;
-    transform: scale(0.5) rotate(-180deg);
-}
-
-body.dark-mode .sun-icon {
-    opacity: 1;
-    transform: scale(1) rotate(0deg);
-}
-
-/* Navigation */
-.hauptnavigation {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
-    padding: 15px;
-    z-index: 100;
-    background: rgba(10, 10, 10, 0.96);
-    backdrop-filter: blur(12px);
-    border-radius: 8px;
-    margin: 0 auto;
-    max-width: fit-content;
-    border: 1px solid rgba(192, 192, 192, 0.3);
-    box-shadow: 
-        0 12px 35px rgba(0, 0, 0, 0.7),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1),
-        0 0 20px rgba(192, 192, 192, 0.2);
-}
-
-/* ==========================================================================
-   MOBILE LAYOUT - KORRIGIERT
-   ========================================================================== */
-@media screen and (max-width: 768px) {
-    .header {
-        padding: 25px 15px 15px;
-        min-height: 100px;
-    }
-    
-    /* Burger Menu sichtbar - LINKS */
-    .burger {
-        display: flex;
-        top: 25px;
-        left: 15px;
-        width: 36px;
-        height: 36px;
-    }
-    
-    /* Dark Mode Toggle - RECHTS */
-    .dark-mode-toggle {
-        top: 25px;
-        right: 15px;
-        width: 45px;
-        height: 45px;
-    }
-    
-    /* Logo kleiner auf Mobile */
-    .logo {
-        width: min(65vw, 280px);
-        margin: 10px auto 15px;
-    }
-    
-    /* Navigation für Mobile */
-    .hauptnavigation {
-        position: fixed;
-        top: 0;
-        left: -100%;
-        width: 280px;
-        height: 100vh;
-        background: rgba(15, 15, 15, 0.99);
-        backdrop-filter: blur(15px);
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        align-items: center;
-        gap: 12px;
-        z-index: 10000;
-        padding: 100px 20px 40px;
-        transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: -5px 0 40px rgba(0, 0, 0, 0.9);
-        border: none;
-        border-radius: 0;
-    }
-    
-    .hauptnavigation.aktiv {
-        left: 0;
-    }
-    
-    /* Menu Overlay */
-    .menu-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.8);
-        z-index: 9999;
-        opacity: 0;
-        visibility: hidden;
-        transition: opacity 0.3s ease, visibility 0.3s ease;
-        backdrop-filter: blur(3px);
-    }
-    
-    .menu-overlay.active {
-        opacity: 1;
-        visibility: visible;
-    }
-}
-
-/* Extra kleine Screens */
-@media screen and (max-width: 480px) {
-    .burger {
-        top: 20px;
-        left: 10px;
-        width: 32px;
-        height: 32px;
-    }
-    
-    .dark-mode-toggle {
-        top: 20px;
-        right: 10px;
-        width: 40px;
-        height: 40px;
-    }
-    
-    .logo {
-        width: min(60vw, 220px);
-    }
-    
-    .moon-icon, .sun-icon {
-        font-size: 20px;
-    }
-}
-
-/* ==========================================================================
-   ANIMATIONEN - VERBESSERT
-   ========================================================================== */
-
-/* Logo Pulsieren */
-@keyframes logoPulse {
-    0%, 100% {
-        transform: scale(1);
-        filter: brightness(1.1) drop-shadow(0 0 15px rgba(192, 192, 192, 0.2));
-    }
-    50% {
-        transform: scale(1.03);
-        filter: brightness(1.25) drop-shadow(0 0 20px rgba(192, 192, 192, 0.5));
-    }
-}
-
-/* Preloader Logo */
-@keyframes preloaderLogoPulse {
-    0%, 100% { 
-        transform: scale(1); 
-        filter: brightness(1.1) drop-shadow(0 0 10px rgba(192, 192, 192, 0.3)); 
-    }
-    50% { 
-        transform: scale(1.08); 
-        filter: brightness(1.4) drop-shadow(0 0 25px rgba(192, 192, 192, 0.7)); 
-    }
-}
-
-.preloader-logo {
-    animation: preloaderLogoPulse 3s infinite ease-in-out;
-}
-
-/* Burger Animation */
-.burger.aktiv span:nth-child(1) {
-    transform: rotate(45deg) translate(6px, 6px);
-}
-
-.burger.aktiv span:nth-child(2) {
-    opacity: 0;
-    transform: translateX(-10px);
-}
-
-.burger.aktiv span:nth-child(3) {
-    transform: rotate(-45deg) translate(6px, -6px);
-}
-
-/* Navigation Items Hover */
-.hauptnavigation a {
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-}
-
-.hauptnavigation a::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: -100%;
-    width: 100%;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, #c0c0c0, transparent);
-    transition: left 0.3s ease;
-}
-
-.hauptnavigation a:hover::after {
-    left: 0;
-}
-
-/* Silver Glow für aktive Navigation */
-@keyframes silverGlow {
-    0%, 100% { 
-        box-shadow: 
-            0 5px 20px rgba(192, 192, 192, 0.5),
-            inset 0 1px 0 rgba(255, 255, 255, 0.2),
-            0 0 10px rgba(192, 192, 192, 0.3); 
-    }
-    50% { 
-        box-shadow: 
-            0 5px 30px rgba(192, 192, 192, 0.9),
-            inset 0 1px 0 rgba(255, 255, 255, 0.4),
-            0 0 25px rgba(192, 192, 192, 0.7); 
-    }
-}
-
-.hauptnavigation a.active {
-    animation: silverGlow 3s infinite ease-in-out;
-}
-/* ==========================================================================
-   DARK MODE TOGGLE - SCHÖN DESIGN
-   ========================================================================== */
-.dark-mode-toggle {
-    position: absolute;
-    top: 35px;
-    right: 20px;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background: rgba(0, 0, 0, 0.85);
-    border: 2px solid rgba(192, 192, 192, 0.5);
-    color: #c0c0c0;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 10001;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    padding: 0;
-    overflow: hidden;
-    box-shadow: 
-        0 4px 12px rgba(0, 0, 0, 0.4),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
-}
-
-.dark-mode-toggle:hover {
-    transform: scale(1.08) rotate(5deg);
-    border-color: rgba(192, 192, 192, 0.8);
-    background: rgba(20, 20, 20, 0.9);
-    box-shadow: 
-        0 6px 20px rgba(192, 192, 192, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.15);
-}
-
-.dark-mode-toggle:active {
-    transform: scale(0.95);
-}
-
-.moon-icon, .sun-icon {
-    font-size: 22px;
-    position: absolute;
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    text-shadow: 0 0 5px currentColor;
-}
-
-.moon-icon {
-    opacity: 1;
-    transform: scale(1) rotate(0deg);
-}
-
-.sun-icon {
-    opacity: 0;
-    transform: scale(0.5) rotate(180deg);
-    color: #FFD700;
-}
-
-/* Dark Mode Toggle States */
-body.dark-mode .dark-mode-toggle {
-    background: rgba(40, 40, 40, 0.9);
-    border-color: rgba(255, 215, 0, 0.5);
-    box-shadow: 
-        0 4px 15px rgba(255, 215, 0, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, 0.15);
-}
-
-body.dark-mode .dark-mode-toggle:hover {
-    border-color: rgba(255, 215, 0, 0.8);
-    background: rgba(50, 50, 50, 0.95);
-    box-shadow: 
-        0 6px 25px rgba(255, 215, 0, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2);
-}
-
-body.dark-mode .moon-icon {
-    opacity: 0;
-    transform: scale(0.5) rotate(-180deg);
-}
-
-body.dark-mode .sun-icon {
-    opacity: 1;
-    transform: scale(1) rotate(0deg);
-}
-
-/* ==========================================================================
-   BURGER MENÜ - SCHÖN DESIGN
-   ========================================================================== */
-.burger {
-    display: none;
-    position: absolute;
-    top: 35px;
-    left: 20px;
-    width: 40px;
-    height: 40px;
-    background: rgba(0, 0, 0, 0.8);
-    border: 2px solid rgba(192, 192, 192, 0.5);
-    border-radius: 8px;
-    cursor: pointer;
-    padding: 0;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 5px;
-    z-index: 10002;
-    transition: all 0.3s ease;
-}
-
-.burger span {
-    display: block;
-    width: 22px;
-    height: 2px;
-    background-color: #cfd2d6;
-    transition: all 0.3s ease;
-    border-radius: 1px;
-    box-shadow: 0 0 3px rgba(192, 192, 192, 0.3);
-}
-
-.burger:hover {
-    background: rgba(20, 20, 20, 0.9);
-    border-color: rgba(192, 192, 192, 0.7);
-    transform: scale(1.05);
-}
-
-.burger:hover span {
-    background-color: rgba(192, 192, 192, 0.9);
-    box-shadow: 0 0 5px rgba(192, 192, 192, 0.5);
-}
-
-.burger.aktiv {
-    border-color: rgba(192, 192, 192, 0.8);
-    background: rgba(30, 30, 30, 0.95);
-}
-
-.burger.aktiv span:nth-child(1) {
-    transform: rotate(45deg) translate(5px, 5px);
-    background-color: #ffffff;
-}
-
-.burger.aktiv span:nth-child(2) {
-    opacity: 0;
-    transform: translateX(-10px);
-}
-
-.burger.aktiv span:nth-child(3) {
-    transform: rotate(-45deg) translate(5px, -5px);
-    background-color: #ffffff;
-}
-
-/* ==========================================================================
-   MOBILE LAYOUT - GENAU WIE DEINE WEBSITE
-   ========================================================================== */
-@media screen and (max-width: 768px) {
-    .header {
-        padding: 20px 15px 15px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        position: relative;
-        min-height: 120px;
-    }
-    
-    /* Burger Menu - LINKS */
-    .burger {
-        display: flex;
-        position: absolute;
-        top: 20px;
-        left: 15px;
-        right: auto;
-        width: 36px;
-        height: 36px;
-    }
-    
-    /* Dark Mode Toggle - RECHTS */
-    .dark-mode-toggle {
-        position: absolute;
-        top: 20px;
-        right: 15px;
-        left: auto;
-        width: 42px;
-        height: 42px;
-    }
-    
-    /* Logo - MITTE */
-    .logo {
-        width: 180px;
-        margin: 10px auto 15px;
-        display: block;
-        order: 1;
-    }
-    
-    .moon-icon, .sun-icon {
-        font-size: 20px;
-    }
-    
-    .burger span {
-        width: 20px;
-    }
-}
-
-/* Extra kleine Screens */
-@media screen and (max-width: 480px) {
-    .burger {
-        top: 15px;
-        left: 10px;
-        width: 34px;
-        height: 34px;
-    }
-    
-    .dark-mode-toggle {
-        top: 15px;
-        right: 10px;
-        width: 38px;
-        height: 38px;
-    }
-    
-    .logo {
-        width: 160px;
-    }
-    
-    .moon-icon, .sun-icon {
-        font-size: 18px;
-    }
-}
-/* ==========================================================================
-   MOBILE MENÜ - KORRIGIERT (NICHT MEHR AUTO-ÖFFNEN)
-   ========================================================================== */
-
-@media screen and (max-width: 768px) {
-    /* Burger Button - LINKS */
-    .burger {
-        display: flex !important;
-        position: absolute !important;
-        top: 20px !important;
-        left: 15px !important;
-        right: auto !important;
-        width: 36px !important;
-        height: 36px !important;
-        z-index: 10002 !important;
-    }
-    
-    /* Navigation - Standardmäßig VERSTECKT! */
-    .hauptnavigation {
-        position: fixed !important;
-        top: 0 !important;
-        left: -100% !important;  /* WICHTIG: Versteckt außerhalb des Bildschirms */
-        width: 280px !important;
-        height: 100vh !important;
-        background: rgba(15, 15, 15, 0.99) !important;
-        backdrop-filter: blur(15px) !important;
-        display: flex !important;
-        flex-direction: column !important;
-        justify-content: flex-start !important;
-        align-items: center !important;
-        gap: 12px !important;
-        z-index: 10000 !important;
-        padding: 100px 20px 40px !important;
-        transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-        box-shadow: 5px 0 40px rgba(0, 0, 0, 0.9) !important;
-        overflow-y: auto !important;
-        -webkit-overflow-scrolling: touch !important;
-    }
-    
-    /* Navigation - Nur sichtbar wenn .aktiv Klasse vorhanden */
-    .hauptnavigation.aktiv {
-        left: 0 !important;  /* Kommt von links herein */
-    }
-    
-    /* Menu Overlay */
-    .menu-overlay {
-        position: fixed !important;
-        top: 0 !important;
-        left: 0 !important;
-        width: 100% !important;
-        height: 100% !important;
-        background: rgba(0, 0, 0, 0.8) !important;
-        z-index: 9999 !important;
-        opacity: 0 !important;
-        visibility: hidden !important;
-        transition: opacity 0.3s ease, visibility 0.3s ease !important;
-        backdrop-filter: blur(3px) !important;
-        cursor: pointer !important;
-    }
-    
-    .menu-overlay.active {
-        opacity: 1 !important;
-        visibility: visible !important;
-    }
-    
-    /* Verhindere Scrollen wenn Menü offen */
-    body.menu-open {
-        overflow: hidden !important;
-        position: fixed !important;
-        width: 100% !important;
-        height: 100% !important;
-    }
-    
-    /* Dark Mode Toggle - RECHTS */
-    .dark-mode-toggle {
-        position: absolute !important;
-        top: 20px !important;
-        right: 15px !important;
-        left: auto !important;
-        width: 42px !important;
-        height: 42px !important;
-        z-index: 10001 !important;
-    }
-    
-    /* Logo - MITTE */
-    .logo {
-        width: 180px !important;
-        margin: 10px auto 15px !important;
-        display: block !important;
-        order: 1 !important;
-    }
-}
-
-/* Extra kleine Screens */
-@media screen and (max-width: 480px) {
-    .burger {
-        top: 15px !important;
-        left: 10px !important;
-        width: 34px !important;
-        height: 34px !important;
-    }
-    
-    .dark-mode-toggle {
-        top: 15px !important;
-        right: 10px !important;
-        width: 38px !important;
-        height: 38px !important;
-    }
-    
-    .hauptnavigation {
-        width: 250px !important;
-        padding-top: 90px !important;
     }
 }
