@@ -723,3 +723,280 @@ body.loaded .footer {
     visibility: visible;
     transition: opacity 0.5s ease 0.3s, visibility 0.5s ease 0.3s;
 }
+/* ==========================================================================
+   DARK MODE TOGGLE - VERBESSERT
+   ========================================================================== */
+.dark-mode-toggle {
+    position: absolute;
+    top: 35px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.9);
+    border: 2px solid rgba(192, 192, 192, 0.6);
+    color: #c0c0c0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10002;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 0;
+    overflow: hidden;
+    box-shadow: 
+        0 4px 15px rgba(0, 0, 0, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode-toggle:hover {
+    transform: scale(1.1) rotate(15deg);
+    border-color: rgba(192, 192, 192, 0.9);
+    background: rgba(20, 20, 20, 0.95);
+    box-shadow: 
+        0 8px 25px rgba(192, 192, 192, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.dark-mode-toggle:active {
+    transform: scale(0.95);
+}
+
+.moon-icon, .sun-icon {
+    font-size: 24px;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    position: absolute;
+}
+
+.moon-icon {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+}
+
+.sun-icon {
+    opacity: 0;
+    transform: scale(0.5) rotate(180deg);
+}
+
+/* Dark Mode Toggle States */
+body.dark-mode .dark-mode-toggle {
+    background: rgba(30, 30, 30, 0.95);
+    border-color: rgba(255, 255, 255, 0.4);
+    color: #ffd700;
+    box-shadow: 
+        0 4px 20px rgba(255, 215, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+body.dark-mode .dark-mode-toggle:hover {
+    border-color: rgba(255, 215, 0, 0.8);
+    background: rgba(40, 40, 40, 0.98);
+    box-shadow: 
+        0 8px 30px rgba(255, 215, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+body.dark-mode .moon-icon {
+    opacity: 0;
+    transform: scale(0.5) rotate(-180deg);
+}
+
+body.dark-mode .sun-icon {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+}
+
+/* ==========================================================================
+   ANIMATIONEN - VERBESSERT
+   ========================================================================== */
+
+/* Logo Pulsieren */
+@keyframes logoGlow {
+    0%, 100% {
+        filter: 
+            brightness(1.1) 
+            drop-shadow(0 0 10px rgba(192, 192, 192, 0.3));
+        transform: scale(1);
+    }
+    50% {
+        filter: 
+            brightness(1.4) 
+            drop-shadow(0 0 25px rgba(192, 192, 192, 0.7));
+        transform: scale(1.05);
+    }
+}
+
+.logo, .preloader-logo {
+    animation: logoGlow 4s infinite ease-in-out;
+}
+
+/* Text Schimmer */
+@keyframes textShimmer {
+    0% {
+        text-shadow: 
+            0 0 10px rgba(200, 200, 200, 0.3),
+            0 0 20px rgba(200, 200, 200, 0.2);
+    }
+    50% {
+        text-shadow: 
+            0 0 20px rgba(255, 255, 255, 0.6),
+            0 0 40px rgba(255, 255, 255, 0.4),
+            0 0 60px rgba(255, 255, 255, 0.2);
+    }
+    100% {
+        text-shadow: 
+            0 0 10px rgba(200, 200, 200, 0.3),
+            0 0 20px rgba(200, 200, 200, 0.2);
+    }
+}
+
+h1, .lead-text, .zitat {
+    animation: textShimmer 6s infinite ease-in-out;
+}
+
+/* Navigation Items Hover */
+@keyframes navItemPulse {
+    0%, 100% {
+        transform: translateY(0);
+        box-shadow: 0 2px 10px rgba(192, 192, 192, 0.2);
+    }
+    50% {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(192, 192, 192, 0.5);
+    }
+}
+
+.hauptnavigation a:hover {
+    animation: navItemPulse 2s infinite ease-in-out;
+}
+
+/* Content Fade-in */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.inhalt > * {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.6s ease forwards;
+}
+
+/* Verzögerte Animationen für Content */
+.inhalt p:nth-child(1) { animation-delay: 0.1s; }
+.inhalt p:nth-child(2) { animation-delay: 0.2s; }
+.inhalt p:nth-child(3) { animation-delay: 0.3s; }
+.inhalt p:nth-child(4) { animation-delay: 0.4s; }
+.highlight { animation-delay: 0.5s; }
+.inhalt p:nth-child(6) { animation-delay: 0.6s; }
+.zitat { animation-delay: 0.7s; }
+.inhalt p:nth-child(8) { animation-delay: 0.8s; }
+
+/* Silver Wave Animation für Lichtkanten */
+@keyframes silverWave {
+    0% {
+        background-position: -200% 0;
+        opacity: 0.7;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        background-position: 200% 0;
+        opacity: 0.7;
+    }
+}
+
+.lichtkante {
+    animation: silverWave 6s infinite linear;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(192, 192, 192, 0.4),
+        rgba(192, 192, 192, 0.8),
+        rgba(192, 192, 192, 0.4),
+        transparent
+    );
+    background-size: 200% 100%;
+    height: 1px;
+    margin: 30px 0;
+}
+
+/* Social Icons Hover */
+@keyframes socialIconFloat {
+    0%, 100% {
+        transform: translateY(0) rotate(0deg);
+    }
+    33% {
+        transform: translateY(-5px) rotate(5deg);
+    }
+    66% {
+        transform: translateY(-3px) rotate(-3deg);
+    }
+}
+
+.social-link:hover .social-icon-wrapper {
+    animation: socialIconFloat 2s infinite ease-in-out;
+}
+
+/* ==========================================================================
+   MOBILE ANIMATIONEN
+   ========================================================================== */
+@media screen and (max-width: 768px) {
+    .dark-mode-toggle {
+        top: 25px;
+        right: 15px;
+        width: 45px;
+        height: 45px;
+    }
+    
+    /* Sanftere Animationen für Mobile */
+    @keyframes mobileFadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+    
+    .inhalt > * {
+        animation: mobileFadeIn 0.4s ease forwards;
+    }
+    
+    /* Kürzere Verzögerungen */
+    .inhalt p:nth-child(1) { animation-delay: 0.05s; }
+    .inhalt p:nth-child(2) { animation-delay: 0.1s; }
+    .inhalt p:nth-child(3) { animation-delay: 0.15s; }
+    .inhalt p:nth-child(4) { animation-delay: 0.2s; }
+    .highlight { animation-delay: 0.25s; }
+    .inhalt p:nth-child(6) { animation-delay: 0.3s; }
+    .zitat { animation-delay: 0.35s; }
+    .inhalt p:nth-child(8) { animation-delay: 0.4s; }
+}
+
+/* ==========================================================================
+   REDUCED MOTION SUPPORT
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    
+    .logo, .preloader-logo,
+    h1, .lead-text, .zitat,
+    .hauptnavigation a:hover,
+    .social-link:hover .social-icon-wrapper {
+        animation: none !important;
+    }
+}
