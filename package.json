@@ -2,7 +2,7 @@
   "name": "m.s.app",
   "version": "1.0.0",
   "private": true,
-  "homepage": "https://mathias-silberhain.github.io/m.s.app",
+  "homepage": "https://matthias-silberhain.github.io/m.s.app",
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
