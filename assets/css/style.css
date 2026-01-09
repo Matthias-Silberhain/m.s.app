@@ -1528,3 +1528,226 @@ body.dark-mode .sun-icon {
 .hauptnavigation a.active {
     animation: silverGlow 3s infinite ease-in-out;
 }
+/* ==========================================================================
+   DARK MODE TOGGLE - SCHÖN DESIGN
+   ========================================================================== */
+.dark-mode-toggle {
+    position: absolute;
+    top: 35px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.85);
+    border: 2px solid rgba(192, 192, 192, 0.5);
+    color: #c0c0c0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10001;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 0;
+    overflow: hidden;
+    box-shadow: 
+        0 4px 12px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode-toggle:hover {
+    transform: scale(1.08) rotate(5deg);
+    border-color: rgba(192, 192, 192, 0.8);
+    background: rgba(20, 20, 20, 0.9);
+    box-shadow: 
+        0 6px 20px rgba(192, 192, 192, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.dark-mode-toggle:active {
+    transform: scale(0.95);
+}
+
+.moon-icon, .sun-icon {
+    font-size: 22px;
+    position: absolute;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    text-shadow: 0 0 5px currentColor;
+}
+
+.moon-icon {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+}
+
+.sun-icon {
+    opacity: 0;
+    transform: scale(0.5) rotate(180deg);
+    color: #FFD700;
+}
+
+/* Dark Mode Toggle States */
+body.dark-mode .dark-mode-toggle {
+    background: rgba(40, 40, 40, 0.9);
+    border-color: rgba(255, 215, 0, 0.5);
+    box-shadow: 
+        0 4px 15px rgba(255, 215, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+body.dark-mode .dark-mode-toggle:hover {
+    border-color: rgba(255, 215, 0, 0.8);
+    background: rgba(50, 50, 50, 0.95);
+    box-shadow: 
+        0 6px 25px rgba(255, 215, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+body.dark-mode .moon-icon {
+    opacity: 0;
+    transform: scale(0.5) rotate(-180deg);
+}
+
+body.dark-mode .sun-icon {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+}
+
+/* ==========================================================================
+   BURGER MENÜ - SCHÖN DESIGN
+   ========================================================================== */
+.burger {
+    display: none;
+    position: absolute;
+    top: 35px;
+    left: 20px;
+    width: 40px;
+    height: 40px;
+    background: rgba(0, 0, 0, 0.8);
+    border: 2px solid rgba(192, 192, 192, 0.5);
+    border-radius: 8px;
+    cursor: pointer;
+    padding: 0;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    z-index: 10002;
+    transition: all 0.3s ease;
+}
+
+.burger span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background-color: #cfd2d6;
+    transition: all 0.3s ease;
+    border-radius: 1px;
+    box-shadow: 0 0 3px rgba(192, 192, 192, 0.3);
+}
+
+.burger:hover {
+    background: rgba(20, 20, 20, 0.9);
+    border-color: rgba(192, 192, 192, 0.7);
+    transform: scale(1.05);
+}
+
+.burger:hover span {
+    background-color: rgba(192, 192, 192, 0.9);
+    box-shadow: 0 0 5px rgba(192, 192, 192, 0.5);
+}
+
+.burger.aktiv {
+    border-color: rgba(192, 192, 192, 0.8);
+    background: rgba(30, 30, 30, 0.95);
+}
+
+.burger.aktiv span:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+    background-color: #ffffff;
+}
+
+.burger.aktiv span:nth-child(2) {
+    opacity: 0;
+    transform: translateX(-10px);
+}
+
+.burger.aktiv span:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -5px);
+    background-color: #ffffff;
+}
+
+/* ==========================================================================
+   MOBILE LAYOUT - GENAU WIE DEINE WEBSITE
+   ========================================================================== */
+@media screen and (max-width: 768px) {
+    .header {
+        padding: 20px 15px 15px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+        min-height: 120px;
+    }
+    
+    /* Burger Menu - LINKS */
+    .burger {
+        display: flex;
+        position: absolute;
+        top: 20px;
+        left: 15px;
+        right: auto;
+        width: 36px;
+        height: 36px;
+    }
+    
+    /* Dark Mode Toggle - RECHTS */
+    .dark-mode-toggle {
+        position: absolute;
+        top: 20px;
+        right: 15px;
+        left: auto;
+        width: 42px;
+        height: 42px;
+    }
+    
+    /* Logo - MITTE */
+    .logo {
+        width: 180px;
+        margin: 10px auto 15px;
+        display: block;
+        order: 1;
+    }
+    
+    .moon-icon, .sun-icon {
+        font-size: 20px;
+    }
+    
+    .burger span {
+        width: 20px;
+    }
+}
+
+/* Extra kleine Screens */
+@media screen and (max-width: 480px) {
+    .burger {
+        top: 15px;
+        left: 10px;
+        width: 34px;
+        height: 34px;
+    }
+    
+    .dark-mode-toggle {
+        top: 15px;
+        right: 10px;
+        width: 38px;
+        height: 38px;
+    }
+    
+    .logo {
+        width: 160px;
+    }
+    
+    .moon-icon, .sun-icon {
+        font-size: 18px;
+    }
+}
