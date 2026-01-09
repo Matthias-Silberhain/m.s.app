@@ -1,0 +1,15 @@
+import React from 'react';
+
+const Preloader = () => {
+  return (
+    <div className="fixed inset-0 flex items-center justify-center bg-gray-900 z-50">
+      <div className="text-center">
+        <div className="text-4xl text-silver font-bold mb-4">Matthias Silberhain</div>
+        <div className="w-16 h-16 border-t-4 border-silver border-solid rounded-full animate-spin mx-auto"></div>
+        <p className="mt-4 text-gray-300">Lade Autoren-App...</p>
+      </div>
+    </div>
+  );
+};
+
+export default Preloader;
