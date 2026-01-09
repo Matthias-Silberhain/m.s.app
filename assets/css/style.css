@@ -1,17 +1,20 @@
-/* style.css - GESAMTE DATEI ERSETZEN */
 /* ==========================================================================
-   CSS RESET
+   CSS RESET & BASISSTYLES
    ========================================================================== */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
 }
 
 html, body {
     width: 100%;
     height: 100%;
     overflow-x: hidden;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    touch-action: manipulation;
 }
 
 body {
@@ -20,10 +23,13 @@ body {
     color: #cfd2d6;
     line-height: 1.65;
     min-height: 100vh;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    overflow-y: auto;
+    position: relative;
 }
 
 /* ==========================================================================
-   PRELOADER
+   PRELOADER - OPTIMIERT FÜR MOBILE
    ========================================================================== */
 #preloader {
     position: fixed;
@@ -38,29 +44,135 @@ body {
     z-index: 9999;
     opacity: 1;
     visibility: visible;
-    transition: opacity 0.6s ease;
+    transition: opacity 0.6s ease, visibility 0.6s ease;
 }
 
 #preloader.loaded {
     opacity: 0;
     visibility: hidden;
+    pointer-events: none;
 }
 
 .preloader-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     text-align: center;
+    padding: 20px;
 }
 
 .preloader-logo {
-    width: 200px;
+    width: 180px;
     height: auto;
-    margin-bottom: 30px;
+    margin-bottom: 40px;
+    display: block;
+    filter: brightness(1.1) drop-shadow(0 0 10px rgba(192, 192, 192, 0.3));
+    animation: preloaderLogoPulse 3s infinite ease-in-out;
+    transform-origin: center;
 }
 
 .preloader-text {
     font-family: "Cinzel", serif;
     font-size: 24px;
-    color: #e0e0e0;
     letter-spacing: 0.15em;
+    color: #e0e0e0;
+    text-shadow: 0 0 10px rgba(200, 200, 200, 0.3);
+    margin-bottom: 60px;
+    min-height: 40px;
+    position: relative;
+}
+
+.preloader-text::after {
+    content: '|';
+    animation: blink 1s infinite;
+    margin-left: 5px;
+    color: #c0c0c0;
+}
+
+.preloader-line {
+    position: absolute;
+    top: calc(70% + 20px);
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg,
+        transparent,
+        #c0c0c0,
+        #ffffff,
+        #c0c0c0,
+        transparent
+    );
+    opacity: 0;
+    border-radius: 2px;
+    box-shadow: 
+        0 0 15px rgba(192, 192, 192, 0.6),
+        0 0 30px rgba(192, 192, 192, 0.4),
+        inset 0 0 10px rgba(255, 255, 255, 0.3);
+    z-index: 10000;
+}
+
+.preloader-line.active {
+    animation: 
+        lineExpand 2s cubic-bezier(0.4, 0, 0.2, 1) forwards,
+        lineGlow 2s ease-in-out;
+}
+
+/* ==========================================================================
+   ANIMATIONEN
+   ========================================================================== */
+@keyframes preloaderLogoPulse {
+    0%, 100% { 
+        transform: scale(1); 
+        filter: brightness(1.1) drop-shadow(0 0 10px rgba(192, 192, 192, 0.3)); 
+    }
+    50% { 
+        transform: scale(1.08); 
+        filter: brightness(1.4) drop-shadow(0 0 25px rgba(192, 192, 192, 0.7)); 
+    }
+}
+
+@keyframes lineExpand {
+    0% { 
+        width: 0; 
+        opacity: 0; 
+    }
+    10% {
+        width: 20%;
+        opacity: 0.4;
+    }
+    50% { 
+        width: 80%; 
+        opacity: 1; 
+    }
+    100% { 
+        width: 100%; 
+        opacity: 0.7; 
+    }
+}
+
+@keyframes lineGlow {
+    0%, 100% { 
+        box-shadow: 
+            0 0 15px rgba(192, 192, 192, 0.6),
+            0 0 30px rgba(192, 192, 192, 0.4),
+            inset 0 0 10px rgba(255, 255, 255, 0.3); 
+    }
+    50% { 
+        box-shadow: 
+            0 0 25px rgba(255, 255, 255, 0.9),
+            0 0 50px rgba(255, 255, 255, 0.6),
+            inset 0 0 20px rgba(255, 255, 255, 0.6); 
+    }
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
 }
 
 /* ==========================================================================
@@ -70,14 +182,97 @@ body {
     padding: 30px 20px 20px;
     text-align: center;
     background-color: rgba(0, 0, 0, 0.95);
+    position: relative;
+    border-bottom: 1px solid rgba(192, 192, 192, 0.1);
 }
 
 .logo {
-    max-width: 300px;
-    width: 100%;
+    width: 300px;
+    max-width: 80%;
     height: auto;
     margin: 0 auto 25px;
     display: block;
+    filter: brightness(1.1) drop-shadow(0 0 15px rgba(192, 192, 192, 0.2));
+}
+
+/* ==========================================================================
+   DARK MODE TOGGLE
+   ========================================================================== */
+.dark-mode-toggle {
+    position: absolute;
+    top: 30px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.8);
+    border: 1px solid rgba(200, 205, 215, 0.4);
+    color: #d6d9de;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    z-index: 10002;
+    padding: 0;
+}
+
+.moon-icon, .sun-icon {
+    width: 20px;
+    height: 20px;
+    fill: currentColor;
+    transition: all 0.3s ease;
+}
+
+.moon-icon {
+    display: block;
+}
+
+.sun-icon {
+    display: none;
+}
+
+/* ==========================================================================
+   BURGER MENÜ
+   ========================================================================== */
+.burger {
+    display: none;
+    width: 40px;
+    height: 40px;
+    margin: 0;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    position: absolute;
+    z-index: 10002;
+}
+
+.burger span {
+    display: block;
+    width: 100%;
+    height: 2px;
+    background-color: #cfd2d6;
+    transition: all 0.3s ease;
+    border-radius: 1px;
+    transform-origin: center;
+}
+
+.burger.aktiv span:nth-child(1) {
+    transform: rotate(45deg) translate(6px, 6px);
+}
+
+.burger.aktiv span:nth-child(2) {
+    opacity: 0;
+    transform: translateX(-10px);
+}
+
+.burger.aktiv span:nth-child(3) {
+    transform: rotate(-45deg) translate(6px, -6px);
 }
 
 /* ==========================================================================
@@ -86,47 +281,89 @@ body {
 .hauptnavigation {
     display: flex;
     justify-content: center;
+    gap: 20px;
     flex-wrap: wrap;
-    gap: 15px;
     padding: 15px;
-    max-width: 800px;
+    z-index: 100;
+    background: rgba(10, 10, 10, 0.96);
+    border-radius: 8px;
     margin: 0 auto;
+    max-width: fit-content;
+    border: 1px solid rgba(192, 192, 192, 0.3);
 }
 
 .hauptnavigation a {
     font-family: "Cinzel", serif;
     color: rgba(232, 234, 236, 0.95);
     text-decoration: none;
-    font-size: 0.9rem;
-    padding: 8px 15px;
     letter-spacing: 0.1em;
+    font-size: 0.9rem;
+    padding: 10px 15px;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.hauptnavigation a:hover {
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+.hauptnavigation a.active {
+    color: #ffffff;
+    font-weight: 600;
+    background: rgba(192, 192, 192, 0.1);
+    border-radius: 4px;
+}
+
+/* ==========================================================================
+   LICHTKANTEN
+   ========================================================================== */
+.lichtkante {
+    height: 1px;
+    margin: 25px 0;
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(192, 192, 192, 0.4) 20%,
+        rgba(192, 192, 192, 0.8) 50%,
+        rgba(192, 192, 192, 0.4) 80%,
+        transparent 100%
+    );
+    background-size: 200% 100%;
+    animation: silberWelle 8s infinite linear;
+}
+
+@keyframes silberWelle {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
 }
 
 /* ==========================================================================
    INHALT
    ========================================================================== */
 .inhalt {
-    padding: 40px 20px;
+    padding: 50px 20px;
     max-width: 720px;
     margin: 0 auto;
     opacity: 1;
+    background-color: rgba(5, 5, 5, 0.9);
+    border-radius: 8px;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 h1 {
     font-family: "Cinzel", serif;
-    font-size: 2.3rem;
-    text-align: center;
-    margin-bottom: 35px;
-    color: #e4e6ea;
     letter-spacing: 0.1em;
-}
-
-.lead-text {
-    font-size: 1.4rem;
-    text-align: center;
     color: #e4e6ea;
+    text-align: center;
     margin-bottom: 35px;
-    font-family: "Cinzel", serif;
+    font-size: 2.3rem;
+    line-height: 1.3;
 }
 
 .inhalt p {
@@ -135,6 +372,16 @@ h1 {
     color: #b0b5bc;
     margin-bottom: 28px;
     text-align: left;
+    font-family: "EB Garamond", Garamond, serif;
+}
+
+.lead-text {
+    font-size: 1.4rem;
+    text-align: center;
+    color: #e4e6ea;
+    margin-bottom: 35px;
+    font-weight: 500;
+    font-family: "Cinzel", serif;
 }
 
 .highlight {
@@ -144,8 +391,11 @@ h1 {
     font-style: italic;
     margin: 40px 0;
     padding: 20px;
+    border-left: 2px solid rgba(200, 205, 215, 0.4);
+    border-right: 2px solid rgba(200, 205, 215, 0.4);
     background: rgba(20, 20, 20, 0.4);
     border-radius: 4px;
+    font-family: "EB Garamond", Garamond, serif;
 }
 
 .zitat {
@@ -154,9 +404,11 @@ h1 {
     color: #e4e6ea;
     margin: 50px 0;
     padding: 30px 20px;
+    position: relative;
     background: rgba(20, 20, 20, 0.4);
     border-radius: 8px;
     font-family: "Cinzel", serif;
+    font-weight: 500;
 }
 
 .zitat-autor {
@@ -165,7 +417,84 @@ h1 {
     font-size: 1rem;
     color: #b0b5bc;
     font-style: normal;
-    font-family: "EB Garamond", serif;
+    font-family: "EB Garamond", Garamond, serif;
+}
+
+/* ==========================================================================
+   SOCIAL MEDIA
+   ========================================================================== */
+.social-section {
+    margin: 50px 0;
+    padding: 40px 20px;
+    text-align: center;
+    background-color: rgba(5, 5, 5, 0.9);
+    border-radius: 8px;
+}
+
+.social-title {
+    font-family: "Cinzel", serif;
+    color: #e4e6ea;
+    margin-bottom: 35px;
+    font-size: 1.4rem;
+    letter-spacing: 0.1em;
+}
+
+.social-grid {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 25px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.social-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: #9da2a8;
+    transition: all 0.3s ease;
+    width: 80px;
+}
+
+.social-icon-wrapper {
+    width: 55px;
+    height: 55px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(200, 205, 215, 0.3);
+    border-radius: 50%;
+    margin-bottom: 10px;
+    transition: all 0.3s ease;
+    background: rgba(15, 15, 15, 0.6);
+}
+
+.social-icon {
+    width: 26px;
+    height: 26px;
+    fill: #9da2a8;
+    transition: all 0.3s ease;
+}
+
+.social-name {
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+}
+
+.social-link:hover {
+    color: #ffffff;
+    transform: translateY(-3px);
+}
+
+.social-link:hover .social-icon-wrapper {
+    border-color: rgba(192, 192, 192, 0.8);
+    background: rgba(192, 192, 192, 0.2);
+}
+
+.social-link:hover .social-icon {
+    fill: #ffffff;
 }
 
 /* ==========================================================================
@@ -174,9 +503,12 @@ h1 {
 .footer {
     text-align: center;
     padding: 35px 20px;
+    font-size: 0.9rem;
+    color: #9da2a8;
     background-color: rgba(0, 0, 0, 0.95);
+    width: 100%;
     border-top: 1px solid rgba(192, 192, 192, 0.1);
-    margin-top: 50px;
+    margin-top: 40px;
 }
 
 .footer-links {
@@ -193,6 +525,27 @@ h1 {
     text-decoration: none;
     font-size: 0.85rem;
     letter-spacing: 0.1em;
+    padding: 5px 10px;
+}
+
+.footer-links a:hover {
+    color: #ffffff;
+}
+
+/* ==========================================================================
+   DARK MODE
+   ========================================================================== */
+body.dark-mode {
+    background-color: #0a0a0a;
+    color: #e8e8e8;
+}
+
+body.dark-mode .moon-icon {
+    display: none;
+}
+
+body.dark-mode .sun-icon {
+    display: block;
 }
 
 /* ==========================================================================
@@ -201,31 +554,101 @@ h1 {
 @media screen and (max-width: 768px) {
     .header {
         padding: 20px 15px 15px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
     }
     
     .logo {
-        max-width: 200px;
+        width: 200px;
+        margin: 0 auto 15px;
     }
     
+    .burger {
+        display: flex;
+        position: absolute;
+        top: 25px;
+        right: 15px;
+    }
+    
+    .dark-mode-toggle {
+        position: absolute;
+        top: 25px;
+        left: 15px;
+        right: auto;
+        width: 36px;
+        height: 36px;
+    }
+    
+    /* Mobile Navigation */
     .hauptnavigation {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 280px;
+        height: 100vh;
+        background: rgba(15, 15, 15, 0.99);
+        display: flex;
         flex-direction: column;
+        justify-content: flex-start;
         align-items: center;
-        gap: 10px;
+        gap: 12px;
+        z-index: 10000;
+        padding: 100px 20px 40px;
+        transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .hauptnavigation.aktiv {
+        right: 0;
     }
     
     .hauptnavigation a {
-        width: 200px;
+        font-size: 1.1rem;
+        padding: 16px 24px;
+        width: 100%;
+        max-width: 260px;
         text-align: center;
-        padding: 12px;
+    }
+    
+    /* Menu Overlay */
+    .menu-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        z-index: 9999;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+    
+    .menu-overlay.active {
+        opacity: 1;
+        visibility: visible;
+    }
+    
+    /* Mobile Preloader */
+    .preloader-logo {
+        width: 140px;
+        margin-bottom: 30px;
+    }
+    
+    .preloader-text {
+        font-size: 20px;
+        margin-bottom: 40px;
+    }
+    
+    /* Mobile Inhalt */
+    .inhalt {
+        padding: 30px 15px;
     }
     
     h1 {
         font-size: 1.8rem;
         margin-bottom: 25px;
-    }
-    
-    .inhalt {
-        padding: 30px 15px;
     }
     
     .inhalt p {
@@ -236,11 +659,13 @@ h1 {
     
     .lead-text {
         font-size: 1.2rem;
+        margin-bottom: 25px;
     }
     
     .highlight {
         font-size: 1.15rem;
         padding: 15px;
+        margin: 30px 0;
     }
     
     .zitat {
@@ -256,11 +681,7 @@ h1 {
 
 @media screen and (max-width: 480px) {
     .logo {
-        max-width: 150px;
-    }
-    
-    h1 {
-        font-size: 1.6rem;
+        width: 180px;
     }
     
     .preloader-logo {
@@ -269,5 +690,36 @@ h1 {
     
     .preloader-text {
         font-size: 18px;
+        letter-spacing: 0.1em;
     }
+    
+    .inhalt {
+        padding: 20px 12px;
+    }
+    
+    h1 {
+        font-size: 1.6rem;
+    }
+    
+    .inhalt p {
+        font-size: 1rem;
+    }
+}
+
+/* ==========================================================================
+   PRELOADER LOADED STATE
+   ========================================================================== */
+body:not(.loaded) .inhalt,
+body:not(.loaded) .social-section,
+body:not(.loaded) .footer {
+    opacity: 0;
+    visibility: hidden;
+}
+
+body.loaded .inhalt,
+body.loaded .social-section,
+body.loaded .footer {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.5s ease 0.3s, visibility 0.5s ease 0.3s;
 }
