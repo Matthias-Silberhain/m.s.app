@@ -1,236 +1,169 @@
 /**
  * PRELOADER - Matthias Silberhain PWA
- * Version 3.0 - Stabil und mobiloptimiert
+ * Version 4.0 - Robuste Mobile-First Lösung
  */
 
 (function() {
     'use strict';
     
-    console.log('🎬 Preloader initialisiert');
+    console.log('🚀 Preloader startet auf:', window.location.hostname);
     
     // DOM-Elemente
     const preloader = document.getElementById('preloader');
-    const preloaderText = document.getElementById('preloader-text');
-    const preloaderLine = document.querySelector('.preloader-line');
+    const preloaderText = document.getElementById('type-text') || document.getElementById('preloader-text');
     const currentYear = document.getElementById('currentYear');
     
-    // Safety timeout
-    let safetyTimeout;
-    
-    // Mobile detection
-    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    const isTouchDevice = 'ontouchstart' in window;
+    // Kein Preloader? Sofort Inhalt zeigen
+    if (!preloader) {
+        console.warn('⚠️ Kein Preloader gefunden - zeige Inhalt direkt');
+        document.body.classList.add('loaded');
+        return;
+    }
     
     /**
      * Initialisiere Preloader
      */
-    function initPreloader() {
-        if (!preloader) {
-            console.error('❌ Preloader-Element nicht gefunden');
-            return;
-        }
+    function init() {
+        console.log('📦 DOM bereit');
         
-        // Setze aktuelles Jahr
+        // 1. Aktuelles Jahr setzen
         if (currentYear) {
             currentYear.textContent = new Date().getFullYear();
         }
         
-        // Setze initialen Zustand
-        resetPreloader();
-        
-        // Starte Preloader-Sequenz basierend auf Gerätetyp
-        if (isMobile || isTouchDevice) {
-            startMobilePreloader();
-        } else {
-            startDesktopPreloader();
-        }
-        
-        // Safety timeout nach 5 Sekunden
-        safetyTimeout = setTimeout(finishPreloader, 5000);
-        
-        // Window load als Backup
-        window.addEventListener('load', handleWindowLoad);
-    }
-    
-    /**
-     * Setze Preloader zurück
-     */
-    function resetPreloader() {
+        // 2. Preloader SOFORT sichtbar machen
         preloader.style.display = 'flex';
         preloader.style.opacity = '1';
         preloader.style.visibility = 'visible';
         preloader.classList.remove('loaded');
         
-        if (preloaderText) {
-            preloaderText.textContent = '';
-        }
-        
-        if (preloaderLine) {
-            preloaderLine.classList.remove('active');
-        }
-        
+        // 3. Body nicht als loaded markieren
         document.body.classList.remove('loaded');
+        
+        // 4. Mobile vs Desktop Entscheidung
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        
+        if (isMobile) {
+            startMobilePreloader();
+        } else {
+            startDesktopPreloader();
+        }
+        
+        // 5. Absolute Sicherheit: Nach 4 Sekunden immer ausblenden
+        setTimeout(finishPreloader, 4000);
     }
     
     /**
-     * Preloader für Mobile (schneller)
+     * Mobile Preloader (schnell)
      */
     function startMobilePreloader() {
-        console.log('📱 Mobile Preloader gestartet');
+        console.log('📱 Mobile Preloader');
         
+        // Sofort Text anzeigen (keine Typewriter-Animation)
         if (preloaderText) {
             preloaderText.textContent = 'MATTHIAS SILBERHAIN';
         }
         
         // Line-Animation starten
-        if (preloaderLine) {
-            setTimeout(() => {
-                preloaderLine.classList.add('active');
-            }, 300);
+        const line = document.querySelector('.preloader-line');
+        if (line) {
+            setTimeout(() => line.classList.add('active'), 200);
         }
         
-        // Kürzere Wartezeit für Mobile
+        // Mobile: Schneller fertig (1.5 Sekunden)
         setTimeout(finishPreloader, 1500);
     }
     
     /**
-     * Preloader für Desktop (mit Typewriter)
+     * Desktop Preloader (mit Animation)
      */
     function startDesktopPreloader() {
-        console.log('💻 Desktop Preloader gestartet');
+        console.log('💻 Desktop Preloader');
         
+        // Typewriter-Effekt
         if (preloaderText) {
-            typeWriterEffect();
+            const text = 'MATTHIAS SILBERHAIN';
+            let i = 0;
+            const speed = 80;
+            
+            function typeWriter() {
+                if (i < text.length) {
+                    preloaderText.textContent += text.charAt(i);
+                    i++;
+                    setTimeout(typeWriter, speed);
+                } else {
+                    setTimeout(finishPreloader, 500);
+                }
+            }
+            
+            setTimeout(() => {
+                preloaderText.textContent = '';
+                typeWriter();
+            }, 300);
         } else {
-            // Fallback
             setTimeout(finishPreloader, 2000);
         }
         
-        // Line-Animation starten
-        if (preloaderLine) {
-            setTimeout(() => {
-                preloaderLine.classList.add('active');
-            }, 500);
+        // Line-Animation
+        const line = document.querySelector('.preloader-line');
+        if (line) {
+            setTimeout(() => line.classList.add('active'), 500);
         }
     }
     
     /**
-     * Typewriter Effekt
-     */
-    function typeWriterEffect() {
-        const text = "MATTHIAS SILBERHAIN";
-        let index = 0;
-        const speed = 80;
-        
-        function type() {
-            if (index < text.length) {
-                preloaderText.textContent += text.charAt(index);
-                index++;
-                setTimeout(type, speed);
-            } else {
-                setTimeout(finishPreloader, 300);
-            }
-        }
-        
-        // Starte Typewriter nach kurzer Verzögerung
-        setTimeout(() => {
-            preloaderText.textContent = '';
-            type();
-        }, 300);
-    }
-    
-    /**
-     * Beende Preloader
+     * Preloader beenden
      */
     function finishPreloader() {
-        // Clear safety timeout
-        if (safetyTimeout) {
-            clearTimeout(safetyTimeout);
-        }
-        
+        // Sicherstellen, dass Preloader existiert
         if (!preloader || preloader.classList.contains('loaded')) {
             return;
         }
         
-        console.log('✅ Preloader beenden');
+        console.log('✅ Beende Preloader');
         
-        // Markiere als geladen
+        // 1. Klasse setzen für CSS-Transitions
         preloader.classList.add('loaded');
+        document.body.classList.add('loaded');
         
-        // Fade-out Animation
-        preloader.style.opacity = '0';
-        
-        setTimeout(() => {
-            // Verstecke komplett
-            preloader.style.display = 'none';
-            document.body.classList.add('loaded');
-            
-            // Zeige Inhalte an
-            showContent();
-            
-            console.log('🎉 Preloader abgeschlossen');
-        }, 600);
-    }
-    
-    /**
-     * Zeige Inhalte nach Preloader an
-     */
-    function showContent() {
-        const elements = document.querySelectorAll('.inhalt, .social-section, .footer');
-        elements.forEach(el => {
-            if (el) {
-                el.style.opacity = '1';
-                el.style.visibility = 'visible';
-            }
+        // 2. Inhalt anzeigen
+        const content = document.querySelectorAll('.inhalt, .social-section, .footer');
+        content.forEach(el => {
+            el.style.opacity = '1';
+            el.style.visibility = 'visible';
         });
-    }
-    
-    /**
-     * Handle Window Load Event
-     */
-    function handleWindowLoad() {
-        console.log('📦 Window loaded - Preloader beenden');
         
-        // Wenn Preloader noch aktiv, beende ihn
-        if (preloader && !preloader.classList.contains('loaded')) {
-            setTimeout(finishPreloader, 500);
-        }
+        // 3. Preloader nach Fade-out komplett verstecken
+        setTimeout(() => {
+            preloader.style.display = 'none';
+            console.log('🎉 Preloader versteckt');
+        }, 500);
     }
     
     /**
-     * Error Handling
+     * Fehlerbehandlung
      */
     function handleErrors() {
-        // Bilder laden eventuell nicht, aber das sollte den Preloader nicht blockieren
-        const images = document.querySelectorAll('img');
-        images.forEach(img => {
-            img.addEventListener('error', () => {
-                console.warn('⚠️ Bild konnte nicht geladen werden:', img.src);
-            });
-        });
-        
-        // Global error handling
         window.addEventListener('error', (e) => {
-            console.error('❌ JavaScript Fehler:', e.message);
-            // Trotzdem Preloader beenden
-            setTimeout(finishPreloader, 1000);
+            console.error('❌ Fehler:', e.message);
+            setTimeout(finishPreloader, 500);
         });
     }
     
-    // Starte alles wenn DOM bereit
+    // Start wenn DOM bereit
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', () => {
-            initPreloader();
+            init();
             handleErrors();
         });
     } else {
-        initPreloader();
+        init();
         handleErrors();
     }
     
-    // Globale Funktion für andere Skripte
-    window.preloader = {
-        finish: finishPreloader,
-        isLoaded: () => document.body.classList.contains('loaded')
-    };
+    // Window Load als zusätzlicher Trigger
+    window.addEventListener('load', () => {
+        console.log('🖼️ Alle Ressourcen geladen');
+        setTimeout(finishPreloader, 1000);
+    });
 })();
