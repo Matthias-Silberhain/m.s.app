@@ -1,39 +1,60 @@
 import React, { useState, useEffect } from 'react';
-import './index.css';
+import Navigation from './components/Navigation';
+import PortfolioShowcase from './components/PortfolioShowcase';
+import WritingBlog from './components/WritingBlog';
+import BookGallery from './components/BookGallery';
+import AboutSection from './components/AboutSection';
+import ContactForm from './components/ContactForm';
+import ReadingList from './components/ReadingList';
+import WritingProgressTracker from './components/WritingProgressTracker';
+import Preloader from './components/Preloader';
 
 function App() {
-  const [loading, setLoading] = useState(true);
-
+  const [isLoading, setIsLoading] = useState(true);
+  const [activeSection, setActiveSection] = useState('portfolio');
+  
   useEffect(() => {
-    setTimeout(() => setLoading(false), 2000);
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+    return () => clearTimeout(timer);
   }, []);
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
-        <div className="text-center">
-          <div className="text-4xl text-silver font-bold mb-4">MATTHIAS SILBERHAIN</div>
-          <div className="text-gray-400">Lade Autoren-App...</div>
-        </div>
-      </div>
-    );
+  const renderSection = () => {
+    switch(activeSection) {
+      case 'portfolio': return <PortfolioShowcase />;
+      case 'blog': return <WritingBlog />;
+      case 'gallery': return <BookGallery />;
+      case 'about': return <AboutSection />;
+      case 'contact': return <ContactForm />;
+      case 'reading': return <ReadingList />;
+      case 'progress': return <WritingProgressTracker />;
+      default: return <PortfolioShowcase />;
+    }
+  };
+
+  if (isLoading) {
+    return <Preloader />;
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-8">
-      <h1 className="text-4xl text-silver font-bold mb-6">Willkommen zur Autoren-App</h1>
-      <p className="text-gray-400 mb-8">Die App wird bald vollständig sein!</p>
+    <div className="min-h-screen bg-gray-900 text-gray-300">
+      <Navigation activeSection={activeSection} setActiveSection={setActiveSection} />
       
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="bg-gray-800 p-4 rounded-lg">
-          <h2 className="text-xl text-silver mb-2">Portfolio</h2>
-          <p className="text-gray-400">Wird bald verfügbar sein</p>
+      <main className="container mx-auto px-4 py-8">
+        {renderSection()}
+      </main>
+      
+      <footer className="bg-gray-800 py-6 mt-12">
+        <div className="container mx-auto px-4 text-center">
+          <p className="text-silver">© {new Date().getFullYear()} Matthias Silberhain. Alle Rechte vorbehalten.</p>
+          <div className="mt-2 flex justify-center space-x-4">
+            <a href="https://github.com" className="hover:text-silver transition-colors">GitHub</a>
+            <a href="#" className="hover:text-silver transition-colors">Impressum</a>
+            <a href="#" className="hover:text-silver transition-colors">Datenschutz</a>
+          </div>
         </div>
-        <div className="bg-gray-800 p-4 rounded-lg">
-          <h2 className="text-xl text-silver mb-2">Buch-Galerie</h2>
-          <p className="text-gray-400">Wird bald verfügbar sein</p>
-        </div>
-      </div>
+      </footer>
     </div>
   );
 }
