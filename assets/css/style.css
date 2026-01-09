@@ -196,25 +196,104 @@ body {
 }
 
 /* ==========================================================================
-   DARK MODE TOGGLE
+   DARK MODE TOGGLE - VERBESSERT
    ========================================================================== */
+
 .dark-mode-toggle {
     position: absolute;
-    top: 30px;
+    top: 35px;
     right: 20px;
-    background: rgba(0, 0, 0, 0.8);
-    border: 1px solid rgba(200, 205, 215, 0.4);
-    color: #d6d9de;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.9);
+    border: 2px solid rgba(192, 192, 192, 0.6);
+    color: #c0c0c0;
     cursor: pointer;
-    width: 40px;
-    height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 50%;
-    transition: all 0.3s ease;
     z-index: 10002;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     padding: 0;
+    overflow: hidden;
+    box-shadow: 
+        0 4px 15px rgba(0, 0, 0, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode-toggle:hover {
+    transform: scale(1.1) rotate(15deg);
+    border-color: rgba(192, 192, 192, 0.9);
+    background: rgba(20, 20, 20, 0.95);
+    box-shadow: 
+        0 8px 25px rgba(192, 192, 192, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.dark-mode-toggle:active {
+    transform: scale(0.95);
+}
+
+.moon-icon, .sun-icon {
+    font-size: 24px;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    position: absolute;
+}
+
+.moon-icon {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+}
+
+.sun-icon {
+    opacity: 0;
+    transform: scale(0.5) rotate(180deg);
+}
+
+/* Dark Mode Toggle States */
+body.dark-mode .dark-mode-toggle {
+    background: rgba(30, 30, 30, 0.95);
+    border-color: rgba(255, 255, 255, 0.4);
+    color: #ffd700;
+    box-shadow: 
+        0 4px 20px rgba(255, 215, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+body.dark-mode .dark-mode-toggle:hover {
+    border-color: rgba(255, 215, 0, 0.8);
+    background: rgba(40, 40, 40, 0.98);
+    box-shadow: 
+        0 8px 30px rgba(255, 215, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+body.dark-mode .moon-icon {
+    opacity: 0;
+    transform: scale(0.5) rotate(-180deg);
+}
+
+body.dark-mode .sun-icon {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+}
+
+/* Auf Mobile: Toggle links, Burger rechts */
+@media screen and (max-width: 768px) {
+    .dark-mode-toggle {
+        top: 25px;
+        left: 15px;
+        right: auto;
+        width: 45px;
+        height: 45px;
+    }
+    
+    .burger {
+        top: 25px;
+        right: 15px;
+        left: auto;
+    }
 }
 
 .moon-icon, .sun-icon {
