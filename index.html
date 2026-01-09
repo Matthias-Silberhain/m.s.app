@@ -2,56 +2,57 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Matthias Silberhain</title>
     
     <!-- PWA Meta Tags -->
     <meta name="theme-color" content="#000000">
     <meta name="description" content="Offizielle Website von Matthias Silberhain - Autor">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     
     <!-- PWA Manifest -->
     <link rel="manifest" href="manifest.json">
+    
+    <!-- iOS Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Matthias Silberhain">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
+    
+    <!-- Icons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon-16x16.png">
+    
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
     
-    <!-- Main CSS -->
-    <link rel="stylesheet" href="assets/css/style.css">
-    
-    <!-- Emergency CSS (falls main CSS nicht lädt) -->
+    <!-- Inline CSS für schnelle Korrekturen -->
     <style>
-        /* Emergency Preloader */
-        #preloader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: #000;
-            z-index: 9999;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        /* Dark Mode Toggle Positionierung - vorübergehend */
+        .dark-mode-toggle {
+            position: absolute;
+            top: 35px;
+            right: 20px;
+            z-index: 10002;
         }
-        
-        #preloader.hidden {
-            display: none;
-        }
-        
-        /* Emergency Content */
-        .header, .inhalt, .footer {
-            display: none;
-        }
-        
-        body.loaded .header,
-        body.loaded .inhalt,
-        body.loaded .footer {
-            display: block;
+
+        /* Auf Mobile: Toggle links, Burger rechts */
+        @media screen and (max-width: 768px) {
+            .dark-mode-toggle {
+                top: 25px;
+                left: 15px;
+                right: auto;
+            }
+            
+            .burger {
+                top: 25px;
+                right: 15px;
+                left: auto;
+            }
         }
     </style>
 </head>
@@ -67,11 +68,11 @@
 
     <!-- HEADER -->
     <header class="header">
-       <!-- Dark Mode Toggle - Verbessert -->
-<button class="dark-mode-toggle" id="darkModeToggle" aria-label="Dark mode umschalten">
-    <span class="moon-icon">🌙</span>
-    <span class="sun-icon">☀️</span>
-</button>
+        <!-- Dark Mode Toggle - jetzt mit Emojis -->
+        <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Dark mode umschalten">
+            <span class="moon-icon">🌙</span>
+            <span class="sun-icon">☀️</span>
+        </button>
 
         <!-- Burger Menu -->
         <button id="burgerButton" class="burger" aria-label="Menü öffnen">
@@ -184,29 +185,10 @@
         <p>&copy; <span id="currentYear"></span> Matthias Silberhain. Alle Rechte vorbehalten.</p>
     </footer>
 
-    <!-- JavaScript Files -->
+    <!-- JavaScript -->
     <script src="assets/js/preloader.js"></script>
     <script src="assets/js/menu.js"></script>
     <script src="assets/js/darkmode.js"></script>
     <script src="assets/js/pwa.js"></script>
-    
-    <!-- Emergency Script -->
-    <script>
-        // Absolute Fallback für Preloader
-        setTimeout(function() {
-            const preloader = document.getElementById('preloader');
-            if (preloader && preloader.style.display !== 'none') {
-                preloader.style.display = 'none';
-                document.body.classList.add('loaded');
-                console.log('Emergency: Preloader entfernt');
-            }
-            
-            // Setze aktuelles Jahr
-            const yearElement = document.getElementById('currentYear');
-            if (yearElement) {
-                yearElement.textContent = new Date().getFullYear();
-            }
-        }, 4000);
-    </script>
 </body>
 </html>
