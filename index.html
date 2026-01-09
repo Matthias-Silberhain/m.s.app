@@ -2,23 +2,22 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Matthias Silberhain</title>
     
     <!-- PWA Meta Tags -->
     <meta name="theme-color" content="#000000">
     <meta name="description" content="Offizielle Website von Matthias Silberhain - Autor">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Matthias Silberhain">
     
     <!-- PWA Manifest -->
     <link rel="manifest" href="manifest.json">
     
-    <!-- iOS Meta Tags -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Matthias Silberhain">
-    <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
-    
     <!-- Icons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon-16x16.png">
     
@@ -30,29 +29,57 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
     
-    <!-- Inline CSS für schnelle Korrekturen -->
+    <!-- Inline Emergency Styles -->
     <style>
-        /* Dark Mode Toggle Positionierung - vorübergehend */
-        .dark-mode-toggle {
-            position: absolute;
-            top: 35px;
-            right: 20px;
-            z-index: 10002;
+        /* Emergency Preloader */
+        #preloader {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            background: #000 !important;
+            z-index: 9999 !important;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
         }
-
-        /* Auf Mobile: Toggle links, Burger rechts */
-        @media screen and (max-width: 768px) {
-            .dark-mode-toggle {
-                top: 25px;
-                left: 15px;
-                right: auto;
-            }
-            
-            .burger {
-                top: 25px;
-                right: 15px;
-                left: auto;
-            }
+        
+        /* Emergency Dark Mode Toggle */
+        .dark-mode-toggle {
+            position: fixed !important;
+            top: 25px !important;
+            right: 25px !important;
+            width: 50px !important;
+            height: 50px !important;
+            border-radius: 50% !important;
+            background: rgba(0,0,0,0.8) !important;
+            border: 2px solid rgba(192,192,192,0.6) !important;
+            color: #c0c0c0 !important;
+            cursor: pointer !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            z-index: 10000 !important;
+            font-size: 24px !important;
+            padding: 0 !important;
+        }
+        
+        .moon-icon, .sun-icon {
+            position: absolute !important;
+            transition: all 0.3s ease !important;
+        }
+        
+        .sun-icon {
+            display: none !important;
+        }
+        
+        body.dark-mode .moon-icon {
+            display: none !important;
+        }
+        
+        body.dark-mode .sun-icon {
+            display: block !important;
         }
     </style>
 </head>
@@ -68,7 +95,7 @@
 
     <!-- HEADER -->
     <header class="header">
-        <!-- Dark Mode Toggle - jetzt mit Emojis -->
+        <!-- Dark Mode Toggle - FIXED POSITION -->
         <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Dark mode umschalten">
             <span class="moon-icon">🌙</span>
             <span class="sun-icon">☀️</span>
@@ -185,10 +212,53 @@
         <p>&copy; <span id="currentYear"></span> Matthias Silberhain. Alle Rechte vorbehalten.</p>
     </footer>
 
-    <!-- JavaScript -->
+    <!-- JavaScript Files -->
     <script src="assets/js/preloader.js"></script>
     <script src="assets/js/menu.js"></script>
     <script src="assets/js/darkmode.js"></script>
     <script src="assets/js/pwa.js"></script>
+    
+    <!-- Emergency Script -->
+    <script>
+        // Absolute Sicherheit für Dark Mode Toggle
+        setTimeout(function() {
+            const toggle = document.getElementById('darkModeToggle');
+            if (toggle) {
+                // Position sicherstellen
+                toggle.style.position = 'fixed';
+                toggle.style.top = '25px';
+                toggle.style.right = '25px';
+                toggle.style.zIndex = '10000';
+                
+                // Event Listener hinzufügen falls JS fehlschlägt
+                toggle.addEventListener('click', function() {
+                    document.body.classList.toggle('dark-mode');
+                    const isDark = document.body.classList.contains('dark-mode');
+                    localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
+                    
+                    // Icons wechseln
+                    const moon = this.querySelector('.moon-icon');
+                    const sun = this.querySelector('.sun-icon');
+                    if (moon) moon.style.display = isDark ? 'none' : 'block';
+                    if (sun) sun.style.display = isDark ? 'block' : 'none';
+                });
+            }
+            
+            // Preloader Fallback
+            const preloader = document.getElementById('preloader');
+            if (preloader && preloader.style.display !== 'none') {
+                setTimeout(function() {
+                    preloader.style.display = 'none';
+                    document.body.classList.add('loaded');
+                }, 4000);
+            }
+            
+            // Aktuelles Jahr setzen
+            const yearElement = document.getElementById('currentYear');
+            if (yearElement) {
+                yearElement.textContent = new Date().getFullYear();
+            }
+        }, 100);
+    </script>
 </body>
 </html>
