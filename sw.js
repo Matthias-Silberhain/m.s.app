@@ -65,8 +65,18 @@ self.addEventListener('activate', event => {
 });
 
 // Fetch Event - NETWORK FIRST für Preloader-Dateien
+// In deiner sw.js, in der fetch-Funktion:
 self.addEventListener('fetch', event => {
   const url = new URL(event.request.url);
+  
+  // CSS-Dateien IMMER frisch laden, nie aus Cache
+  if (url.pathname.includes('.css')) {
+    event.respondWith(fetch(event.request));
+    return;
+  }
+  
+  // ... Rest deines fetch-Handlers
+});
   
   // WICHTIG: Preloader-Dateien IMMER frisch laden
   if (url.pathname.includes('preloader') || 
