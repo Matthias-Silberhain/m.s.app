@@ -1,5 +1,5 @@
 /**
- * DARK MODE - Matthias Silberhain PWA
+ * DARK MODE
  */
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -13,18 +13,18 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
     }
     
-    // Prüfe gespeicherten Modus
+    // Gespeicherten Modus prüfen
     const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
     const savedMode = localStorage.getItem('darkMode');
     
-    // Setze initialen Modus
+    // Initialer Modus
     if (savedMode === 'enabled' || (!savedMode && prefersDarkScheme.matches)) {
         enableDarkMode();
     } else {
         disableDarkMode();
     }
     
-    // Event Listener für Toggle
+    // Event Listener
     darkModeToggle.addEventListener('click', function() {
         if (body.classList.contains('dark-mode')) {
             disableDarkMode();
@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // System Preference Änderungen
+    // System Preference
     prefersDarkScheme.addEventListener('change', function(e) {
         if (!localStorage.getItem('darkMode')) {
             if (e.matches) {
