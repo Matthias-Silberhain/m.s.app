@@ -130,6 +130,39 @@
             display: block !important;
         }
     </style>
+
+<!-- HEADER -->
+<header class="header">
+    <!-- Burger Menu - LINKS (nur auf Mobile sichtbar) -->
+    <button id="burgerButton" class="burger" aria-label="Menü öffnen">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
+    <!-- Logo - MITTE -->
+    <img src="assets/images/logo.png" class="logo" alt="Matthias Silberhain Logo">
+
+    <!-- Dark Mode Toggle - RECHTS -->
+    <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Dark mode umschalten">
+        <span class="moon-icon">🌙</span>
+        <span class="sun-icon">☀️</span>
+    </button>
+
+    <!-- Navigation - Standardmäßig versteckt auf Mobile -->
+    <nav class="hauptnavigation" id="mainNav">
+        <a href="index.html" class="active">STARTSEITE</a>
+        <a href="ueber-mich.html">ÜBER MICH</a>
+        <a href="werke.html">WERKE</a>
+        <a href="termine.html">TERMINE</a>
+        <a href="kontakt.html">KONTAKT</a>
+    </nav>
+
+    <!-- Menu Overlay - Für Klick zum Schließen -->
+    <div class="menu-overlay" id="menuOverlay"></div>
+</header>
+
+    
 </head>
 <body>
     <!-- PRELOADER -->
