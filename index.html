@@ -16,11 +16,6 @@
     <!-- PWA Manifest -->
     <link rel="manifest" href="manifest.json">
     
-    <!-- Icons -->
-    <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon-16x16.png">
-    
     <!-- Main CSS -->
     <link rel="stylesheet" href="assets/css/style.css">
     
@@ -29,140 +24,37 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
     
-    <!-- Inline Emergency Styles -->
+    <!-- Emergency CSS -->
     <style>
-        /* Emergency Preloader */
+        /* Emergency: Menü sicher geschlossen halten */
+        .hauptnavigation {
+            position: fixed;
+            top: 0;
+            left: -100%;
+            transition: left 0.3s ease;
+        }
+        
+        .hauptnavigation.aktiv {
+            left: 0;
+        }
+        
+        /* Emergency: Preloader sichtbar am Anfang */
         #preloader {
-            position: fixed !important;
-            top: 0 !important;
-            left: 0 !important;
-            width: 100vw !important;
-            height: 100vh !important;
-            background: #000 !important;
-            z-index: 9999 !important;
-            display: flex !important;
-            justify-content: center !important;
-            align-items: center !important;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: #000;
+            z-index: 9999;
+            display: flex;
         }
         
-        /* Emergency Mobile Layout */
-        @media screen and (max-width: 768px) {
-            .header {
-                padding: 20px 15px 15px !important;
-                display: flex !important;
-                flex-direction: column !important;
-                align-items: center !important;
-                position: relative !important;
-                min-height: 120px !important;
-            }
-            
-            /* Burger Menu - LINKS */
-            .burger {
-                position: absolute !important;
-                top: 25px !important;
-                left: 15px !important;
-                right: auto !important;
-                display: flex !important;
-                width: 36px !important;
-                height: 36px !important;
-                z-index: 10002 !important;
-            }
-            
-            /* Dark Mode Toggle - RECHTS */
-            .dark-mode-toggle {
-                position: absolute !important;
-                top: 25px !important;
-                right: 15px !important;
-                left: auto !important;
-                width: 45px !important;
-                height: 45px !important;
-                z-index: 10001 !important;
-            }
-            
-            /* Logo - MITTE */
-            .logo {
-                width: 200px !important;
-                margin: 0 auto 15px !important;
-                display: block !important;
-                order: 1 !important;
-            }
-        }
-        
-        /* Desktop Layout */
-        @media screen and (min-width: 769px) {
-            .header {
-                padding: 30px 20px 20px !important;
-                position: relative !important;
-            }
-            
-            .burger {
-                display: none !important;
-            }
-            
-            .dark-mode-toggle {
-                position: absolute !important;
-                top: 35px !important;
-                right: 20px !important;
-                z-index: 10001 !important;
-            }
-            
-            .logo {
-                width: 300px !important;
-                margin: 0 auto 25px !important;
-            }
-        }
-        
-        /* Icons */
-        .moon-icon, .sun-icon {
-            position: absolute !important;
-            transition: all 0.3s ease !important;
-        }
-        
-        .sun-icon {
-            display: none !important;
-        }
-        
-        body.dark-mode .moon-icon {
-            display: none !important;
-        }
-        
-        body.dark-mode .sun-icon {
-            display: block !important;
+        body.loaded #preloader {
+            opacity: 0;
+            visibility: hidden;
         }
     </style>
-
-<!-- HEADER -->
-<header class="header">
-    <!-- Burger Menu - LINKS (nur auf Mobile sichtbar) -->
-    <button id="burgerButton" class="burger" aria-label="Menü öffnen">
-        <span></span>
-        <span></span>
-        <span></span>
-    </button>
-
-    <!-- Logo - MITTE -->
-    <img src="assets/images/logo.png" class="logo" alt="Matthias Silberhain Logo">
-
-    <!-- Dark Mode Toggle - RECHTS -->
-    <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Dark mode umschalten">
-        <span class="moon-icon">🌙</span>
-        <span class="sun-icon">☀️</span>
-    </button>
-
-    <!-- Navigation - Standardmäßig versteckt auf Mobile -->
-    <nav class="hauptnavigation" id="mainNav">
-        <a href="index.html" class="active">STARTSEITE</a>
-        <a href="ueber-mich.html">ÜBER MICH</a>
-        <a href="werke.html">WERKE</a>
-        <a href="termine.html">TERMINE</a>
-        <a href="kontakt.html">KONTAKT</a>
-    </nav>
-
-    <!-- Menu Overlay - Für Klick zum Schließen -->
-    <div class="menu-overlay" id="menuOverlay"></div>
-</header>
-
-    
 </head>
 <body>
     <!-- PRELOADER -->
@@ -176,17 +68,17 @@
 
     <!-- HEADER -->
     <header class="header">
-        <!-- Burger Menu - LINKS (nur auf Mobile) -->
+        <!-- Burger Menu - Links -->
         <button id="burgerButton" class="burger" aria-label="Menü öffnen">
             <span></span>
             <span></span>
             <span></span>
         </button>
 
-        <!-- Logo - MITTE -->
+        <!-- Logo - Mitte -->
         <img src="assets/images/logo.png" class="logo" alt="Matthias Silberhain Logo">
 
-        <!-- Dark Mode Toggle - RECHTS -->
+        <!-- Dark Mode Toggle - Rechts -->
         <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Dark mode umschalten">
             <span class="moon-icon">🌙</span>
             <span class="sun-icon">☀️</span>
@@ -235,54 +127,6 @@
         <p>Auf diesen Seiten finden Sie Einblicke in meine Arbeit, Informationen zu aktuellen Projekten und die Möglichkeit, mit mir in Kontakt zu treten. Willkommen bei Matthias Silberhain.</p>
     </main>
 
-    <!-- SOCIAL MEDIA -->
-    <section class="social-section">
-        <h3 class="social-title">Folgen Sie den Gedanken</h3>
-        <div class="social-grid">
-            <!-- Snapchat -->
-            <a href="https://snapchat.com" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Snapchat">
-                <div class="social-icon-wrapper">
-                    <svg class="social-icon" viewBox="0 0 24 24">
-                        <path d="M5.83 2H18.2c1.14 0 2.07.93 2.07 2.07v15.86c0 1.14-.93 2.07-2.07 2.07H5.83A2.07 2.07 0 0 1 3.76 19.9V4.07C3.76 2.93 4.69 2 5.83 2z"/>
-                    </svg>
-                </div>
-                <span class="social-name">Snapchat</span>
-            </a>
-            
-            <!-- Clapper -->
-            <a href="https://clapperapp.com" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Clapper">
-                <div class="social-icon-wrapper">
-                    <svg class="social-icon" viewBox="0 0 24 24">
-                        <path d="M19.5 3H4.5C3.67 3 3 3.67 3 4.5v15C3 20.33 3.67 21 4.5 21h15c.83 0 1.5-.67 1.5-1.5v-15C21 3.67 20.33 3 19.5 3z"/>
-                    </svg>
-                </div>
-                <span class="social-name">Clapper</span>
-            </a>
-            
-            <!-- TikTok -->
-            <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="TikTok">
-                <div class="social-icon-wrapper">
-                    <svg class="social-icon" viewBox="0 0 24 24">
-                        <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.10-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/>
-                    </svg>
-                </div>
-                <span class="social-name">TikTok</span>
-            </a>
-            
-            <!-- Telegram -->
-            <a href="https://telegram.org" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Telegram">
-                <div class="social-icon-wrapper">
-                    <svg class="social-icon" viewBox="0 0 24 24">
-                        <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.697.064-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.81.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
-                    </svg>
-                </div>
-                <span class="social-name">Telegram</span>
-            </a>
-        </div>
-    </section>
-    
-    <div class="lichtkante"></div>
-
     <!-- FOOTER -->
     <footer class="footer">
         <div class="footer-links">
@@ -293,7 +137,7 @@
         <p>&copy; <span id="currentYear"></span> Matthias Silberhain. Alle Rechte vorbehalten.</p>
     </footer>
 
-    <!-- JavaScript Files -->
+    <!-- JavaScript -->
     <script src="assets/js/preloader.js"></script>
     <script src="assets/js/menu.js"></script>
     <script src="assets/js/darkmode.js"></script>
@@ -301,35 +145,29 @@
     
     <!-- Emergency Script -->
     <script>
-        // Absolute Sicherheit für Layout
-        setTimeout(function() {
-            // Mobile Layout erzwingen
-            if (window.innerWidth <= 768) {
-                // Burger Menu - LINKS
-                const burger = document.getElementById('burgerButton');
-                if (burger) {
-                    burger.style.position = 'absolute';
-                    burger.style.top = '25px';
-                    burger.style.left = '15px';
-                    burger.style.right = 'auto';
-                }
-                
-                // Dark Mode Toggle - RECHTS
-                const toggle = document.getElementById('darkModeToggle');
-                if (toggle) {
-                    toggle.style.position = 'absolute';
-                    toggle.style.top = '25px';
-                    toggle.style.right = '15px';
-                    toggle.style.left = 'auto';
-                }
-            }
+        // SICHERSTELLEN: Menü startet geschlossen
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚨 Emergency: Menü geschlossen halten');
             
-            // Aktuelles Jahr setzen
+            const nav = document.getElementById('mainNav');
+            const burger = document.getElementById('burgerButton');
+            const overlay = document.getElementById('menuOverlay');
+            const body = document.body;
+            
+            if (nav) {
+                nav.classList.remove('aktiv');
+                nav.style.left = '-100%';
+            }
+            if (burger) burger.classList.remove('aktiv');
+            if (overlay) overlay.classList.remove('active');
+            body.classList.remove('menu-open');
+            
+            // Aktuelles Jahr
             const yearElement = document.getElementById('currentYear');
             if (yearElement) {
                 yearElement.textContent = new Date().getFullYear();
             }
-        }, 100);
+        });
     </script>
 </body>
 </html>
