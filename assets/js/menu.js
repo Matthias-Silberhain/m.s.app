@@ -1,5 +1,5 @@
 /**
- * MOBILE MENÜ - Stabil und funktioniert
+ * MOBILE MENÜ - Korrigierte Version
  */
 
 (function() {
@@ -24,17 +24,17 @@
             return;
         }
         
-        // 1. SICHERSTELLEN: Menü ist initial GESCHLOSSEN
+        // SICHERSTELLEN: Menü ist initial GESCHLOSSEN
         closeMenu();
         
-        // 2. Event Listener für Burger Button
+        // Event Listener für Burger Button
         burgerButton.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
             toggleMenu();
         });
         
-        // 3. Event Listener für Overlay (schließen)
+        // Event Listener für Overlay (schließen)
         if (menuOverlay) {
             menuOverlay.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -42,7 +42,7 @@
             });
         }
         
-        // 4. Schließen bei Klick auf Nav Links
+        // Schließen bei Klick auf Nav Links
         const navLinks = mainNav.querySelectorAll('a');
         navLinks.forEach(link => {
             link.addEventListener('click', function(e) {
@@ -50,35 +50,22 @@
             });
         });
         
-        // 5. Schließen bei Escape Taste
+        // Schließen bei Escape Taste
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape' && mainNav.classList.contains('aktiv')) {
                 closeMenu();
             }
         });
         
-        // 6. Schließen bei Fenster-Resize (wenn zu Desktop wechselt)
+        // Schließen bei Fenster-Resize (wenn zu Desktop wechselt)
         window.addEventListener('resize', function() {
             if (window.innerWidth > 768 && mainNav.classList.contains('aktiv')) {
                 closeMenu();
             }
         });
         
-        // 7. Schließen bei Klick außerhalb des Menüs
-        document.addEventListener('click', function(e) {
-            // Wenn Menü offen ist UND Klick NICHT auf Menü oder Burger
-            if (mainNav.classList.contains('aktiv') && 
-                !mainNav.contains(e.target) && 
-                e.target !== burgerButton && 
-                !burgerButton.contains(e.target)) {
-                closeMenu();
-            }
-        });
-        
         // Funktionen
         function toggleMenu() {
-            console.log('🔄 Toggle Menu aufgerufen');
-            
             if (mainNav.classList.contains('aktiv')) {
                 closeMenu();
             } else {
@@ -87,8 +74,6 @@
         }
         
         function openMenu() {
-            console.log('📱 Menü öffnen');
-            
             burgerButton.classList.add('aktiv');
             mainNav.classList.add('aktiv');
             
@@ -101,11 +86,11 @@
             // Accessibility
             burgerButton.setAttribute('aria-expanded', 'true');
             mainNav.setAttribute('aria-hidden', 'false');
+            
+            console.log('📱 Menü geöffnet');
         }
         
         function closeMenu() {
-            console.log('📱 Menü schließen');
-            
             burgerButton.classList.remove('aktiv');
             mainNav.classList.remove('aktiv');
             
@@ -118,17 +103,17 @@
             // Accessibility
             burgerButton.setAttribute('aria-expanded', 'false');
             mainNav.setAttribute('aria-hidden', 'true');
+            
+            console.log('📱 Menü geschlossen');
         }
         
         // Initiale Accessibility-Attribute
         burgerButton.setAttribute('aria-expanded', 'false');
         mainNav.setAttribute('aria-hidden', 'true');
         
-        // Globale Funktion für andere Skripte
+        // Globale Funktion
         window.closeMobileMenu = closeMenu;
         
-        // DEBUG: Zeige Menü-Status
         console.log('✅ Mobile Menu initialisiert');
-        console.log('Menü Status:', mainNav.classList.contains('aktiv') ? 'GEÖFFNET' : 'GESCHLOSSEN');
     }
 })();
