@@ -1,33 +1,15 @@
 <!DOCTYPE html>
 <html lang="de">
-  <head>
+<head>
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Autoren-Web-App von Matthias Silberhain"
-    />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <meta name="description" content="Autoren-Portfolio von Matthias Silberhain" />
     <title>Matthias Silberhain - Autor</title>
-  </head>
-  <body>
+</head>
+<body>
     <noscript>Sie müssen JavaScript aktivieren, um diese Anwendung auszuführen.</noscript>
     <div id="root"></div>
-<script>
-  // Single Page App für GitHub Pages
-  (function(l) {
-    if (l.search[1] === '/' ) {
-      var decoded = l.search.slice(1).split('&').map(function(s) {
-        return s.replace(/~and~/g, '&')
-      }).join('?');
-      window.history.replaceState(null, null,
-        l.pathname.slice(0, -1) + decoded + l.hash
-      );
-    }
-  }(window.location))
-</script>    
-  </body>
+</body>
 </html>
