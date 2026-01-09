@@ -251,3 +251,58 @@ body.loaded .inhalt {
     transition-duration: 0.01ms !important;
   }
 }
+/* ==========================================================================
+   MOBILE PRELOADER FIX - Garantiert Sichtbarkeit
+   ========================================================================== */
+
+/* Stellt sicher, dass der Preloader auf Mobile immer sichtbar ist */
+@media screen and (max-width: 768px) {
+    #preloader {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        height: -webkit-fill-available !important;
+        height: 100dvh !important;
+        z-index: 9999 !important;
+        background: #000000 !important;
+    }
+
+    .preloader-text {
+        font-size: 22px !important;
+        letter-spacing: 0.15em !important;
+    }
+
+    /* Verhindert Scrollen während Preloader aktiv */
+    body:not(.loaded) {
+        overflow: hidden !important;
+        position: fixed !important;
+        width: 100% !important;
+        height: 100% !important;
+    }
+}
+
+/* Versteckt den Preloader, wenn die loaded-Klasse gesetzt ist */
+#preloader.loaded {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    transition: opacity 0.5s ease, visibility 0.5s ease !important;
+}
+
+/* Versteckt den Inhalt, bis der Preloader fertig ist */
+body:not(.loaded) .inhalt,
+body:not(.loaded) .social-section,
+body:not(.loaded) .footer {
+    opacity: 0 !important;
+    visibility: hidden !important;
+}
+
+body.loaded .inhalt,
+body.loaded .social-section,
+body.loaded .footer {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transition: opacity 0.5s ease 0.3s !important;
+}
