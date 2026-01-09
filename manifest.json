@@ -1,58 +1,17 @@
 {
   "name": "Matthias Silberhain",
   "short_name": "Silberhain",
-  "description": "Offizielle Website von Matthias Silberhain - Autor",
+  "description": "Offizielle PWA von Matthias Silberhain",
   "start_url": "/m.s.app/",
   "scope": "/m.s.app/",
   "display": "standalone",
-  "display_override": ["window-controls-overlay"],
-  "orientation": "portrait",
   "background_color": "#000000",
   "theme_color": "#000000",
-  "categories": ["books", "literature", "education"],
-  "lang": "de",
-  "dir": "ltr",
-  
+  "orientation": "portrait",
   "icons": [
-    {
-      "src": "assets/icons/icon-72.png",
-      "sizes": "72x72",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "assets/icons/icon-96.png",
-      "sizes": "96x96",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "assets/icons/icon-128.png",
-      "sizes": "128x128",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "assets/icons/icon-144.png",
-      "sizes": "144x144",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "assets/icons/icon-152.png",
-      "sizes": "152x152",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
     {
       "src": "assets/icons/icon-192.png",
       "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "assets/icons/icon-384.png",
-      "sizes": "384x384",
       "type": "image/png",
       "purpose": "any maskable"
     },
@@ -61,47 +20,6 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
-    }
-  ],
-  
-  "screenshots": [
-    {
-      "src": "assets/images/screenshot-desktop.png",
-      "sizes": "1280x720",
-      "type": "image/png",
-      "form_factor": "wide",
-      "label": "Desktop Ansicht"
-    },
-    {
-      "src": "assets/images/screenshot-mobile.png",
-      "sizes": "750x1334",
-      "type": "image/png",
-      "form_factor": "narrow",
-      "label": "Mobile Ansicht"
-    }
-  ],
-  
-  "shortcuts": [
-    {
-      "name": "Startseite",
-      "short_name": "Home",
-      "description": "Zurück zur Startseite",
-      "url": "/m.s.app/",
-      "icons": [{ "src": "assets/icons/icon-96.png", "sizes": "96x96" }]
-    },
-    {
-      "name": "Werke",
-      "short_name": "Werke",
-      "description": "Zu den Werken",
-      "url": "/m.s.app/werke.html",
-      "icons": [{ "src": "assets/icons/icon-96.png", "sizes": "96x96" }]
-    },
-    {
-      "name": "Kontakt",
-      "short_name": "Kontakt",
-      "description": "Kontakt aufnehmen",
-      "url": "/m.s.app/kontakt.html",
-      "icons": [{ "src": "assets/icons/icon-96.png", "sizes": "96x96" }]
     }
   ]
 }
