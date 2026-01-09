@@ -1,16 +1,22 @@
 /**
- * SERVICE WORKER - Vereinfachte Version für zuverlässigen Betrieb
+ * SERVICE WORKER - Matthias Silberhain PWA
+ * Korrigierte Pfade für GitHub Pages
  */
 
-const CACHE_NAME = 'matthias-silberhain-v1.1';
+const CACHE_NAME = 'matthias-silberhain-v1.2';
 const OFFLINE_URL = '/m.s.app/index.html';
 
-// Assets die gecached werden sollen (nur kritische)
+// WICHTIG: Pfade müssen relativ zum Repository sein
 const PRECACHE_ASSETS = [
   '/m.s.app/',
   '/m.s.app/index.html',
   '/m.s.app/assets/css/style.css',
-  '/m.s.app/manifest.webmanifest'
+  '/m.s.app/assets/js/preloader.js',
+  '/m.s.app/assets/js/menu.js',
+  '/m.s.app/assets/js/darkmode.js',
+  '/m.s.app/assets/js/pwa.js',
+  '/m.s.app/assets/images/logo.png',
+  '/m.s.app/manifest.json'
 ];
 
 // Install Event
@@ -20,96 +26,87 @@ self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => {
-        console.log('📦 Service Worker: Caching kritische Assets');
-        // Nur die allerwichtigsten Dateien cachen
-        return cache.addAll(PRECACHE_ASSETS).catch(err => {
-          console.warn('Einige Assets konnten nicht gecached werden:', err);
-        });
+        console.log('📦 Caching Assets für:', self.location.origin);
+        // Versuche Assets zu cachen, ignoriere Fehler
+        return Promise.all(
+          PRECACHE_ASSETS.map(url => {
+            return cache.add(url).catch(error => {
+              console.warn(`⚠️ Konnte nicht cachen: ${url}`, error);
+            });
+          })
+        );
       })
       .then(() => {
-        console.log('✅ Service Worker: Installation abgeschlossen');
+        console.log('✅ Installation abgeschlossen');
         return self.skipWaiting();
       })
   );
 });
 
-// Activate Event
+// Activate Event - VEREINFACHT
 self.addEventListener('activate', event => {
   console.log('🚀 Service Worker: Aktiviere');
   
   event.waitUntil(
-    caches.keys().then(cacheNames => {
-      return Promise.all(
-        cacheNames.map(cacheName => {
-          // Lösche alle alten Caches
-          if (cacheName !== CACHE_NAME) {
-            console.log('🗑️ Service Worker: Lösche alten Cache', cacheName);
-            return caches.delete(cacheName);
-          }
-        })
-      );
-    }).then(() => {
-      console.log('✅ Service Worker: Aktivierung abgeschlossen');
-      return self.clients.claim();
-    })
+    Promise.all([
+      self.clients.claim(),
+      caches.keys().then(cacheNames => {
+        return Promise.all(
+          cacheNames.map(cacheName => {
+            if (cacheName !== CACHE_NAME) {
+              console.log('🗑️ Lösche alten Cache:', cacheName);
+              return caches.delete(cacheName);
+            }
+          })
+        );
+      })
+    ])
   );
 });
 
-// Fetch Event - Network First für bessere Aktualität
+// Fetch Event - NETWORK FIRST für Preloader-Dateien
 self.addEventListener('fetch', event => {
-  // Nur GET-Requests behandeln
-  if (event.request.method !== 'GET') return;
+  const url = new URL(event.request.url);
   
-  // Für HTML-Dateien: Network First, dann Cache
-  if (event.request.headers.get('Accept').includes('text/html')) {
-    event.respondWith(
-      fetch(event.request)
-        .then(response => {
-          // Cache die Antwort für zukünftige Offline-Nutzung
-          const responseClone = response.clone();
-          caches.open(CACHE_NAME).then(cache => {
-            cache.put(event.request, responseClone);
-          });
-          return response;
-        })
-        .catch(() => {
-          // Falls offline: aus Cache liefern
-          return caches.match(event.request)
-            .then(cachedResponse => cachedResponse || caches.match(OFFLINE_URL));
-        })
-    );
+  // WICHTIG: Preloader-Dateien IMMER frisch laden
+  if (url.pathname.includes('preloader') || 
+      url.pathname.includes('type-text') ||
+      url.search.includes('nocache')) {
+    event.respondWith(fetch(event.request));
     return;
   }
   
-  // Für CSS, JS, Bilder: Cache First, dann Network
+  // Für alle anderen: Cache First mit Network Fallback
   event.respondWith(
     caches.match(event.request)
       .then(cachedResponse => {
-        // Wenn im Cache, zurückgeben
         if (cachedResponse) {
+          console.log('📦 Aus Cache:', url.pathname);
           return cachedResponse;
         }
         
-        // Ansonsten vom Netzwerk laden
         return fetch(event.request)
-          .then(response => {
-            // Nur erfolgreiche Antworten cachen
-            if (!response || response.status !== 200) {
-              return response;
+          .then(networkResponse => {
+            // Nur erfolgreiche Antworten cachen (keine Preloader-Dateien!)
+            if (!networkResponse || networkResponse.status !== 200) {
+              return networkResponse;
             }
             
             // Response klonen und cachen
-            const responseToCache = response.clone();
+            const responseToCache = networkResponse.clone();
             caches.open(CACHE_NAME)
               .then(cache => {
                 cache.put(event.request, responseToCache);
               });
             
-            return response;
+            return networkResponse;
           })
-          .catch(error => {
-            console.warn('Fetch fehlgeschlagen:', error);
-            // Keine Fallback-Antwort für Nicht-HTML-Ressourcen
+          .catch(() => {
+            // Offline Fallback
+            if (event.request.headers.get('Accept').includes('text/html')) {
+              return caches.match(OFFLINE_URL);
+            }
+            return null;
           });
       })
   );
