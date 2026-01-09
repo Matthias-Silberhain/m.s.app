@@ -1182,3 +1182,349 @@ body.dark-mode .sun-icon {
         font-size: 20px !important;
     }
 }
+/* ==========================================================================
+   HEADER LAYOUT - KORRIGIERT
+   ========================================================================== */
+
+/* Header Container */
+.header {
+    position: relative;
+    padding: 35px 20px 25px;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.95);
+    min-height: 120px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Logo zentrieren */
+.logo {
+    width: min(75vw, 420px);
+    max-width: 380px;
+    height: auto;
+    margin: 0 auto 25px;
+    display: block;
+    filter: brightness(1.1) drop-shadow(0 0 15px rgba(192, 192, 192, 0.2));
+    animation: logoPulse 5s infinite ease-in-out;
+}
+
+/* Burger Menu - LINKS */
+.burger {
+    position: absolute;
+    top: 35px;
+    left: 20px;
+    width: 40px;
+    height: 40px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: none; /* Nur auf Mobile sichtbar */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    z-index: 10002;
+}
+
+.burger span {
+    display: block;
+    width: 100%;
+    height: 2px;
+    background-color: #cfd2d6;
+    transition: all 0.3s ease;
+    border-radius: 1px;
+}
+
+/* Dark Mode Toggle - RECHTS */
+.dark-mode-toggle {
+    position: absolute;
+    top: 35px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.9);
+    border: 2px solid rgba(192, 192, 192, 0.6);
+    color: #c0c0c0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10001;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 0;
+    overflow: hidden;
+}
+
+/* Schöne Hover-Effekte */
+.dark-mode-toggle:hover {
+    transform: scale(1.1);
+    border-color: rgba(192, 192, 192, 0.9);
+    background: rgba(20, 20, 20, 0.95);
+    box-shadow: 
+        0 8px 25px rgba(192, 192, 192, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.dark-mode-toggle:active {
+    transform: scale(0.95);
+}
+
+/* Icons Animation */
+.moon-icon, .sun-icon {
+    font-size: 24px;
+    position: absolute;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.moon-icon {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+}
+
+.sun-icon {
+    opacity: 0;
+    transform: scale(0.5) rotate(180deg);
+}
+
+/* Dark Mode States */
+body.dark-mode .dark-mode-toggle {
+    background: rgba(30, 30, 30, 0.95);
+    border-color: rgba(255, 255, 255, 0.4);
+    color: #ffd700;
+    box-shadow: 
+        0 4px 20px rgba(255, 215, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+body.dark-mode .dark-mode-toggle:hover {
+    border-color: rgba(255, 215, 0, 0.8);
+    background: rgba(40, 40, 40, 0.98);
+    box-shadow: 
+        0 8px 30px rgba(255, 215, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+body.dark-mode .moon-icon {
+    opacity: 0;
+    transform: scale(0.5) rotate(-180deg);
+}
+
+body.dark-mode .sun-icon {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+}
+
+/* Navigation */
+.hauptnavigation {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    padding: 15px;
+    z-index: 100;
+    background: rgba(10, 10, 10, 0.96);
+    backdrop-filter: blur(12px);
+    border-radius: 8px;
+    margin: 0 auto;
+    max-width: fit-content;
+    border: 1px solid rgba(192, 192, 192, 0.3);
+    box-shadow: 
+        0 12px 35px rgba(0, 0, 0, 0.7),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1),
+        0 0 20px rgba(192, 192, 192, 0.2);
+}
+
+/* ==========================================================================
+   MOBILE LAYOUT - KORRIGIERT
+   ========================================================================== */
+@media screen and (max-width: 768px) {
+    .header {
+        padding: 25px 15px 15px;
+        min-height: 100px;
+    }
+    
+    /* Burger Menu sichtbar - LINKS */
+    .burger {
+        display: flex;
+        top: 25px;
+        left: 15px;
+        width: 36px;
+        height: 36px;
+    }
+    
+    /* Dark Mode Toggle - RECHTS */
+    .dark-mode-toggle {
+        top: 25px;
+        right: 15px;
+        width: 45px;
+        height: 45px;
+    }
+    
+    /* Logo kleiner auf Mobile */
+    .logo {
+        width: min(65vw, 280px);
+        margin: 10px auto 15px;
+    }
+    
+    /* Navigation für Mobile */
+    .hauptnavigation {
+        position: fixed;
+        top: 0;
+        left: -100%;
+        width: 280px;
+        height: 100vh;
+        background: rgba(15, 15, 15, 0.99);
+        backdrop-filter: blur(15px);
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 12px;
+        z-index: 10000;
+        padding: 100px 20px 40px;
+        transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: -5px 0 40px rgba(0, 0, 0, 0.9);
+        border: none;
+        border-radius: 0;
+    }
+    
+    .hauptnavigation.aktiv {
+        left: 0;
+    }
+    
+    /* Menu Overlay */
+    .menu-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        z-index: 9999;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+        backdrop-filter: blur(3px);
+    }
+    
+    .menu-overlay.active {
+        opacity: 1;
+        visibility: visible;
+    }
+}
+
+/* Extra kleine Screens */
+@media screen and (max-width: 480px) {
+    .burger {
+        top: 20px;
+        left: 10px;
+        width: 32px;
+        height: 32px;
+    }
+    
+    .dark-mode-toggle {
+        top: 20px;
+        right: 10px;
+        width: 40px;
+        height: 40px;
+    }
+    
+    .logo {
+        width: min(60vw, 220px);
+    }
+    
+    .moon-icon, .sun-icon {
+        font-size: 20px;
+    }
+}
+
+/* ==========================================================================
+   ANIMATIONEN - VERBESSERT
+   ========================================================================== */
+
+/* Logo Pulsieren */
+@keyframes logoPulse {
+    0%, 100% {
+        transform: scale(1);
+        filter: brightness(1.1) drop-shadow(0 0 15px rgba(192, 192, 192, 0.2));
+    }
+    50% {
+        transform: scale(1.03);
+        filter: brightness(1.25) drop-shadow(0 0 20px rgba(192, 192, 192, 0.5));
+    }
+}
+
+/* Preloader Logo */
+@keyframes preloaderLogoPulse {
+    0%, 100% { 
+        transform: scale(1); 
+        filter: brightness(1.1) drop-shadow(0 0 10px rgba(192, 192, 192, 0.3)); 
+    }
+    50% { 
+        transform: scale(1.08); 
+        filter: brightness(1.4) drop-shadow(0 0 25px rgba(192, 192, 192, 0.7)); 
+    }
+}
+
+.preloader-logo {
+    animation: preloaderLogoPulse 3s infinite ease-in-out;
+}
+
+/* Burger Animation */
+.burger.aktiv span:nth-child(1) {
+    transform: rotate(45deg) translate(6px, 6px);
+}
+
+.burger.aktiv span:nth-child(2) {
+    opacity: 0;
+    transform: translateX(-10px);
+}
+
+.burger.aktiv span:nth-child(3) {
+    transform: rotate(-45deg) translate(6px, -6px);
+}
+
+/* Navigation Items Hover */
+.hauptnavigation a {
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.hauptnavigation a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: -100%;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #c0c0c0, transparent);
+    transition: left 0.3s ease;
+}
+
+.hauptnavigation a:hover::after {
+    left: 0;
+}
+
+/* Silver Glow für aktive Navigation */
+@keyframes silverGlow {
+    0%, 100% { 
+        box-shadow: 
+            0 5px 20px rgba(192, 192, 192, 0.5),
+            inset 0 1px 0 rgba(255, 255, 255, 0.2),
+            0 0 10px rgba(192, 192, 192, 0.3); 
+    }
+    50% { 
+        box-shadow: 
+            0 5px 30px rgba(192, 192, 192, 0.9),
+            inset 0 1px 0 rgba(255, 255, 255, 0.4),
+            0 0 25px rgba(192, 192, 192, 0.7); 
+    }
+}
+
+.hauptnavigation a.active {
+    animation: silverGlow 3s infinite ease-in-out;
+}
