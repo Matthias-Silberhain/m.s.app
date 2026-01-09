@@ -186,5 +186,33 @@
     <script src="assets/js/menu.js"></script>
     <script src="assets/js/darkmode.js"></script>
     <script src="assets/js/pwa.js"></script>
+<script>
+// Logo-Größe korrigieren
+document.addEventListener('DOMContentLoaded', function() {
+    const logos = document.querySelectorAll('.logo, .preloader-logo');
+    
+    logos.forEach(logo => {
+        // Maximalgröße setzen
+        logo.style.maxWidth = '300px';
+        logo.style.width = '100%';
+        logo.style.height = 'auto';
+        logo.style.margin = '0 auto 20px';
+        
+        // Mobile Anpassung
+        if (window.innerWidth <= 768) {
+            logo.style.maxWidth = '200px';
+        }
+    });
+    
+    // Viewport für Mobile optimieren
+    const viewportMeta = document.querySelector('meta[name="viewport"]');
+    if (!viewportMeta) {
+        const meta = document.createElement('meta');
+        meta.name = 'viewport';
+        meta.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
+        document.head.appendChild(meta);
+    }
+});
+</script>    
 </body>
 </html>
