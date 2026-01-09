@@ -45,26 +45,35 @@
             align-items: center !important;
         }
         
-        /* Emergency Dark Mode Toggle */
-        .dark-mode-toggle {
-            position: fixed !important;
-            top: 25px !important;
-            right: 25px !important;
-            width: 50px !important;
-            height: 50px !important;
-            border-radius: 50% !important;
-            background: rgba(0,0,0,0.8) !important;
-            border: 2px solid rgba(192,192,192,0.6) !important;
-            color: #c0c0c0 !important;
-            cursor: pointer !important;
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            z-index: 10000 !important;
-            font-size: 24px !important;
-            padding: 0 !important;
+        /* Emergency Header Layout */
+        .header {
+            position: relative !important;
+            min-height: 120px !important;
         }
         
+        /* Burger Menu - LINKS */
+        .burger {
+            position: absolute !important;
+            top: 25px !important;
+            left: 20px !important;
+            z-index: 10001 !important;
+        }
+        
+        /* Dark Mode Toggle - RECHTS */
+        .dark-mode-toggle {
+            position: absolute !important;
+            top: 25px !important;
+            right: 20px !important;
+            z-index: 10000 !important;
+        }
+        
+        /* Logo zentrieren */
+        .logo {
+            position: relative !important;
+            z-index: 9999 !important;
+        }
+        
+        /* Icons */
         .moon-icon, .sun-icon {
             position: absolute !important;
             transition: all 0.3s ease !important;
@@ -95,20 +104,20 @@
 
     <!-- HEADER -->
     <header class="header">
-        <!-- Dark Mode Toggle - FIXED POSITION -->
-        <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Dark mode umschalten">
-            <span class="moon-icon">🌙</span>
-            <span class="sun-icon">☀️</span>
-        </button>
-
-        <!-- Burger Menu -->
+        <!-- Burger Menu - LINKS -->
         <button id="burgerButton" class="burger" aria-label="Menü öffnen">
             <span></span>
             <span></span>
             <span></span>
         </button>
 
-        <!-- Logo -->
+        <!-- Dark Mode Toggle - RECHTS -->
+        <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Dark mode umschalten">
+            <span class="moon-icon">🌙</span>
+            <span class="sun-icon">☀️</span>
+        </button>
+
+        <!-- Logo - MITTE -->
         <img src="assets/images/logo.png" class="logo" alt="Matthias Silberhain Logo">
 
         <!-- Navigation -->
@@ -147,7 +156,7 @@
         <p>In einer Zeit, in der Komplexität oft vereinfacht wird, halte ich es für notwendig, genau hinzuschauen. Meine Texte sollen nicht nur informieren, sondern zum Denken anregen. Sie stellen Fragen, wo andere Antworten vorgeben. Sie zeigen Zusammenhänge, wo andere isolieren.</p>
         
         <div class="zitat">
-            "Ich schreibe, weil die Wahrheit eine Stimme braucht."
+            "Ich schreibe, weil die Wahrheit eine Stimmae braucht."
             <span class="zitat-autor">– Matthias Silberhain</span>
         </div>
         
@@ -220,28 +229,31 @@
     
     <!-- Emergency Script -->
     <script>
-        // Absolute Sicherheit für Dark Mode Toggle
+        // Absolute Sicherheit für Layout
         setTimeout(function() {
+            // Dark Mode Toggle - RECHTS
             const toggle = document.getElementById('darkModeToggle');
             if (toggle) {
-                // Position sicherstellen
-                toggle.style.position = 'fixed';
+                toggle.style.position = 'absolute';
                 toggle.style.top = '25px';
-                toggle.style.right = '25px';
-                toggle.style.zIndex = '10000';
-                
-                // Event Listener hinzufügen falls JS fehlschlägt
-                toggle.addEventListener('click', function() {
-                    document.body.classList.toggle('dark-mode');
-                    const isDark = document.body.classList.contains('dark-mode');
-                    localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
-                    
-                    // Icons wechseln
-                    const moon = this.querySelector('.moon-icon');
-                    const sun = this.querySelector('.sun-icon');
-                    if (moon) moon.style.display = isDark ? 'none' : 'block';
-                    if (sun) sun.style.display = isDark ? 'block' : 'none';
-                });
+                toggle.style.right = '20px';
+                toggle.style.left = 'auto';
+            }
+            
+            // Burger Menu - LINKS
+            const burger = document.getElementById('burgerButton');
+            if (burger) {
+                burger.style.position = 'absolute';
+                burger.style.top = '25px';
+                burger.style.left = '20px';
+                burger.style.right = 'auto';
+            }
+            
+            // Logo zentrieren
+            const logo = document.querySelector('.logo');
+            if (logo) {
+                logo.style.margin = '0 auto';
+                logo.style.display = 'block';
             }
             
             // Preloader Fallback
