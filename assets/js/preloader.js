@@ -1,12 +1,12 @@
 /**
  * PRELOADER - Matthias Silberhain PWA
- * Robuste Version für alle Geräte
+ * Typewriter für ALLE Geräte
  */
 
 (function() {
     'use strict';
     
-    console.log('🚀 Preloader initialisiert');
+    console.log('🚀 Preloader gestartet');
     
     // Warte auf DOM
     if (document.readyState === 'loading') {
@@ -38,13 +38,12 @@
             currentYear.textContent = new Date().getFullYear();
         }
         
-        // 3. Gerät erkennen
-        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-        
-        if (isMobile) {
-            startMobilePreloader(preloaderText);
+        // 3. TYPEWRITER FÜR ALLE GERÄTE (auch Mobile!)
+        if (preloaderText) {
+            startTypewriter(preloaderText);
         } else {
-            startDesktopPreloader(preloaderText);
+            // Fallback
+            setTimeout(() => finishPreloader(preloader), 2000);
         }
         
         // 4. Line Animation starten
@@ -55,12 +54,11 @@
             }, 300);
         }
         
-        // 5. Preloader beenden nach Zeit
-        const delay = isMobile ? 1800 : 2500;
-        setTimeout(() => finishPreloader(preloader), delay);
+        // 5. Preloader beenden nach Zeit (etwas länger für Typewriter)
+        setTimeout(() => finishPreloader(preloader), 3500);
         
         // 6. Absolute Sicherheit
-        setTimeout(() => finishPreloader(preloader), 4000);
+        setTimeout(() => finishPreloader(preloader), 5000);
         
         // 7. Window Load Backup
         window.addEventListener('load', () => {
@@ -68,37 +66,36 @@
         });
     }
     
-    function startMobilePreloader(preloaderText) {
-        console.log('📱 Mobile Preloader');
+    function startTypewriter(element) {
+        const text = 'MATTHIAS SILBERHAIN';
+        let i = 0;
         
-        // Sofort Text anzeigen (keine Animation auf Mobile)
-        if (preloaderText) {
-            preloaderText.textContent = 'MATTHIAS SILBERHAIN';
-        }
-    }
-    
-    function startDesktopPreloader(preloaderText) {
-        console.log('💻 Desktop Preloader');
+        // Schnellere Geschwindigkeit auf Touch-Geräten
+        const isTouchDevice = 'ontouchstart' in window;
+        const speed = isTouchDevice ? 60 : 80;
         
-        // Typewriter Effect
-        if (preloaderText) {
-            const text = 'MATTHIAS SILBERHAIN';
-            let i = 0;
-            const speed = 80;
-            
-            function typeWriter() {
-                if (i < text.length) {
-                    preloaderText.textContent += text.charAt(i);
-                    i++;
-                    setTimeout(typeWriter, speed);
-                }
+        function typeWriter() {
+            if (i < text.length) {
+                element.textContent += text.charAt(i);
+                i++;
+                setTimeout(typeWriter, speed);
+            } else {
+                // Cursor-Blinken hinzufügen nach Fertigstellung
+                element.style.position = 'relative';
+                const cursor = document.createElement('span');
+                cursor.textContent = '|';
+                cursor.style.animation = 'blink 1s infinite';
+                cursor.style.marginLeft = '5px';
+                cursor.style.color = '#c0c0c0';
+                element.appendChild(cursor);
             }
-            
-            setTimeout(() => {
-                preloaderText.textContent = '';
-                typeWriter();
-            }, 300);
         }
+        
+        // Kurze Verzögerung, dann starten
+        setTimeout(() => {
+            element.textContent = '';
+            typeWriter();
+        }, 300);
     }
     
     function finishPreloader(preloader) {
@@ -112,7 +109,7 @@
         preloader.classList.add('loaded');
         document.body.classList.add('loaded');
         
-        // 2. Fade-out
+        // 2. Fade-out Animation
         setTimeout(() => {
             preloader.style.opacity = '0';
             
@@ -120,8 +117,22 @@
             setTimeout(() => {
                 preloader.style.display = 'none';
                 console.log('🎉 Preloader versteckt');
+                
+                // 4. Animationen im Content starten
+                startContentAnimations();
             }, 600);
         }, 100);
+    }
+    
+    function startContentAnimations() {
+        // Alle Inhalte nacheinander einfaden lassen
+        const elements = document.querySelectorAll('.inhalt > *');
+        elements.forEach((el, index) => {
+            setTimeout(() => {
+                el.style.opacity = '1';
+                el.style.transform = 'translateY(0)';
+            }, 100 * index);
+        });
     }
     
     // Error Handling
