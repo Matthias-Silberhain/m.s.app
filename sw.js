@@ -1,22 +1,20 @@
 /**
  * SERVICE WORKER - Matthias Silberhain PWA
- * Korrigierte Pfade für GitHub Pages
  */
 
-const CACHE_NAME = 'matthias-silberhain-v1.2';
-const OFFLINE_URL = '/m.s.app/index.html';
+const CACHE_NAME = 'matthias-silberhain-pwa-v1.0';
 
-// WICHTIG: Pfade müssen relativ zum Repository sein
+// Assets zum Cachen
 const PRECACHE_ASSETS = [
-  '/m.s.app/',
-  '/m.s.app/index.html',
-  '/m.s.app/assets/css/style.css',
-  '/m.s.app/assets/js/preloader.js',
-  '/m.s.app/assets/js/menu.js',
-  '/m.s.app/assets/js/darkmode.js',
-  '/m.s.app/assets/js/pwa.js',
-  '/m.s.app/assets/images/logo.png',
-  '/m.s.app/manifest.json'
+  './',
+  './index.html',
+  './assets/css/style.css',
+  './assets/js/preloader.js',
+  './assets/js/menu.js',
+  './assets/js/darkmode.js',
+  './assets/js/pwa.js',
+  './assets/images/logo.png',
+  './manifest.json'
 ];
 
 // Install Event
@@ -26,15 +24,8 @@ self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => {
-        console.log('📦 Caching Assets für:', self.location.origin);
-        // Versuche Assets zu cachen, ignoriere Fehler
-        return Promise.all(
-          PRECACHE_ASSETS.map(url => {
-            return cache.add(url).catch(error => {
-              console.warn(`⚠️ Konnte nicht cachen: ${url}`, error);
-            });
-          })
-        );
+        console.log('📦 Caching Assets');
+        return cache.addAll(PRECACHE_ASSETS);
       })
       .then(() => {
         console.log('✅ Installation abgeschlossen');
@@ -43,61 +34,44 @@ self.addEventListener('install', event => {
   );
 });
 
-// Activate Event - VEREINFACHT
+// Activate Event
 self.addEventListener('activate', event => {
   console.log('🚀 Service Worker: Aktiviere');
   
   event.waitUntil(
-    Promise.all([
-      self.clients.claim(),
-      caches.keys().then(cacheNames => {
-        return Promise.all(
-          cacheNames.map(cacheName => {
-            if (cacheName !== CACHE_NAME) {
-              console.log('🗑️ Lösche alten Cache:', cacheName);
-              return caches.delete(cacheName);
-            }
-          })
-        );
-      })
-    ])
+    caches.keys().then(cacheNames => {
+      return Promise.all(
+        cacheNames.map(cacheName => {
+          if (cacheName !== CACHE_NAME) {
+            console.log('🗑️ Lösche alten Cache:', cacheName);
+            return caches.delete(cacheName);
+          }
+        })
+      );
+    }).then(() => {
+      return self.clients.claim();
+    })
   );
 });
 
-// Fetch Event - NETWORK FIRST für Preloader-Dateien
-// In deiner sw.js, in der fetch-Funktion:
+// Fetch Event
 self.addEventListener('fetch', event => {
-  const url = new URL(event.request.url);
+  // Nicht-GET Requests ignorieren
+  if (event.request.method !== 'GET') return;
   
-  // CSS-Dateien IMMER frisch laden, nie aus Cache
-  if (url.pathname.includes('.css')) {
-    event.respondWith(fetch(event.request));
-    return;
-  }
-  
-  // ... Rest deines fetch-Handlers
-});
-  
-  // WICHTIG: Preloader-Dateien IMMER frisch laden
-  if (url.pathname.includes('preloader') || 
-      url.pathname.includes('type-text') ||
-      url.search.includes('nocache')) {
-    event.respondWith(fetch(event.request));
-    return;
-  }
-  
-  // Für alle anderen: Cache First mit Network Fallback
   event.respondWith(
     caches.match(event.request)
       .then(cachedResponse => {
+        // Wenn im Cache, zurückgeben
         if (cachedResponse) {
-          console.log('📦 Aus Cache:', url.pathname);
+          console.log('📦 Aus Cache:', event.request.url);
           return cachedResponse;
         }
         
+        // Sonst vom Netzwerk laden
         return fetch(event.request)
           .then(networkResponse => {
-            // Nur erfolgreiche Antworten cachen (keine Preloader-Dateien!)
+            // Nur erfolgreiche Antworten cachen
             if (!networkResponse || networkResponse.status !== 200) {
               return networkResponse;
             }
@@ -111,11 +85,8 @@ self.addEventListener('fetch', event => {
             
             return networkResponse;
           })
-          .catch(() => {
-            // Offline Fallback
-            if (event.request.headers.get('Accept').includes('text/html')) {
-              return caches.match(OFFLINE_URL);
-            }
+          .catch(error => {
+            console.warn('⚠️ Fetch fehlgeschlagen:', error);
             return null;
           });
       })
