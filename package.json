@@ -1,9 +1,0 @@
-{
-  "name": "meine-pwa",
-  "version": "1.0.0",
-  "description": "Meine Progressive Web App",
-  "main": "index.html",
-  "scripts": {},
-  "author": "Matthias Silberhain",
-  "license": "MIT"
-}
