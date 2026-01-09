@@ -14,3 +14,24 @@ body {
 .text-silver {
   color: #c0c0c0;
 }
+
+.border-silver {
+  border-color: #c0c0c0;
+}
+
+.bg-silver {
+  background-color: #c0c0c0;
+}
+
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 8s linear infinite;
+}
